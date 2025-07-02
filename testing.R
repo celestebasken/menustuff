@@ -30,7 +30,7 @@ Beef_Price_Clean <- Beef_Price_Clean %>%
            sep = " ",
            convert = TRUE)  # Converts QS_bu_value to numeric
 
-## Calculating the total spend based on the Sales Batch Unit:
+## Calculating the total spend based on the Sales Batch Unit (lbs)
 # Turning the Quantity Sales Batch Unit into two columns for ~math~
 Beef_Price_Clean <- Beef_Price_Clean %>%
   separate(Quantity_sales_batch_unit,
@@ -78,6 +78,7 @@ Beef_Price_Clean <- Beef_Price_Clean %>%
   )
 # Making a new column 
 # First gotta make things numeric
+  # check this with str(Beef_Price_Clean)
 Beef_Price_Clean <- Beef_Price_Clean %>%
   mutate(
     QS_base_value = as.numeric(QS_base_value),
@@ -109,11 +110,29 @@ Beef_Product_Price$QS_base_unit_unit <- NULL
 Beef_Product_Price$Price_excl_vat_per_base_unit <- NULL
 Beef_Product_Price$price_sales_per_unit <- NULL
 Beef_Product_Price$price_sales_unit <- NULL
-Beef_Product_Price$price_base_per_unit <- NULL
-Beef_Product_Price$price_base_unit <- NULL
+
 
 # Total spend per product, based on sales batch (arbitrarily chosen since they seem the same)
+# Adding this to the Product Price df
 Beef_Product_Price <- Beef_Product_Price %>%
   group_by(Product) %>%
   mutate(Total_spend = sum(Spend_based_on_sales_batch_unit, na.rm = TRUE)) %>%
   ungroup()
+
+# Now a new df with just one row per item
+Beef_Product_Summary <- Beef_Price_Clean %>%
+  group_by(Product) %>%
+  summarise(
+    Total_spend_base = sum(Spend_based_on_sales_batch_unit, na.rm = TRUE),
+    Total_quantity_lbs = sum(QS_base_value, na.rm = TRUE),
+    Average_price_per_lb = mean(price_base_per_unit, na.rm = TRUE),
+    Producer = first(Producer),
+    Meat_certs = first(Meat_certs),
+    Sustainable = first(Sustainable),
+    Product_Code = first(Product_code),
+    Supplier = first(Supplier),
+    .groups = "drop"
+  )
+
+# Let's save this new df
+write.csv(Beef_Product_Summary,"~/Downloads/Beef_Product_Summary.csv", row.names = FALSE)
