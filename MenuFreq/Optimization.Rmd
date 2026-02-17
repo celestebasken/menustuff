@@ -1,0 +1,19 @@
+---
+title: "Optimization"
+author: "Celeste Basken"
+date: "2026-02-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(broom)
+library(knitr)
+#library(dplyr)
+
+```
+
