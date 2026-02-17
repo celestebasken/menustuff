@@ -75,8 +75,6 @@ for (cat in categories) {
 
 library(lpSolve)
 
-
-
 x0 <- optimization$Menu_freq_f25
 n  <- nrow(optimization)
 
@@ -288,3 +286,4 @@ for (cat in categories) {
 
 
 ## Part 2: Scenario #2
+
