@@ -17,3 +17,43 @@ library(knitr)
 
 ```
 
+```{r}
+# Reading in data
+optimization <- read.csv("optimization_data.csv")
+
+```
+
+```{r}
+# Monthly cost of the current meat frequency if we hypothetically purchase 1 lb of the center plate protein per meal period
+
+monthly_cost <- sum(optimization$Avg_price_lb * optimization$Menu_freq_f25)
+
+# What percent of that hypothetical monthly spend is on sustainable meat
+
+monthly_sus_spend <- sum(optimization$Sustainable_price_lb * optimization$Menu_freq_f25)
+
+
+```
+
+Constraints (my instructions, basically)
+
+```{r}
+# Constraint #1: The amount that a protein is served cannot decrease by more than x%
+reduction <- 0.5
+optimization$min_freq <- optimization$Menu_freq_f25*reduction
+
+# Constraint #2: Maximize sustainable % spend
+## I want to increase the % of spend which is on sustainable products
+sus_spend_percent <- monthly_sus_spend/monthly_cost
+
+# Constraint #3: Minimize greenhouse gas emissions associated with production. This is also assuming we're buying 1 lb of meat per meal.
+## We're going to assume that conventional/sustainable has no impact on GHGs for now, since we don't have good data
+
+GHG_total <- sum(optimization$Conventional_GHG_per_lb * optimization$Menu_freq_f25)
+
+# Constraint #4: Still serve 111 meals
+meals_served <- sum(optimization$Menu_freq_f25)
+
+```
+
+

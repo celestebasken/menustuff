@@ -1,0 +1,163 @@
+---
+title: "integer_programming"
+author: "Celeste x Chat GPT"
+date: "2026-02-16"
+output: html_document
+---
+
+```{r}
+# install.packages("lpSolve")
+library(lpSolve)
+
+optimization <- read.csv("optimization_data.csv", stringsAsFactors = FALSE)
+
+# ---- Inputs ----
+reduction <- 0.5              # cannot decrease by more than 50%
+cost_slack <- 0.001           # allow up to +0.1% cost to improve sustainability/GHG (tune this)
+sus_slack  <- 0.0             # allow slight drop from best sus spend in stage 3 (tune this)
+
+# ---- Data vectors ----
+x0 <- optimization$Menu_freq_f25
+meals_served <- sum(x0)
+
+min_freq <- x0 * reduction
+
+price <- optimization$Avg_price_lb
+
+# sustainable spend: treat Default_sus == "Yes" as sustainable dollars
+sus_flag <- ifelse(tolower(optimization$Default_sus) %in% c("yes","y","true","1"), 1, 0)
+sus_price <- price * sus_flag   # dollars/lb counted as "sustainable dollars"
+
+ghg <- optimization$Conventional_GHG_per_lb
+
+n <- nrow(optimization)
+
+# ---- Common constraints ----
+# sum(x) == meals_served
+A_eq <- matrix(1, nrow = 1, ncol = n)
+b_eq <- meals_served
+
+# lpSolve uses: const.mat %*% x  (<=, =, >=) const.rhs
+const.mat <- A_eq
+const.dir <- "="
+const.rhs <- b_eq
+
+# bounds + integrality
+lower <- min_freq
+upper <- rep(Inf, n)          # you can add an upper bound if desired
+all_int <- TRUE
+
+# Helper to compute summary metrics
+summarize_solution <- function(x, label = "solution") {
+  total_cost <- sum(price * x)
+  sus_spend  <- sum(sus_price * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg * x)
+
+  data.frame(
+    label = label,
+    meals = sum(x),
+    total_cost = total_cost,
+    sus_spend = sus_spend,
+    sus_pct = sus_pct,
+    total_ghg = total_ghg
+  )
+}
+
+# ---- Baseline ----
+baseline_summary <- summarize_solution(x0, "baseline")
+
+# ============================================================
+# Stage 1: Minimize total cost
+# ============================================================
+sol1 <- lp(
+  direction = "min",
+  objective.in = price,
+  const.mat = const.mat,
+  const.dir = const.dir,
+  const.rhs = const.rhs,
+  all.int = all_int,
+  lower = lower,
+  upper = upper
+)
+
+if (sol1$status != 0) stop("Stage 1 infeasible/failed. Try reducing 'reduction' or adding flexibility.")
+
+x1 <- sol1$solution
+opt_cost <- sum(price * x1)
+
+# Add cost cap for later stages
+# price %*% x <= opt_cost * (1 + cost_slack)
+const.mat2 <- rbind(const.mat, price)
+const.dir2 <- c(const.dir, "<=")
+const.rhs2 <- c(const.rhs, opt_cost * (1 + cost_slack))
+
+# ============================================================
+# Stage 2: Maximize sustainable spend, subject to near-optimal cost
+# ============================================================
+sol2 <- lp(
+  direction = "max",
+  objective.in = sus_price,
+  const.mat = const.mat2,
+  const.dir = const.dir2,
+  const.rhs = const.rhs2,
+  all.int = all_int,
+  lower = lower,
+  upper = upper
+)
+
+if (sol2$status != 0) stop("Stage 2 infeasible/failed. Try increasing cost_slack.")
+
+x2 <- sol2$solution
+opt_sus <- sum(sus_price * x2)
+
+# Add sustainable spend floor for stage 3
+# sus_price %*% x >= opt_sus * (1 - sus_slack)
+const.mat3 <- rbind(const.mat2, sus_price)
+const.dir3 <- c(const.dir2, ">=")
+const.rhs3 <- c(const.rhs2, opt_sus * (1 - sus_slack))
+
+# ============================================================
+# Stage 3: Minimize GHG, subject to near-optimal cost + best (or near-best) sus spend
+# ============================================================
+sol3 <- lp(
+  direction = "min",
+  objective.in = ghg,
+  const.mat = const.mat3,
+  const.dir = const.dir3,
+  const.rhs = const.rhs3,
+  all.int = all_int,
+  lower = lower,
+  upper = upper
+)
+
+if (sol3$status != 0) stop("Stage 3 infeasible/failed. Try increasing cost_slack or sus_slack.")
+
+x3 <- sol3$solution
+
+# ---- Summaries ----
+out <- rbind(
+  baseline_summary,
+  summarize_solution(x1, "stage1_min_cost"),
+  summarize_solution(x2, "stage2_max_sus_given_cost"),
+  summarize_solution(x3, "stage3_min_ghg_given_cost+sus")
+)
+
+print(out)
+
+# ---- Compare frequencies (what changed) ----
+result <- optimization
+result$freq_baseline <- x0
+result$freq_opt <- x3
+result$delta <- result$freq_opt - result$freq_baseline
+
+# Biggest increases/decreases
+result_sorted <- result[order(result$delta), c("Category","Ingredient","freq_baseline","freq_opt","delta","Avg_price_lb","Default_sus","Conventional_GHG_per_lb")]
+print(head(result_sorted, 10))             # biggest decreases
+print(tail(result_sorted, 10))             # biggest increases
+
+# Optional: write to CSV
+# write.csv(result, "menu_frequency_optimized.csv", row.names = FALSE)
+
+```
+
