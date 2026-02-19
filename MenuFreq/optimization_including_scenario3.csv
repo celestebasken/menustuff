@@ -1,0 +1,36 @@
+"Category","Ingredient","Avg_price_lb","Conventional_price_lb","Sustainable_price_lb","Default_sus","Menu_freq_f25","Conventional_GHG_per_lb","freq_baseline","freq_opt_costcut","delta_costcut","freq_opt_s1b","delta_s1b","freq_opt_s2","delta_s2","freq_opt_s3","delta_s3"
+"Beef","Beef Barbacoa Precooked",7.16,7.16,0,"No",4,41.34628634,4,2,-2,2,-2,2,-2,3,-1
+"Beef","Beef Ground HALAL",3.61,3.61,0,"No",6,41.34628634,6,3,-3,3,-3,3,-3,5,-1
+"Beef","Beef Brisket Whole HALAL",5.6,0,5.6,"Yes",1,41.34628634,1,1,0,1,0,1,0,1,0
+"Beef","Beef Carne Asada Diced 1/4 Fully Cooked",8.46,8.46,0,"No",1,41.34628634,1,1,0,1,0,1,0,1,0
+"Beef","Beef Chicken Fried",0.35,0.35,0,"No",1,41.34628634,1,1,0,1,0,1,0,1,0
+"Beef","Beef Meatball Precooked",5.64,5.64,0,"No",3,41.34628634,3,2,-1,2,-1,2,-1,3,0
+"Beef","Beef Sirloin Philly Sliced HALAL",8.43,0,8.43,"Yes",4,41.34628634,4,2,-2,2,-2,6,2,3,-1
+"Chicken","Chicken 8 Cut HALAL",2.62,0,2.62,"Yes",11,4.399609786,11,16,5,16,5,16,5,13,2
+"Chicken","Chicken Thigh Boneless HALAL",1.98,1.98,0,"No",16,4.399609786,16,24,8,24,8,15,-1,20,4
+"Chicken","Chicken Breast B/S Raw HALAL",2.53,2.96,2.09,"Yes",4,4.399609786,4,6,2,6,2,6,2,4,0
+"Chicken","Chicken Diced Dark Meat HALAL",3.64,3.64,0,"No",4,4.399609786,4,5,1,6,2,2,-2,3,-1
+"Chicken","Chicken Tenderloin Breaded Precooked",0.97,0.97,0,"No",3,4.399609786,3,4,1,4,1,4,1,3,0
+"Chicken","Chicken Breast B/S Raw 4 oz",5.94,4.94,6.93,"No",2,4.399609786,2,1,-1,1,-1,1,-1,2,0
+"Chicken","Chicken Breast Fajita Cut",3.15,3.15,0,"No",3,4.399609786,3,4,1,4,1,4,1,3,0
+"Chicken","Chicken Diced Meat Precooked",4.02,4.02,0,"No",3,4.399609786,3,2,-1,2,-1,2,-1,3,0
+"Chicken","Chicken Mandarin Orange with Sauce",4.39,4.39,0,"No",2,4.399609786,2,1,-1,1,-1,1,-1,2,0
+"Chicken","Chicken Thigh Bone In HALAL",1.41,1.41,0,"No",5,4.399609786,5,7,2,7,2,7,2,6,1
+"Chicken","Chicken Thigh Boneless Precooked",5.78,5.78,0,"No",3,4.399609786,3,2,-1,2,-1,2,-1,3,0
+"Chicken","Chicken Breast Fajita Cut HALAL",3.19,3.19,0,"No",1,4.399609786,1,1,0,1,0,1,0,1,0
+"Chicken","Chicken Tenderloin Breaded (HS) Halal",4.6,4.6,0,"No",1,4.399609786,1,1,0,1,0,1,0,1,0
+"Chicken","Chicken Thigh Boneless",3.49,1.69,5.29,"No",1,4.399609786,1,1,0,1,0,1,0,1,0
+"Fish","Rockfish Fillet",6.9,6.9,7.69,"Yes",6,4.979783836,6,3,-3,3,-3,9,3,5,-1
+"Fish","Salmon Fillet Standard",8.28,0,8.28,"Yes",4,41.34628634,4,2,-2,2,-2,6,2,3,-1
+"Fish","Cod Fillet Breaded",9.91,9.91,0,"No",3,9.831502854,3,2,-1,2,-1,2,-1,3,0
+"Fish","Catfish Fillet",6.03,6.03,0,"No",1,4.399609786,1,1,0,1,0,1,0,1,0
+"Fish","Cod Fillet",7.48,7.48,0,"No",1,4.399609786,1,1,0,1,0,1,0,1,0
+"Shellfish","Shrimp 31/40",5.59,5.59,0,"No",2,21.127425,2,1,-1,1,-1,1,-1,2,0
+"Shellfish","Shrimp 26/30",5.69,5.69,0,"No",1,21.127425,1,1,0,1,0,1,0,1,0
+"Shellfish","Shrimp Breaded PopCorn Style",4.59,4.59,0,"No",1,21.127425,1,1,0,1,0,1,0,1,0
+"Pork","Pork Stew Cut",4.66,4.69,4.62,"No",5,9.831502854,5,3,-2,3,-2,3,-2,4,-1
+"Pork","Pork Butt Boneless",3.25,3.25,0,"No",2,9.831502854,2,3,1,3,1,1,-1,2,0
+"Pork","Pork Carnitas Precooked",5.75,5.75,0,"No",2,9.831502854,2,1,-1,1,-1,1,-1,2,0
+"Pork","Pork Loin Boneless",3.75,0,3.75,"Yes",2,9.831502854,2,3,1,2,0,3,1,2,0
+"Pork","Pork Ham Boneless",4.3,4.3,0,"No",1,9.831502854,1,1,0,1,0,1,0,1,0
+"Turkey","Turkey Breast Boneless Skin On",6.6,6.6,0,"No",1,4.399609786,1,1,0,1,0,1,0,1,0

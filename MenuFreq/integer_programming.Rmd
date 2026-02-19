@@ -379,6 +379,7 @@ optimization$delta_s1b <- optimization$freq_opt_s1b - optimization$Menu_freq_f25
 Yeah this is worse-- lol
 
 ## Part 2: Scenario #2
+Maximize sustainability! Yay
 
 ```{r}
 
@@ -497,7 +498,322 @@ category_totals_s2
 
 write.csv(optimization, file = "optimization_including_scenario2.csv", row.names = FALSE)
 
+```
+
+## Scenario 3: 
+Same as 1b but with caps of 25%
+
+```{r}
+
+# ---- baseline & dimensions ----
+x0 <- optimization$Menu_freq_f25
+n  <- length(x0)
+meals_served <- sum(x0)
+
+# ---- vectors (assumes you already created these) ----
+# price <- optimization$Avg_price_lb
+# ghg   <- optimization$Conventional_GHG_per_lb
+# sus_price <- price * sus_flag   # from earlier (Default_sus-based)
+
+# ---- 25% bounds ----
+reduction_25 <- 0.75   # can decrease at most 25%
+increase_25  <- 1.25   # can increase at most 25%
+
+lower_25 <- ceiling(x0 * reduction_25)
+upper_25 <- floor(x0 * increase_25)
+
+# ---- build constraints: sum meals + lower + upper ----
+A <- matrix(1, nrow = 1, ncol = n)
+dir <- "="
+rhs <- meals_served
+
+# lower bounds: x >= lower_25
+A <- rbind(A, diag(n))
+dir <- c(dir, rep(">=", n))
+rhs <- c(rhs, lower_25)
+
+# upper bounds: x <= upper_25
+A <- rbind(A, diag(n))
+dir <- c(dir, rep("<=", n))
+rhs <- c(rhs, upper_25)
+
+# ---- tuning knobs ----
+cost_slack <- 0.001   # allow +0.1% cost beyond minimum so GHG/sus can move (increase if needed)
+ghg_slack  <- 0.0     # keep best GHG in stage 3 (set to small >0 if stage3 can't move)
+
+# ============================================================
+# Stage 1: Minimize cost
+# ============================================================
+sol3_stage1 <- lp(
+  direction = "min",
+  objective.in = price,
+  const.mat = A,
+  const.dir = dir,
+  const.rhs = rhs,
+  all.int = TRUE
+)
+
+if (sol3_stage1$status != 0) {
+  stop("Scenario 3 Stage 1 infeasible. ±25% caps may be too strict.")
+}
+
+x3_cost <- sol3_stage1$solution
+opt_cost <- sum(price * x3_cost)
+
+# Add cost cap: price %*% x <= opt_cost * (1 + cost_slack)
+A_costcap   <- rbind(A, price)
+dir_costcap <- c(dir, "<=")
+rhs_costcap <- c(rhs, opt_cost * (1 + cost_slack))
+
+# ============================================================
+# Stage 2: Minimize GHG given near-min cost
+# ============================================================
+sol3_stage2 <- lp(
+  direction = "min",
+  objective.in = ghg,
+  const.mat = A_costcap,
+  const.dir = dir_costcap,
+  const.rhs = rhs_costcap,
+  all.int = TRUE
+)
+
+if (sol3_stage2$status != 0) {
+  stop("Scenario 3 Stage 2 infeasible. Try increasing cost_slack (e.g., 0.01).")
+}
+
+x3_ghg <- sol3_stage2$solution
+opt_ghg <- sum(ghg * x3_ghg)
+
+# Add GHG cap: ghg %*% x <= opt_ghg * (1 + ghg_slack)
+A_ghgcap   <- rbind(A_costcap, ghg)
+dir_ghgcap <- c(dir_costcap, "<=")
+rhs_ghgcap <- c(rhs_costcap, opt_ghg * (1 + ghg_slack))
+
+# ============================================================
+# Stage 3: Maximize sustainable spend given near-min cost + near-min GHG
+# ============================================================
+sol3_stage3 <- lp(
+  direction = "max",
+  objective.in = sus_price,
+  const.mat = A_ghgcap,
+  const.dir = dir_ghgcap,
+  const.rhs = rhs_ghgcap,
+  all.int = TRUE
+)
+
+if (sol3_stage3$status != 0) {
+  stop("Scenario 3 Stage 3 infeasible. Try setting ghg_slack to small > 0 (e.g., 0.001 or 0.01).")
+}
+
+x3_final <- sol3_stage3$solution
+
+# ============================================================
+# Summaries + attach to df
+# ============================================================
+summ <- function(x) {
+  total_cost <- sum(price * x)
+  sus_spend  <- sum(sus_price * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg * x)
+  c(meals = sum(x), total_cost = total_cost, sus_spend = sus_spend, sus_pct = sus_pct, total_ghg = total_ghg)
+}
+
+scenario_3_table <- rbind(
+  baseline = summ(x0),
+  s3_stage1_min_cost = summ(x3_cost),
+  s3_stage2_min_ghg_given_cost = summ(x3_ghg),
+  s3_stage3_max_sus_given_cost_ghg = summ(x3_final)
+)
+
+print(scenario_3_table)
+
+# Add scenario 3 frequencies
+optimization$freq_opt_s3 <- x3_final
+optimization$delta_s3 <- optimization$freq_opt_s3 - optimization$Menu_freq_f25
+
+
+```
+```{r}
+#download these solutions
+
+write.csv(optimization, file = "optimization_including_scenario3.csv", row.names = FALSE)
 
 ```
 
+```{r}
+# Make sure delta exists
+optimization <- optimization %>%
+  mutate(
+    freq_baseline = Menu_freq_f25,
+    delta_s3 = freq_opt_s3 - Menu_freq_f25
+  )
 
+category_totals_s3 <- optimization %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_meals = sum(freq_baseline, na.rm = TRUE),
+    opt_meals_s3   = sum(freq_opt_s3, na.rm = TRUE),
+    delta_meals_s3 = sum(delta_s3, na.rm = TRUE),
+    baseline_share = baseline_meals / sum(freq_baseline, na.rm = TRUE),
+    opt_share_s3   = opt_meals_s3 / sum(freq_opt_s3, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(opt_meals_s3))
+
+category_totals_s3
+```
+
+## Scenario 4: Same as 2 but with fish capped
+
+```{r}
+
+# --- baseline ---
+x0 <- optimization$Menu_freq_f25
+n  <- length(x0)
+meals_served <- sum(x0)
+
+# --- make sure Category is clean (prevents “Fish ” vs “Fish”) ---
+optimization$Category <- trimws(optimization$Category)
+
+# --- vectors (use your existing ones) ---
+# price <- optimization$Avg_price_lb
+# ghg   <- optimization$Conventional_GHG_per_lb
+# sus_price <- price * sus_flag   # as you defined earlier
+
+# ----------------------------
+# 0) Build your usual per-item bounds + total meals constraints
+#    (Use whatever bounds you’ve been using; below shows the ±50% version.)
+# ----------------------------
+reduction <- 0.5         # cannot decrease by more than 50%
+max_multiplier <- 1.5    # cannot increase by more than 50%
+
+lower <- ceiling(x0 * reduction)
+upper <- floor(x0 * max_multiplier)
+
+A <- matrix(1, nrow = 1, ncol = n)
+dir <- "="
+rhs <- meals_served
+
+# lower bounds: x >= lower
+A <- rbind(A, diag(n))
+dir <- c(dir, rep(">=", n))
+rhs <- c(rhs, lower)
+
+# upper bounds: x <= upper
+A <- rbind(A, diag(n))
+dir <- c(dir, rep("<=", n))
+rhs <- c(rhs, upper)
+
+# ----------------------------
+# 1) Add fish cap: total fish meals <= 1.15 * baseline fish meals
+# ----------------------------
+# IMPORTANT: adjust these labels to match your data exactly if needed
+fish_labels <- c("Fish", "Seafood")
+
+fish_idx <- which(optimization$Category %in% fish_labels)
+
+# If fish_idx is empty, try this more flexible matching:
+if (length(fish_idx) == 0) {
+  fish_idx <- which(grepl("fish|seafood", tolower(optimization$Category)))
+}
+
+if (length(fish_idx) == 0) {
+  stop("Could not find Fish rows. Check unique(optimization$Category) and update fish_labels.")
+}
+
+baseline_fish_meals <- sum(x0[fish_idx])
+fish_cap <- floor(baseline_fish_meals * 1.15)
+
+fish_row <- rep(0, n)
+fish_row[fish_idx] <- 1
+
+A_fish   <- rbind(A, fish_row)
+dir_fish <- c(dir, "<=")
+rhs_fish <- c(rhs, fish_cap)
+
+# ----------------------------
+# 2) Scenario 4: cost cannot increase (cap at baseline cost)
+# ----------------------------
+baseline_cost <- sum(price * x0)
+
+cost_slack <- 0.0  # set to 0.001 if you want a tiny wiggle (0.1%)
+
+A_costcap   <- rbind(A_fish, price)
+dir_costcap <- c(dir_fish, "<=")
+rhs_costcap <- c(rhs_fish, baseline_cost * (1 + cost_slack))
+
+# ----------------------------
+# 3) Stage 1: Maximize sustainability (under cost cap + fish cap + per-item bounds)
+# ----------------------------
+sol4_stage1 <- lp(
+  direction = "max",
+  objective.in = sus_price,
+  const.mat = A_costcap,
+  const.dir = dir_costcap,
+  const.rhs = rhs_costcap,
+  all.int = TRUE
+)
+
+if (sol4_stage1$status != 0) {
+  stop("Scenario 4 Stage 1 infeasible. Try: (a) cost_slack <- 0.001, (b) relax bounds, or (c) fish cap too tight.")
+}
+
+x4_sus <- sol4_stage1$solution
+opt_sus4 <- sum(sus_price * x4_sus)
+
+# ----------------------------
+# 4) Stage 2: Minimize GHG while keeping sustainability at (near) optimum
+# ----------------------------
+sus_slack <- 0.0  # set to 0.005 (0.5%) if Stage 2 becomes infeasible
+
+A_susfloor   <- rbind(A_costcap, sus_price)
+dir_susfloor <- c(dir_costcap, ">=")
+rhs_susfloor <- c(rhs_costcap, opt_sus4 * (1 - sus_slack))
+
+sol4_stage2 <- lp(
+  direction = "min",
+  objective.in = ghg,
+  const.mat = A_susfloor,
+  const.dir = dir_susfloor,
+  const.rhs = rhs_susfloor,
+  all.int = TRUE
+)
+
+if (sol4_stage2$status != 0) {
+  stop("Scenario 4 Stage 2 infeasible. Try sus_slack <- 0.005 or 0.01.")
+}
+
+x4_final <- sol4_stage2$solution
+
+# ----------------------------
+# 5) Summaries + attach results
+# ----------------------------
+summ <- function(x) {
+  total_cost <- sum(price * x)
+  sus_spend  <- sum(sus_price * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg * x)
+  fish_meals <- sum(x[fish_idx])
+  c(meals = sum(x), total_cost = total_cost, sus_spend = sus_spend, sus_pct = sus_pct,
+    total_ghg = total_ghg, fish_meals = fish_meals)
+}
+
+scenario_4_table <- rbind(
+  baseline = summ(x0),
+  s4_stage1_max_sus_no_costinc_fishcap = summ(x4_sus),
+  s4_stage2_min_ghg_given_cost_sus_fishcap = summ(x4_final)
+)
+
+print(scenario_4_table)
+
+# Attach to dataframe
+optimization$freq_opt_s4 <- x4_final
+optimization$delta_s4 <- optimization$freq_opt_s4 - optimization$Menu_freq_f25
+
+```
+```{r}
+#download these solutions
+
+write.csv(optimization, file = "optimization_including_scenario4.csv", row.names = FALSE)
+
+```
