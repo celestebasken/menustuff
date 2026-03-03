@@ -1,0 +1,174 @@
+---
+title: "hypothetical_proteins_optimization"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(lpSolve)
+
+optimization <- read.csv("optimization_data_hypotheticals.csv", stringsAsFactors = FALSE)
+```
+
+
+
+Maximize sustainability! Yay
+
+```{r}
+
+x0 <- optimization$Menu_freq_f25
+n  <- nrow(optimization)
+
+meals_served <- sum(x0)
+
+# Lower bound 
+reduction <- 0.5
+lower <- ceiling(x0 * reduction)
+
+# Upper bound 
+max_multiplier <- 1.5
+upper <- floor(x0 * max_multiplier)
+
+price <- optimization$Avg_price_lb
+ghg   <- optimization$Conventional_GHG_per_lb
+
+sus_flag <- ifelse(tolower(optimization$Default_sus) %in% c("yes","y","true","1","Yes"), 1, 0)
+sus_price <- price * sus_flag
+
+# ---- baseline totals ----
+
+baseline_cost <- sum(price * x0)
+
+# ---- Constraint matrix ----
+# 1) Maintain total meals: sum(x) = meals_served
+A <- matrix(1, nrow = 1, ncol = n)
+dir <- "="
+rhs <- meals_served
+
+# 2) Lower bounds: x_i >= lower_i  ->  I x >= lower
+A <- rbind(A, diag(n))
+dir <- c(dir, rep(">=", n))
+rhs <- c(rhs, lower)
+
+# 3) Optional upper bounds: x_i <= upper_i -> I x <= upper (only for non-NA uppers)
+if (any(!is.na(upper))) {
+  idx <- which(!is.na(upper))
+  A <- rbind(A, diag(n)[idx, , drop = FALSE])
+  dir <- c(dir, rep("<=", length(idx)))
+  rhs <- c(rhs, upper[idx])
+}
+
+# Tuning knobs
+# (Usually you keep cost_slack = 0 for "no increase", but you can allow tiny rounding wiggle.)
+cost_slack <- 0.0   # 0 means cost must be <= baseline_cost exactly
+sus_slack  <- 0.0   # 0 means keep the best sustainable spend in stage 3 (tight)
+
+# ============================================================
+# Constraint: cost cannot increase
+# ============================================================
+A_costcap   <- rbind(A, price)
+dir_costcap <- c(dir, "<=")
+rhs_costcap <- c(rhs, baseline_cost * (1 + cost_slack))
+
+# ============================================================
+# Stage 2.1: Maximize sustainability under cost cap
+# ============================================================
+sol2_stage1 <- lp(
+  direction = "max",
+  objective.in = sus_price,
+  const.mat = A_costcap,
+  const.dir = dir_costcap,
+  const.rhs = rhs_costcap,
+  all.int = TRUE
+)
+
+if (sol2_stage1$status != 0) {
+  stop("Scenario 2 Stage 1 infeasible. Try relaxing reduction/upper bounds or set cost_slack to a small value (e.g., 0.001).")
+}
+
+x2_sus <- sol2_stage1$solution
+opt_sus_2 <- sum(sus_price * x2_sus)
+
+# ============================================================
+# Stage 2.2: Minimize GHG, while keeping sustainability at (near) optimum
+# ============================================================
+A_susfloor   <- rbind(A_costcap, sus_price)
+dir_susfloor <- c(dir_costcap, ">=")
+rhs_susfloor <- c(rhs_costcap, opt_sus_2 * (1 - sus_slack))
+
+sol2_stage2 <- lp(
+  direction = "min",
+  objective.in = ghg,
+  const.mat = A_susfloor,
+  const.dir = dir_susfloor,
+  const.rhs = rhs_susfloor,
+  all.int = TRUE
+)
+
+if (sol2_stage2$status != 0) {
+  stop("Scenario 2 Stage 2 infeasible. Try setting sus_slack to a small value (e.g., 0.001 or 0.01).")
+}
+
+x2_final <- sol2_stage2$solution
+
+# ============================================================
+# Summaries
+# ============================================================
+summ <- function(x) {
+  total_cost <- sum(price * x)
+  sus_spend  <- sum(sus_price * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg * x)
+  c(meals = sum(x), total_cost = total_cost, sus_spend = sus_spend, sus_pct = sus_pct, total_ghg = total_ghg)
+}
+
+scenario_2_table <- rbind(
+  baseline = summ(x0),
+  s2_stage1_max_sus_no_cost_increase = summ(x2_sus),
+  s2_stage2_min_ghg_given_cost_and_sus = summ(x2_final)
+)
+
+print(scenario_2_table)
+
+# ============================================================
+# Attach Scenario 2 frequencies to your dataframe
+# ============================================================
+optimization$freq_opt_s2 <- x2_final
+optimization$delta_s2 <- optimization$freq_opt_s2 - optimization$Menu_freq_f25
+
+```
+```{r}
+
+# If you didn't already set these:
+optimization <- optimization %>%
+  mutate(
+    freq_baseline = Menu_freq_f25,
+    delta_s2 = freq_opt_s2 - Menu_freq_f25
+  )
+
+category_totals_s2 <- optimization %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_meals = sum(freq_baseline, na.rm = TRUE),
+    opt_meals_s2   = sum(freq_opt_s2, na.rm = TRUE),
+    delta_meals_s2 = sum(delta_s2, na.rm = TRUE),
+    baseline_share = baseline_meals / sum(freq_baseline, na.rm = TRUE),
+    opt_share_s2   = opt_meals_s2 / sum(freq_opt_s2, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(opt_meals_s2))
+
+category_totals_s2
+
+
+```
+
+
+```{r}
+#download these solutions
+
+#write.csv(optimization, file = "optimization_including_scenario2.csv", row.names = FALSE)
+
+```
