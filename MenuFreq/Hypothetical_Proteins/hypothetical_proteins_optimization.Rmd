@@ -141,7 +141,6 @@ optimization$delta_s2 <- optimization$freq_opt_s2 - optimization$Menu_freq_f25
 ```
 ```{r}
 
-# If you didn't already set these:
 optimization <- optimization %>%
   mutate(
     freq_baseline = Menu_freq_f25,
@@ -169,6 +168,6 @@ category_totals_s2
 ```{r}
 #download these solutions
 
-#write.csv(optimization, file = "optimization_including_scenario2.csv", row.names = FALSE)
+write.csv(optimization, file = "optimization_including_scenario2b.csv", row.names = FALSE)
 
 ```
