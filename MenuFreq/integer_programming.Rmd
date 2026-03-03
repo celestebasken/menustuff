@@ -1,6 +1,6 @@
 ---
 title: "integer_programming"
-author: "Celeste x Chat GPT"
+author: "Celeste x Chat"
 date: "2026-02-16"
 output: html_document
 ---
@@ -19,7 +19,6 @@ library(stringr)
 
 optimization <- read.csv("optimization_data.csv", stringsAsFactors = FALSE)
 
-# If your cut name column isn't Ingredient, change this:
 cut_col <- "Ingredient"
 
 # Folder for outputs
