@@ -180,4 +180,51 @@ rbind(
   stage3_min_ghg_given_cost_sus = summ(x3)
 )
 ```
+```{r}
+# -----------------------------------------
+# Add optimized frequencies to dataframe
+# -----------------------------------------
+
+optimization <- optimization %>%
+  mutate(
+    freq_baseline = Menu_freq_f25,
+    freq_opt_s3 = x3,
+    delta_s3 = freq_opt_s3 - freq_baseline
+  )
+
+
+# -----------------------------------------
+# Category totals
+# -----------------------------------------
+
+category_totals_s3 <- optimization %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_meals = sum(freq_baseline, na.rm = TRUE),
+    opt_meals_s3   = sum(freq_opt_s3, na.rm = TRUE),
+    delta_meals_s3 = sum(delta_s3, na.rm = TRUE),
+
+    baseline_share = baseline_meals / sum(freq_baseline, na.rm = TRUE),
+    opt_share_s3   = opt_meals_s3 / sum(freq_opt_s3, na.rm = TRUE),
+
+    .groups = "drop"
+  ) %>%
+  arrange(desc(opt_meals_s3))
+
+
+# View category totals
+category_totals_s3
+
+
+# -----------------------------------------
+# Save updated optimization table
+# -----------------------------------------
+
+write.csv(
+  optimization,
+  file = "optimization_including_scenario3_results.csv",
+  row.names = FALSE
+)
+
+```
 
