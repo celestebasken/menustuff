@@ -10,7 +10,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Part 0: Current menu freq figures
+## Part 0: Load data, Current menu freq figures
 
 ```{r}
 library(dplyr)
@@ -20,6 +20,9 @@ library(lpSolve)
 
 optimization <- read.csv("optimization_data.csv", stringsAsFactors = FALSE)
 
+```
+
+```{r}
 cut_col <- "Ingredient"
 
 # Folder for outputs
@@ -33,7 +36,6 @@ meat_colors <- c(
   "Turkey" = "#E8C3A0",    # light tan
   "Shellfish" = "#00008B" # darker blue
 )
-
 
 # Make one plot per Category
 categories <- sort(unique(optimization$Category))
@@ -64,8 +66,8 @@ for (cat in categories) {
     plot = p, width = 12, height = 7, dpi = 300
   )
 }
-
 ```
+
 
 ## Part 1: Optimization Scenario #1
 
