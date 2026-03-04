@@ -9,7 +9,7 @@ library(ggplot2)
 library(stringr)
 library(lpSolve)
 
-optimization <- read.csv("optimization_data_hypotheticals.csv", stringsAsFactors = FALSE)
+optimization_hypothetical <- read.csv("optimization_data_hypotheticals.csv", stringsAsFactors = FALSE)
 ```
 
 
@@ -18,8 +18,8 @@ Maximize sustainability! Yay
 
 ```{r}
 
-x0 <- optimization$Menu_freq_f25
-n  <- nrow(optimization)
+x0 <- optimization_hypothetical$Menu_freq_f25
+n  <- nrow(optimization_hypothetical)
 
 meals_served <- sum(x0)
 
@@ -31,10 +31,10 @@ lower <- ceiling(x0 * reduction)
 max_multiplier <- 1.5
 upper <- floor(x0 * max_multiplier)
 
-price <- optimization$Avg_price_lb
-ghg   <- optimization$Conventional_GHG_per_lb
+price <- optimization_hypothetical$Avg_price_lb
+ghg   <- optimization_hypothetical$Conventional_GHG_per_lb
 
-sus_flag <- ifelse(tolower(optimization$Default_sus) %in% c("yes","y","true","1","Yes"), 1, 0)
+sus_flag <- ifelse(tolower(optimization_hypothetical$Default_sus) %in% c("yes","y","true","1","Yes"), 1, 0)
 sus_price <- price * sus_flag
 
 # ---- baseline totals ----
@@ -135,19 +135,19 @@ print(scenario_2_table)
 # ============================================================
 # Attach Scenario 2 frequencies to your dataframe
 # ============================================================
-optimization$freq_opt_s2 <- x2_final
-optimization$delta_s2 <- optimization$freq_opt_s2 - optimization$Menu_freq_f25
+optimization_hypothetical$freq_opt_s2 <- x2_final
+optimization_hypothetical$delta_s2 <- optimization_hypothetical$freq_opt_s2 - optimization_hypothetical$Menu_freq_f25
 
 ```
 ```{r}
 
-optimization <- optimization %>%
+optimization_hypothetical <- optimization_hypothetical %>%
   mutate(
     freq_baseline = Menu_freq_f25,
     delta_s2 = freq_opt_s2 - Menu_freq_f25
   )
 
-category_totals_s2 <- optimization %>%
+category_totals_s2 <- optimization_hypothetical %>%
   group_by(Category) %>%
   summarise(
     baseline_meals = sum(freq_baseline, na.rm = TRUE),
@@ -168,6 +168,6 @@ category_totals_s2
 ```{r}
 #download these solutions
 
-write.csv(optimization, file = "optimization_including_scenario2b.csv", row.names = FALSE)
+write.csv(optimization_hypothetical, file = "optimization_including_scenario2b.csv", row.names = FALSE)
 
 ```
