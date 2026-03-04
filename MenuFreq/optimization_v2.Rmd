@@ -1,0 +1,183 @@
+---
+title: "optimization_v2"
+author: "Celeste x chat"
+date: "2026-03-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This version incorporates Rebecca's concern (that the values are per lb and not adjusted for the actual weights expected based on the type of meat)
+
+## Part 0: Load data
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(lpSolve)
+
+optimization <- read.csv("optimization_data.csv", stringsAsFactors = FALSE)
+
+```
+
+```{r}
+# Setup
+# ----------------------------
+x0 <- optimization$Menu_freq_f25
+n  <- nrow(optimization)
+
+meals_served <- sum(x0)
+
+# Lower bound (e.g., max 50% reduction)
+reduction <- 0.5
+lower <- ceiling(x0 * reduction)
+
+# Upper bound (e.g., max 50% increase)
+max_multiplier <- 1.5
+upper <- floor(x0 * max_multiplier)
+
+# ----------------------------
+# NEW: portion-adjusted price per "menu appearance"
+# ----------------------------
+# Clean/validate portion weights
+if (!("Expected_lb_meat_portion" %in% names(optimization))) {
+  stop("Column Expected_lb_meat_portion not found in optimization_data.csv")
+}
+
+portion_lb <- optimization$Expected_lb_meat_portion
+if (any(is.na(portion_lb))) {
+  stop("Expected_lb_meat_portion has NA values. Please fill them before optimizing.")
+}
+if (any(portion_lb < 0)) {
+  stop("Expected_lb_meat_portion has negative values. Please correct them.")
+}
+
+# Sustainable flag from Default_sus
+sus_flag <- ifelse(tolower(optimization$Default_sus) %in% c("yes","y","true","1"), 1, 0)
+
+# Effective price per lb used for costing:
+# if Default_sus == yes -> Sustainable_price_lb else Conventional_price_lb
+price_lb <- ifelse(sus_flag == 1,
+                   optimization$Sustainable_price_lb,
+                   optimization$Conventional_price_lb)
+
+# Portion-adjusted "cost per appearance" (THIS is what we minimize / constrain on)
+cost_per_appearance <- price_lb * portion_lb
+
+# "Sustainable spend per appearance" (only counts when Default_sus == yes)
+sus_cost_per_appearance <- optimization$Sustainable_price_lb * portion_lb * sus_flag
+
+# GHG per appearance (uses your existing conventional GHG per lb * portion lbs)
+ghg_per_appearance <- optimization$Conventional_GHG_per_lb * portion_lb
+
+# ----------------------------
+# Constraint matrix
+# ----------------------------
+# 1) Maintain total meals: sum(x) = meals_served
+A <- matrix(1, nrow = 1, ncol = n)
+dir <- "="
+rhs <- meals_served
+
+# 2) Lower bounds: x_i >= lower_i
+A <- rbind(A, diag(n))
+dir <- c(dir, rep(">=", n))
+rhs <- c(rhs, lower)
+
+# 3) Upper bounds: x_i <= upper_i (for non-NA uppers)
+if (any(!is.na(upper))) {
+  idx <- which(!is.na(upper))
+  A <- rbind(A, diag(n)[idx, , drop = FALSE])
+  dir <- c(dir, rep("<=", length(idx)))
+  rhs <- c(rhs, upper[idx])
+}
+
+# ----------------------------
+# Stage 1: minimize portion-adjusted total cost
+# ----------------------------
+sol1 <- lp(
+  direction = "min",
+  objective.in = cost_per_appearance,
+  const.mat = A,
+  const.dir = dir,
+  const.rhs = rhs,
+  all.int = TRUE
+)
+
+sol1$status  # 0 means success
+x1 <- sol1$solution
+
+opt_cost <- sum(cost_per_appearance * x1)
+
+# ----------------------------
+# Stage 2: maximize sustainable spend given (near-)optimal cost
+# ----------------------------
+cost_slack <- 0.001  # 0.1%
+
+A2   <- rbind(A, cost_per_appearance)
+dir2 <- c(dir, "<=")
+rhs2 <- c(rhs, opt_cost * (1 + cost_slack))
+
+sol2 <- lp(
+  direction = "max",
+  objective.in = sus_cost_per_appearance,
+  const.mat = A2,
+  const.dir = dir2,
+  const.rhs = rhs2,
+  all.int = TRUE
+)
+
+sol2$status
+x2 <- sol2$solution
+
+opt_sus <- sum(sus_cost_per_appearance * x2)
+
+# ----------------------------
+# Stage 3: minimize GHG given cost cap + sustainable spend floor
+# ----------------------------
+sus_slack <- 0.0  # require best sustainable spend found in stage 2
+
+A3   <- rbind(A2, sus_cost_per_appearance)
+dir3 <- c(dir2, ">=")
+rhs3 <- c(rhs2, opt_sus * (1 - sus_slack))
+
+sol3 <- lp(
+  direction = "min",
+  objective.in = ghg_per_appearance,
+  const.mat = A3,
+  const.dir = dir3,
+  const.rhs = rhs3,
+  all.int = TRUE
+)
+
+sol3$status
+x3 <- sol3$solution
+
+# ----------------------------
+# Summary helper
+# ----------------------------
+summ <- function(x) {
+  total_cost <- sum(cost_per_appearance * x)
+  sus_spend  <- sum(sus_cost_per_appearance * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg_per_appearance * x)
+
+  c(
+    meals = sum(x),
+    total_cost = total_cost,
+    sus_spend = sus_spend,
+    sus_pct = sus_pct,
+    total_ghg = total_ghg
+  )
+}
+
+rbind(
+  baseline = summ(x0),
+  stage1_min_cost = summ(x1),
+  stage2_max_sus_given_cost = summ(x2),
+  stage3_min_ghg_given_cost_sus = summ(x3)
+)
+```
+
