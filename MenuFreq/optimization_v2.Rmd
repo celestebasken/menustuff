@@ -23,6 +23,8 @@ optimization <- read.csv("optimization_data.csv", stringsAsFactors = FALSE)
 
 ```
 
+## Scenario 1v2
+
 ```{r}
 # Setup
 # ----------------------------
