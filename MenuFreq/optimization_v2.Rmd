@@ -25,6 +25,8 @@ optimization <- read.csv("optimization_data.csv", stringsAsFactors = FALSE)
 
 ## Scenario 1v2
 
+### 1v2.0 This initial version is bad
+
 ```{r}
 # Setup
 # ----------------------------
@@ -229,6 +231,120 @@ write.csv(
 )
 
 ```
+
+### Scenario 2v2.1
+
+Yeah these versions are getting out of control but I really didn't like 1v2 because it lost on sustainability
+
+```{r}
+# =========================
+# S1v2.1: Max cost reduction WITHOUT losing sustainability
+# (Primary: keep sustainable spend >= baseline)
+# (Secondary: minimize total cost)
+# Optional tertiary: minimize GHG (after finding min cost)
+# =========================
+
+# ---- baseline frequencies ----
+x0 <- optimization$Menu_freq_f25
+
+# ---- portion-adjusted vectors (same as S1v2) ----
+portion_lb <- optimization$Expected_lb_meat_portion
+sus_flag <- ifelse(tolower(optimization$Default_sus) %in% c("yes","y","true","1"), 1, 0)
+
+price_lb <- ifelse(
+  sus_flag == 1,
+  optimization$Sustainable_price_lb,
+  optimization$Conventional_price_lb
+)
+
+cost_per_appearance <- price_lb * portion_lb
+sus_cost_per_appearance <- optimization$Sustainable_price_lb * portion_lb * sus_flag
+ghg_per_appearance <- optimization$Conventional_GHG_per_lb * portion_lb
+
+# ---- baseline totals under new accounting ----
+baseline_cost <- sum(cost_per_appearance * x0)
+baseline_sus  <- sum(sus_cost_per_appearance * x0)
+
+# Tuning knob: allow tiny wiggle if you want (0 = strict "no loss")
+sus_slack <- 0.0   # e.g., 0.001 would allow 0.1% loss
+
+# ============================================================
+# Add sustainability floor constraint (NO sustainability loss)
+# ============================================================
+A_susfloor   <- rbind(A, sus_cost_per_appearance)
+dir_susfloor <- c(dir, ">=")
+rhs_susfloor <- c(rhs, baseline_sus * (1 - sus_slack))
+
+# ============================================================
+# Stage 1: Minimize cost subject to sustainability floor
+# (This gives "maximum cost reduction without losing sustainability")
+# ============================================================
+sol_s1v21_stage1 <- lp(
+  direction = "min",
+  objective.in = cost_per_appearance,
+  const.mat = A_susfloor,
+  const.dir = dir_susfloor,
+  const.rhs = rhs_susfloor,
+  all.int = TRUE
+)
+
+if (sol_s1v21_stage1$status != 0) {
+  stop("S1v2.1 Stage 1 infeasible. Try relaxing bounds or set sus_slack to a small value (e.g., 0.001).")
+}
+
+x_s1v21_cost <- sol_s1v21_stage1$solution
+opt_cost_s1v21 <- sum(cost_per_appearance * x_s1v21_cost)
+
+# ============================================================
+# Optional Stage 2: Minimize GHG while keeping:
+#  - cost at its minimum (within tiny slack)
+#  - sustainability >= baseline
+# ============================================================
+cost_slack <- 0.001  # allow tiny rounding wiggle around min cost
+
+A_costcap2   <- rbind(A_susfloor, cost_per_appearance)
+dir_costcap2 <- c(dir_susfloor, "<=")
+rhs_costcap2 <- c(rhs_susfloor, opt_cost_s1v21 * (1 + cost_slack))
+
+sol_s1v21_stage2 <- lp(
+  direction = "min",
+  objective.in = ghg_per_appearance,
+  const.mat = A_costcap2,
+  const.dir = dir_costcap2,
+  const.rhs = rhs_costcap2,
+  all.int = TRUE
+)
+
+if (sol_s1v21_stage2$status != 0) {
+  stop("S1v2.1 Stage 2 infeasible. Try increasing cost_slack slightly (e.g., 0.005).")
+}
+
+x_s1v21_final <- sol_s1v21_stage2$solution
+
+# ============================================================
+# Summaries
+# ============================================================
+summ <- function(x) {
+  total_cost <- sum(cost_per_appearance * x)
+  sus_spend  <- sum(sus_cost_per_appearance * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg_per_appearance * x)
+  c(meals = sum(x), total_cost = total_cost, sus_spend = sus_spend, sus_pct = sus_pct, total_ghg = total_ghg)
+}
+
+s1v21_table <- rbind(
+  baseline = summ(x0),
+  s1v2_1_stage1_min_cost_no_sus_loss = summ(x_s1v21_cost),
+  s1v2_1_final_min_ghg_given_cost_and_no_sus_loss = summ(x_s1v21_final)
+)
+
+print(s1v21_table)
+
+# Attach frequencies
+optimization$freq_opt_s1v21 <- x_s1v21_final
+optimization$delta_s1v21 <- optimization$freq_opt_s1v21 - optimization$Menu_freq_f25
+```
+
 
 ## Scenario 2v2
 
