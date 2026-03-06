@@ -90,9 +90,9 @@ baseline_ghg   <- sum(ghg_per_appearance * x0)
 # -----------------------------------------
 # 8. Bounds
 # -----------------------------------------
-# Existing items: ±50%
-lb <- ifelse(is_existing, floor(0.5 * x0), 0)
-ub <- ifelse(is_existing, ceiling(1.5 * x0), 0)
+# Existing items: strict integer-safe ±50%
+lb <- ifelse(is_existing, ceiling(0.5 * x0), 0)
+ub <- ifelse(is_existing, floor(1.5 * x0), 0)
 
 # New hypothetical Soy/Fish rows: allow entry, controlled by category caps
 ub[is_new_allowed & is_soy]  <- 3
@@ -165,6 +165,34 @@ rhs_fish <- 19
 A   <- rbind(A, A_fish)
 dir <- c(dir, dir_fish)
 rhs <- c(rhs, rhs_fish)
+
+# 9f. Category-level +/- 50% constraints
+# for all categories except Soy and Fish
+# -----------------------------------------
+category_baselines <- optimization %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_cat_meals = sum(Menu_freq_f25, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  filter(!(Category %in% c("Soy", "Fish")))
+
+for (i in seq_len(nrow(category_baselines))) {
+  cat_name <- category_baselines$Category[i]
+  cat_base <- category_baselines$baseline_cat_meals[i]
+
+  cat_vec <- as.numeric(optimization$Category == cat_name)
+
+  # Lower bound: category total >= 50% of baseline
+  A <- rbind(A, cat_vec)
+  dir <- c(dir, ">=")
+  rhs <- c(rhs, ceiling(0.5 * cat_base))
+
+  # Upper bound: category total <= 150% of baseline
+  A <- rbind(A, cat_vec)
+  dir <- c(dir, "<=")
+  rhs <- c(rhs, floor(1.5 * cat_base))
+}
 
 # -----------------------------------------
 # 10. Cost cap
@@ -258,14 +286,7 @@ optimization <- optimization %>%
     freq_baseline = Menu_freq_f25,
     freq_opt_s2v2_expanded = x_final,
     delta_s2v2_expanded = freq_opt_s2v2_expanded - freq_baseline,
-    baseline_cost_contribution = cost_per_appearance * freq_baseline,
-    opt_cost_contribution = cost_per_appearance * freq_opt_s2v2_expanded,
-    baseline_sus_spend = sus_cost_per_appearance * freq_baseline,
-    opt_sus_spend = sus_cost_per_appearance * freq_opt_s2v2_expanded,
-    baseline_ghg_contribution = ghg_per_appearance * freq_baseline,
-    opt_ghg_contribution = ghg_per_appearance * freq_opt_s2v2_expanded,
-    is_existing_item = is_existing,
-    is_new_hypothetical_allowed = is_new_allowed
+    baseline_cost_contribution = cost_per_appearance * freq_baseline
   )
 
 # -----------------------------------------
@@ -297,26 +318,8 @@ category_totals_s2v2_expanded <- optimization %>%
 print(category_totals_s2v2_expanded)
 
 # -----------------------------------------
-# 16. Optional diagnostic checks
-# -----------------------------------------
-cat("\n--- Diagnostic checks ---\n")
-cat("Baseline meals: ", sum(optimization$freq_baseline), "\n")
-cat("Optimized meals:", sum(optimization$freq_opt_s2v2_expanded), "\n")
-cat("Baseline cost:  ", sum(optimization$baseline_cost_contribution), "\n")
-cat("Optimized cost: ", sum(optimization$opt_cost_contribution), "\n")
-cat("Baseline sustainable spend: ", sum(optimization$baseline_sus_spend), "\n")
-cat("Optimized sustainable spend:", sum(optimization$opt_sus_spend), "\n")
-cat("Baseline GHG:   ", sum(optimization$baseline_ghg_contribution), "\n")
-cat("Optimized GHG:  ", sum(optimization$opt_ghg_contribution), "\n")
-cat("Total Soy meals in optimized solution:  ",
-    sum(optimization$freq_opt_s2v2_expanded[optimization$Category == "Soy"]), "\n")
-cat("Total Fish meals in optimized solution: ",
-    sum(optimization$freq_opt_s2v2_expanded[optimization$Category == "Fish"]), "\n")
-
-# -----------------------------------------
 # 17. Export outputs
 # -----------------------------------------
-dir.create("v2optimization_outputs", showWarnings = FALSE)
 
 write.csv(
   optimization,

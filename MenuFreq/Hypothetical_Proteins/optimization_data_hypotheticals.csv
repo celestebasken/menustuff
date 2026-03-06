@@ -1,4 +1,4 @@
-Category,Ingredient,Avg_price_lb,Conventional_price_lb,Sustainable_price_lb,Default_sus,Menu_freq_f25,Conventional_GHG_per_lb,Expected_lb_meat_portion,%_dish_meat,Expected_portions
+Category,Ingredient,Avg_price_lb,Conventional_price_lb,Sustainable_price_lb,Default_sus,Menu_freq_f25,Conventional_GHG_per_lb,Expected_lb_meat_portion,Percent_dish_meat,Expected_portions
 Beef,Beef Barbacoa Precooked,7.16,7.16,0.00,No,4,41.34628634,0.25,1.0000,1103.1875
 Beef,Beef Ground HALAL,3.61,3.61,0.00,No,6,41.34628634,0.1647658499,0.6087,1103.1875
 Beef,Beef Brisket Whole HALAL,5.60,0.00,5.60,Yes,1,41.34628634,0.2399619594,0.8500,1103.1875
@@ -25,8 +25,8 @@ Fish,Salmon Fillet Standard,8.28,0.00,8.28,Yes,4,4.979783836,0.2400460045,0.8525
 Fish,Cod Fillet Breaded,9.91,9.91,0.00,No,3,4.979783836,0.2498935219,0.8550,850.4667
 Fish,Catfish Fillet,6.03,6.03,0.00,No,1,4.979783836,0.240145536,0.8160,850.4667
 Fish,Cod Fillet,7.48,7.48,0.00,No,1,4.979783836,0.2499869253,0.7820,850.4667
-Fish,Sand Bass,6.82,0.00,6.82,Yes,2,4.979783836,0.2425715591,0.8207,850.4667
-Fish,Halibut,15.35,0.00,15.35,Yes,2,4.979783836,0.2425715591,0.8207,850.4667
+Fish,Sand Bass,6.82,0.00,6.82,Yes,0,4.979783836,0.2425715591,0.8207,850.4667
+Fish,Halibut,15.35,0.00,15.35,Yes,0,4.979783836,0.2425715591,0.8207,850.4667
 Shellfish,Shrimp 31/40,5.59,5.59,0.00,No,2,21.127425,0.12609375,0.3720,875.0000
 Shellfish,Shrimp 26/30,5.69,5.69,0.00,No,1,21.127425,0.1000062971,0.2270,875.0000
 Shellfish,Shrimp Breaded PopCorn Style,4.59,4.59,0.00,No,1,21.127425,0.1249872523,0.9690,875.0000
@@ -36,4 +36,4 @@ Pork,Pork Carnitas Precooked,5.75,5.75,0.00,No,2,9.831502854,0.1938331,0.7510,78
 Pork,Pork Loin Boneless,3.75,0.00,3.75,Yes,2,9.831502854,0.2356297719,0.9605,788.4667
 Pork,Pork Ham Boneless,4.30,4.30,0.00,No,1,9.831502854,0.24998,0.8620,788.4667
 Turkey,Turkey Breast Boneless Skin On,6.60,6.60,0.00,No,1,4.399609786,0.166875,0.5340,1000.0000
-Soy,Firm Tofu,2.41,0.00,2.41,Yes,2,1.75423,0.25,0.8000,1000.0000
+Soy,Firm Tofu,2.41,0.00,2.41,Yes,0,1.75423,0.25,0.8000,1000.0000
