@@ -184,55 +184,10 @@ rbind(
   stage3_min_ghg_given_cost_sus = summ(x3)
 )
 ```
-```{r}
-# -----------------------------------------
-# Add optimized frequencies to dataframe
-# -----------------------------------------
 
-optimization <- optimization %>%
-  mutate(
-    freq_baseline = Menu_freq_f25,
-    freq_opt_s3 = x3,
-    delta_s3 = freq_opt_s3 - freq_baseline
-  )
+### Scenario 1v2.1
 
-
-# -----------------------------------------
-# Category totals
-# -----------------------------------------
-
-category_totals_s3 <- optimization %>%
-  group_by(Category) %>%
-  summarise(
-    baseline_meals = sum(freq_baseline, na.rm = TRUE),
-    opt_meals_s3   = sum(freq_opt_s3, na.rm = TRUE),
-    delta_meals_s3 = sum(delta_s3, na.rm = TRUE),
-
-    baseline_share = baseline_meals / sum(freq_baseline, na.rm = TRUE),
-    opt_share_s3   = opt_meals_s3 / sum(freq_opt_s3, na.rm = TRUE),
-
-    .groups = "drop"
-  ) %>%
-  arrange(desc(opt_meals_s3))
-
-
-# View category totals
-category_totals_s3
-
-
-# -----------------------------------------
-# Save updated optimization table
-# -----------------------------------------
-
-write.csv(
-  optimization,
-  file = "optimization_including_scenario3_results.csv",
-  row.names = FALSE
-)
-
-```
-
-### Scenario 2v2.1
+THIS IS A GOOD ONE TO SHOW TO CH
 
 Yeah these versions are getting out of control but I really didn't like 1v2 because it lost on sustainability
 
@@ -244,22 +199,79 @@ Yeah these versions are getting out of control but I really didn't like 1v2 beca
 # Optional tertiary: minimize GHG (after finding min cost)
 # =========================
 
-# ---- baseline frequencies ----
+# Setup
+# ----------------------------
 x0 <- optimization$Menu_freq_f25
+n  <- nrow(optimization)
 
-# ---- portion-adjusted vectors (same as S1v2) ----
+meals_served <- sum(x0)
+
+# Lower bound (e.g., max 50% reduction)
+reduction <- 0.5
+lower <- ceiling(x0 * reduction)
+
+# Upper bound (e.g., max 50% increase)
+max_multiplier <- 1.5
+upper <- floor(x0 * max_multiplier)
+
+# ----------------------------
+# NEW: portion-adjusted price per "menu appearance"
+# ----------------------------
+# Clean/validate portion weights
+if (!("Expected_lb_meat_portion" %in% names(optimization))) {
+  stop("Column Expected_lb_meat_portion not found in optimization_data.csv")
+}
+
+portion_lb <- optimization$Expected_lb_meat_portion
+if (any(is.na(portion_lb))) {
+  stop("Expected_lb_meat_portion has NA values. Please fill them before optimizing.")
+}
+if (any(portion_lb < 0)) {
+  stop("Expected_lb_meat_portion has negative values. Please correct them.")
+}
+
+# ---- portion-adjusted vectors ----
 portion_lb <- optimization$Expected_lb_meat_portion
 sus_flag <- ifelse(tolower(optimization$Default_sus) %in% c("yes","y","true","1"), 1, 0)
 
-price_lb <- ifelse(
-  sus_flag == 1,
-  optimization$Sustainable_price_lb,
-  optimization$Conventional_price_lb
-)
+# Sustainable flag from Default_sus
+sus_flag <- ifelse(tolower(optimization$Default_sus) %in% c("yes","y","true","1"), 1, 0)
 
+# Effective price per lb used for costing:
+# if Default_sus == yes -> Sustainable_price_lb else Conventional_price_lb
+price_lb <- ifelse(sus_flag == 1,
+                   optimization$Sustainable_price_lb,
+                   optimization$Conventional_price_lb)
+
+# Portion-adjusted "cost per appearance" (THIS is what we minimize / constrain on)
 cost_per_appearance <- price_lb * portion_lb
+
+# "Sustainable spend per appearance" (only counts when Default_sus == yes)
 sus_cost_per_appearance <- optimization$Sustainable_price_lb * portion_lb * sus_flag
+
+# GHG per appearance (uses your existing conventional GHG per lb * portion lbs)
 ghg_per_appearance <- optimization$Conventional_GHG_per_lb * portion_lb
+
+# ----------------------------
+# Constraint matrix
+# ----------------------------
+# 1) Maintain total meals: sum(x) = meals_served
+A <- matrix(1, nrow = 1, ncol = n)
+dir <- "="
+rhs <- meals_served
+
+# 2) Lower bounds: x_i >= lower_i
+A <- rbind(A, diag(n))
+dir <- c(dir, rep(">=", n))
+rhs <- c(rhs, lower)
+
+# 3) Upper bounds: x_i <= upper_i (for non-NA uppers)
+if (any(!is.na(upper))) {
+  idx <- which(!is.na(upper))
+  A <- rbind(A, diag(n)[idx, , drop = FALSE])
+  dir <- c(dir, rep("<=", length(idx)))
+  rhs <- c(rhs, upper[idx])
+}
 
 # ---- baseline totals under new accounting ----
 baseline_cost <- sum(cost_per_appearance * x0)
@@ -343,6 +355,54 @@ print(s1v21_table)
 # Attach frequencies
 optimization$freq_opt_s1v21 <- x_s1v21_final
 optimization$delta_s1v21 <- optimization$freq_opt_s1v21 - optimization$Menu_freq_f25
+```
+```{r}
+
+# -----------------------------------------
+# Add optimized frequencies to dataframe
+# -----------------------------------------
+
+optimization <- optimization %>%
+  mutate(
+    freq_baseline = Menu_freq_f25,
+    freq_opt_s1v21 = x_s1v21_final,
+    delta_s1v21 = freq_opt_s1v21 - freq_baseline
+  )
+
+
+# -----------------------------------------
+# Category totals
+# -----------------------------------------
+
+category_totals_s1v21 <- optimization %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_meals = sum(freq_baseline, na.rm = TRUE),
+    opt_meals_s1v21   = sum(freq_opt_s1v21, na.rm = TRUE),
+    delta_meals_s1v21 = sum(delta_s1v21, na.rm = TRUE),
+
+    baseline_share = baseline_meals / sum(freq_baseline, na.rm = TRUE),
+    opt_share_s1v21   = opt_meals_s1v21 / sum(freq_opt_s1v21, na.rm = TRUE),
+
+    .groups = "drop"
+  ) %>%
+  arrange(desc(opt_meals_s1v21))
+
+
+# View category totals
+category_totals_s1v21
+
+
+# -----------------------------------------
+# Save updated optimization table
+# -----------------------------------------
+
+write.csv(
+  optimization,
+  file = "v2optimization_outputs/optimization_s1v2.csv",
+  row.names = FALSE
+)
+
 ```
 
 
