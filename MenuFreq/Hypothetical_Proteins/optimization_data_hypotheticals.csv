@@ -1,39 +1,39 @@
-Category,Ingredient,Avg_price_lb,Conventional_price_lb,Sustainable_price_lb,Default_sus,Menu_freq_f25,Conventional_GHG_per_lb
-Beef,Beef Barbacoa Precooked,7.16,7.16,0.00,No,4,41.34628634
-Beef,Beef Ground HALAL,3.61,3.61,7.30,No,6,41.34628634
-Beef,Beef Brisket Whole HALAL,5.60,0.00,5.60,Yes,1,41.34628634
-Beef,Beef Carne Asada Diced 1/4 Fully Cooked,8.46,8.46,9.84,No,1,41.34628634
-Beef,Beef Chicken Fried,0.35,0.35,0.00,No,1,41.34628634
-Beef,Beef Meatball Precooked,5.64,5.64,0.00,No,3,41.34628634
-Beef,Beef Sirloin Philly Sliced HALAL,8.43,0.00,8.43,Yes,4,41.34628634
-Chicken,Chicken 8 Cut HALAL,2.62,0.00,2.62,Yes,11,4.399609786
-Chicken,Chicken Thigh Boneless HALAL,1.98,1.98,6.56,No,16,4.399609786
-Chicken,Chicken Breast B/S Raw HALAL,2.53,2.96,2.09,Yes,4,4.399609786
-Chicken,Chicken Diced Dark Meat HALAL,3.64,3.64,4.09,No,4,4.399609786
-Chicken,Chicken Tenderloin Breaded Precooked,0.97,0.97,0.00,No,3,4.399609786
-Chicken,Chicken Breast B/S Raw 4 oz,5.94,4.94,6.93,No,2,4.399609786
-Chicken,Chicken Breast Fajita Cut,3.15,3.15,0.00,No,3,4.399609786
-Chicken,Chicken Diced Meat Precooked,4.02,4.02,0.00,No,3,4.399609786
-Chicken,Chicken Mandarin Orange with Sauce,4.39,4.39,0.00,No,2,4.399609786
-Chicken,Chicken Thigh Bone In HALAL,1.41,1.41,0.00,No,5,4.399609786
-Chicken,Chicken Thigh Boneless Precooked,5.78,5.78,0.00,No,3,4.399609786
-Chicken,Chicken Breast Fajita Cut HALAL,3.19,3.19,0.00,No,1,4.399609786
-Chicken,Chicken Tenderloin Breaded (HS) Halal,4.60,4.60,0.00,No,1,4.399609786
-Chicken,Chicken Thigh Boneless,3.49,1.69,5.29,No,1,4.399609786
-Fish,Rockfish Fillet,6.90,6.90,7.69,Yes,6,4.979783836
-Fish,Salmon Fillet Standard,8.28,0.00,8.28,Yes,4,4.979783836
-Fish,Cod Fillet Breaded,9.91,9.91,0.00,No,3,4.979783836
-Fish,Catfish Fillet,6.03,6.03,0.00,No,1,4.979783836
-Fish,Cod Fillet,7.48,7.48,0.00,No,1,4.979783836
-Fish,Sand Bass,6.82,0.00,6.82,Yes,2,4.979783836
-Fish,Halibut,15.35,0.00,15.35,Yes,2,4.979783836
-Shellfish,Shrimp 31/40,5.59,5.59,0.00,No,2,21.127425
-Shellfish,Shrimp 26/30,5.69,5.69,0.00,No,1,21.127425
-Shellfish,Shrimp Breaded PopCorn Style,4.59,4.59,0.00,No,1,21.127425
-Pork,Pork Stew Cut,4.66,4.69,4.62,No,5,9.831502854
-Pork,Pork Butt Boneless,3.25,3.25,4.13,No,2,9.831502854
-Pork,Pork Carnitas Precooked,5.75,5.75,0.00,No,2,9.831502854
-Pork,Pork Loin Boneless,3.75,0.00,3.75,Yes,2,9.831502854
-Pork,Pork Ham Boneless,4.30,4.30,0.00,No,1,9.831502854
-Turkey,Turkey Breast Boneless Skin On,6.60,6.60,0.00,No,1,4.399609786
-Soy,Firm Tofu,2.41,0.00,2.41,Yes,3,1.75423
+Category,Ingredient,Avg_price_lb,Conventional_price_lb,Sustainable_price_lb,Default_sus,Menu_freq_f25,Conventional_GHG_per_lb,Expected_lb_meat_portion,%_dish_meat,Expected_portions
+Beef,Beef Barbacoa Precooked,7.16,7.16,0.00,No,4,41.34628634,0.25,1.0000,1103.1875
+Beef,Beef Ground HALAL,3.61,3.61,0.00,No,6,41.34628634,0.1647658499,0.6087,1103.1875
+Beef,Beef Brisket Whole HALAL,5.60,0.00,5.60,Yes,1,41.34628634,0.2399619594,0.8500,1103.1875
+Beef,Beef Carne Asada Diced 1/4 Fully Cooked,8.46,8.46,0.00,No,1,41.34628634,0.19,1.0000,1103.1875
+Beef,Beef Chicken Fried,0.35,0.35,0.00,No,1,41.34628634,0.2328125,0.7450,1103.1875
+Beef,Beef Meatball Precooked,5.64,5.64,0.00,No,3,41.34628634,0.2359344355,0.6370,1103.1875
+Beef,Beef Sirloin Philly Sliced HALAL,8.43,0.00,8.43,Yes,4,41.34628634,0.1621483189,0.7728,1103.1875
+Chicken,Chicken 8 Cut HALAL,2.62,0.00,2.62,Yes,11,4.399609786,0.2427710526,0.8869,1012.0909
+Chicken,Chicken Thigh Boneless HALAL,1.98,1.98,0.00,No,16,4.399609786,0.2301696977,0.8005,1012.0909
+Chicken,Chicken Breast B/S Raw HALAL,2.53,2.96,2.09,Yes,4,4.399609786,0.236548246,0.6543,1012.0909
+Chicken,Chicken Diced Dark Meat HALAL,3.64,3.64,0.00,No,4,4.399609786,0.1876263053,0.5245,1012.0909
+Chicken,Chicken Tenderloin Breaded Precooked,0.97,0.97,0.00,No,3,4.399609786,0.2524551538,0.9580,1012.0909
+Chicken,Chicken Breast B/S Raw 4 oz,5.94,4.94,6.93,No,2,4.399609786,0.214612918,0.5985,1012.0909
+Chicken,Chicken Breast Fajita Cut,3.15,3.15,0.00,No,3,4.399609786,0.1295156547,0.3757,1012.0909
+Chicken,Chicken Diced Meat Precooked,4.02,4.02,0.00,No,3,4.399609786,0.2013004903,0.6520,1012.0909
+Chicken,Chicken Mandarin Orange with Sauce,4.39,4.39,0.00,No,2,4.399609786,0.3616239916,0.9290,1012.0909
+Chicken,Chicken Thigh Bone In HALAL,1.41,1.41,0.00,No,5,4.399609786,0.2452742942,0.8568,1012.0909
+Chicken,Chicken Thigh Boneless Precooked,5.78,5.78,0.00,No,3,4.399609786,0.2466879542,0.9607,1012.0909
+Chicken,Chicken Breast Fajita Cut HALAL,3.19,3.19,0.00,No,1,4.399609786,0.2010328999,0.4870,1012.0909
+Chicken,Chicken Tenderloin Breaded (HS) Halal,4.60,4.60,0.00,No,1,4.399609786,0.2524551538,0.9580,1012.0909
+Chicken,Chicken Thigh Boneless,3.49,1.69,5.29,No,1,4.399609786,0.2875,0.9200,1012.0909
+Fish,Rockfish Fillet,6.90,6.90,7.69,Yes,6,4.979783836,0.2327858077,0.7978,850.4667
+Fish,Salmon Fillet Standard,8.28,0.00,8.28,Yes,4,4.979783836,0.2400460045,0.8525,850.4667
+Fish,Cod Fillet Breaded,9.91,9.91,0.00,No,3,4.979783836,0.2498935219,0.8550,850.4667
+Fish,Catfish Fillet,6.03,6.03,0.00,No,1,4.979783836,0.240145536,0.8160,850.4667
+Fish,Cod Fillet,7.48,7.48,0.00,No,1,4.979783836,0.2499869253,0.7820,850.4667
+Fish,Sand Bass,6.82,0.00,6.82,Yes,2,4.979783836,0.2425715591,0.8207,850.4667
+Fish,Halibut,15.35,0.00,15.35,Yes,2,4.979783836,0.2425715591,0.8207,850.4667
+Shellfish,Shrimp 31/40,5.59,5.59,0.00,No,2,21.127425,0.12609375,0.3720,875.0000
+Shellfish,Shrimp 26/30,5.69,5.69,0.00,No,1,21.127425,0.1000062971,0.2270,875.0000
+Shellfish,Shrimp Breaded PopCorn Style,4.59,4.59,0.00,No,1,21.127425,0.1249872523,0.9690,875.0000
+Pork,Pork Stew Cut,4.66,4.69,4.62,No,5,9.831502854,0.2072938833,0.5510,788.4667
+Pork,Pork Butt Boneless,3.25,3.25,0.00,No,2,9.831502854,0.2399999258,0.9390,788.4667
+Pork,Pork Carnitas Precooked,5.75,5.75,0.00,No,2,9.831502854,0.1938331,0.7510,788.4667
+Pork,Pork Loin Boneless,3.75,0.00,3.75,Yes,2,9.831502854,0.2356297719,0.9605,788.4667
+Pork,Pork Ham Boneless,4.30,4.30,0.00,No,1,9.831502854,0.24998,0.8620,788.4667
+Turkey,Turkey Breast Boneless Skin On,6.60,6.60,0.00,No,1,4.399609786,0.166875,0.5340,1000.0000
+Soy,Firm Tofu,2.41,0.00,2.41,Yes,2,1.75423,0.25,0.8000,1000.0000
