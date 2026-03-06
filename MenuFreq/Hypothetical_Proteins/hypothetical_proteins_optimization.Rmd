@@ -90,11 +90,28 @@ baseline_ghg   <- sum(ghg_per_appearance * x0)
 # -----------------------------------------
 # 8. Bounds
 # -----------------------------------------
-# Existing items: strict integer-safe ±50%
-lb <- ifelse(is_existing, ceiling(0.5 * x0), 0)
-ub <- ifelse(is_existing, floor(1.5 * x0), 0)
+# Existing items:
+#   if baseline is 1 or 2 -> keep fixed at baseline
+#   if baseline is 3 or more -> apply integer-safe +/- 50%
+#
+# New hypothetical items:
+#   allowed only for Soy and Fish rows with baseline 0
+#   controlled by category caps below
 
-# New hypothetical Soy/Fish rows: allow entry, controlled by category caps
+lb <- ifelse(
+  is_existing,
+  ifelse(x0 <= 2, x0, ceiling(0.5 * x0)),
+  0
+)
+
+ub <- ifelse(
+  is_existing,
+  ifelse(x0 <= 2, x0, floor(1.5 * x0)),
+  0
+)
+
+# New hypothetical Soy/Fish rows can enter
+# These are row-level maxima only; category-level caps are added below
 ub[is_new_allowed & is_soy]  <- 3
 ub[is_new_allowed & is_fish] <- 19
 
@@ -166,8 +183,15 @@ A   <- rbind(A, A_fish)
 dir <- c(dir, dir_fish)
 rhs <- c(rhs, rhs_fish)
 
-# 9f. Category-level +/- 50% constraints
-# for all categories except Soy and Fish
+# -----------------------------------------
+# 9f. Category-level constraints
+# Hybrid rule for small categories:
+#   baseline 1-2  -> fixed at baseline
+#   baseline 3-4  -> baseline +/- 1 meal
+#   baseline >= 5 -> +/- 50%
+#
+# Exclude Soy and Fish from this block because they already
+# have their own special treatment.
 # -----------------------------------------
 category_baselines <- optimization %>%
   group_by(Category) %>%
@@ -183,15 +207,24 @@ for (i in seq_len(nrow(category_baselines))) {
 
   cat_vec <- as.numeric(optimization$Category == cat_name)
 
-  # Lower bound: category total >= 50% of baseline
+  if (cat_base <= 2) {
+    cat_lb <- cat_base
+    cat_ub <- cat_base
+ # } else if (cat_base <= 4) {
+ #   cat_lb <- cat_base - 1
+ #   cat_ub <- cat_base + 1
+  } else {
+    cat_lb <- ceiling(0.5 * cat_base)
+    cat_ub <- floor(1.5 * cat_base)
+  }
+
   A <- rbind(A, cat_vec)
   dir <- c(dir, ">=")
-  rhs <- c(rhs, ceiling(0.5 * cat_base))
+  rhs <- c(rhs, cat_lb)
 
-  # Upper bound: category total <= 150% of baseline
   A <- rbind(A, cat_vec)
   dir <- c(dir, "<=")
-  rhs <- c(rhs, floor(1.5 * cat_base))
+  rhs <- c(rhs, cat_ub)
 }
 
 # -----------------------------------------
