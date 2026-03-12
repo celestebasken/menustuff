@@ -1,0 +1,264 @@
+---
+title: "sp_f_combined"
+date: "2026-03-12"
+author: "Celeste Basken"
+output: html_document
+---
+
+This is the combined SP26 + F25 data in a new optimization.
+
+Now to go to Crazy Town and use SP26 data too!!
+
+# Part 0: Load data
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(lpSolve)
+library(readr)
+library(tidyr)
+
+optimization2 <- read.csv("f25sp26_unknowns_removed.csv", stringsAsFactors = FALSE)
+
+optimization2 <- optimization2 %>%
+  mutate(across(
+    c(Sustainable_price_lb,
+      Conventional_price_lb,
+      Expected_lb_meat_portion,
+      Conventional_GHG_per_lb,
+      Baseline_freq),
+    ~replace_na(parse_number(as.character(.)), 0)
+  ))
+
+```
+
+# Part 1
+
+Fall + Spring 26 menus ASSUMING that we
+
+* Delete any meals with fewer than 100 portions forecasted
+* Replace ingredients that I can’t find with what I assume to be appropriate substitutes?
+
+Just a note: Columns with dif names than 2v2 (optimization csv)
+
+* Menu_freq_f25 -> Baseline_freq
+* %_dish_meat -> Percent_dish_meat
+
+## Scenario s1v2.2: fall n spring with unknowns removed 3.10.26
+
+```{r}
+# =========================
+# s1v2.2: Max cost reduction WITHOUT losing sustainability
+# (Primary: keep sustainable spend >= baseline)
+# (Secondary: minimize total cost)
+# Optional tertiary: minimize GHG (after finding min cost)
+# =========================
+
+# Setup
+# ----------------------------
+x0 <- optimization2$Baseline_freq
+n  <- nrow(optimization2)
+
+meals_served <- sum(x0)
+
+# Lower bound (e.g., max 50% reduction)
+reduction <- 0.25
+lower <- ceiling(x0 * reduction)
+
+# Upper bound (e.g., max 50% increase)
+max_multiplier <- 1.25
+upper <- floor(x0 * max_multiplier)
+
+# ----------------------------
+# NEW: portion-adjusted price per "menu appearance"
+# ----------------------------
+# Clean/validate portion weights
+if (!("Expected_lb_meat_portion" %in% names(optimization2))) {
+  stop("Column Expected_lb_meat_portion not found in optimization2_data.csv")
+}
+
+portion_lb <- optimization2$Expected_lb_meat_portion
+if (any(is.na(portion_lb))) {
+  stop("Expected_lb_meat_portion has NA values. Please fill them before optimizing.")
+}
+if (any(portion_lb < 0)) {
+  stop("Expected_lb_meat_portion has negative values. Please correct them.")
+}
+
+# ---- portion-adjusted vectors ----
+portion_lb <- optimization2$Expected_lb_meat_portion
+default_sus_clean <- tolower(trimws(as.character(optimization2$Default_sus)))
+sus_flag <- as.integer(default_sus_clean == "yes")
+
+# Effective price per lb used for costing:
+# if Default_sus == yes -> Sustainable_price_lb else Conventional_price_lb
+price_lb <- ifelse(sus_flag == 1,
+                   optimization2$Sustainable_price_lb,
+                   optimization2$Conventional_price_lb)
+
+# Portion-adjusted "cost per appearance" (THIS is what we minimize / constrain on)
+cost_per_appearance <- price_lb * portion_lb
+
+# "Sustainable spend per appearance" (only counts when Default_sus == yes)
+sus_cost_per_appearance <- optimization2$Sustainable_price_lb * portion_lb * sus_flag
+
+# GHG per appearance (uses your existing conventional GHG per lb * portion lbs)
+ghg_per_appearance <- optimization2$Conventional_GHG_per_lb * portion_lb
+
+# ----------------------------
+# Constraint matrix
+# ----------------------------
+# 1) Maintain total meals: sum(x) = meals_served
+A <- matrix(1, nrow = 1, ncol = n)
+dir <- "="
+rhs <- meals_served
+
+# 2) Lower bounds: x_i >= lower_i
+A <- rbind(A, diag(n))
+dir <- c(dir, rep(">=", n))
+rhs <- c(rhs, lower)
+
+# 3) Upper bounds: x_i <= upper_i (for non-NA uppers)
+if (any(!is.na(upper))) {
+  idx <- which(!is.na(upper))
+  A <- rbind(A, diag(n)[idx, , drop = FALSE])
+  dir <- c(dir, rep("<=", length(idx)))
+  rhs <- c(rhs, upper[idx])
+}
+
+# ---- baseline totals under new accounting ----
+baseline_cost <- sum(cost_per_appearance * x0)
+baseline_sus  <- sum(sus_cost_per_appearance * x0)
+
+# Tuning knob: allow tiny wiggle if you want (0 = strict "no loss")
+sus_slack <- 0.0   # e.g., 0.001 would allow 0.1% loss
+
+# ============================================================
+# Add sustainability floor constraint (NO sustainability loss)
+# ============================================================
+A_susfloor   <- rbind(A, sus_cost_per_appearance)
+dir_susfloor <- c(dir, ">=")
+rhs_susfloor <- c(rhs, baseline_sus * (1 - sus_slack))
+
+# ============================================================
+# Stage 1: Minimize cost subject to sustainability floor
+# (This gives "maximum cost reduction without losing sustainability")
+# ============================================================
+sol_s1v2.2_stage1 <- lp(
+  direction = "min",
+  objective.in = cost_per_appearance,
+  const.mat = A_susfloor,
+  const.dir = dir_susfloor,
+  const.rhs = rhs_susfloor,
+  all.int = TRUE
+)
+
+if (sol_s1v2.2_stage1$status != 0) {
+  stop("S1v2.1 Stage 1 infeasible. Try relaxing bounds or set sus_slack to a small value (e.g., 0.001).")
+}
+
+x_s1v2.2_cost <- sol_s1v2.2_stage1$solution
+opt_cost_s1v2.2 <- sum(cost_per_appearance * x_s1v2.2_cost)
+
+# ============================================================
+# Optional Stage 2: Minimize GHG while keeping:
+#  - cost at its minimum (within tiny slack)
+#  - sustainability >= baseline
+# ============================================================
+cost_slack <- 0.001  # allow tiny rounding wiggle around min cost
+
+A_costcap2   <- rbind(A_susfloor, cost_per_appearance)
+dir_costcap2 <- c(dir_susfloor, "<=")
+rhs_costcap2 <- c(rhs_susfloor, opt_cost_s1v2.2 * (1 + cost_slack))
+
+sol_s1v2.2_stage2 <- lp(
+  direction = "min",
+  objective.in = ghg_per_appearance,
+  const.mat = A_costcap2,
+  const.dir = dir_costcap2,
+  const.rhs = rhs_costcap2,
+  all.int = TRUE
+)
+
+if (sol_s1v2.2_stage2$status != 0) {
+  stop("S1v2.1 Stage 2 infeasible. Try increasing cost_slack slightly (e.g., 0.005).")
+}
+
+x_s1v2.2_final <- sol_s1v2.2_stage2$solution
+
+# ============================================================
+# Summaries
+# ============================================================
+summ <- function(x) {
+  total_cost <- sum(cost_per_appearance * x)
+  sus_spend  <- sum(sus_cost_per_appearance * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg_per_appearance * x)
+  c(meals = sum(x), total_cost = total_cost, sus_spend = sus_spend, sus_pct = sus_pct, total_ghg = total_ghg)
+}
+
+s1v2.2_table <- rbind(
+  baseline = summ(x0),
+  s1v2_1_stage1_min_cost_no_sus_loss = summ(x_s1v2.2_cost),
+  s1v2_1_final_min_ghg_given_cost_and_no_sus_loss = summ(x_s1v2.2_final)
+)
+
+print(s1v2.2_table)
+
+# Attach frequencies
+optimization2$freq_opt_s1v2.2 <- x_s1v2.2_final
+optimization2$delta_s1v2.2 <- optimization2$freq_opt_s1v2.2 - optimization2$Baseline_freq
+```
+
+```{r}
+
+# -----------------------------------------
+# Add optimized frequencies to dataframe
+# -----------------------------------------
+
+optimization2 <- optimization2 %>%
+  mutate(
+    freq_baseline = Baseline_freq,
+    freq_opt_s1v2_2 = x_s1v2.2_final,
+    delta_s1v2_2 = freq_opt_s1v2_2 - freq_baseline
+  )
+
+
+# -----------------------------------------
+# Category totals
+# -----------------------------------------
+
+category_totals_s1v2_2 <- optimization2 %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_meals = sum(freq_baseline, na.rm = TRUE),
+    opt_meals_s1v2_2 = sum(freq_opt_s1v2_2, na.rm = TRUE),
+    delta_meals_s1v2_2 = sum(delta_s1v2_2, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    baseline_share = baseline_meals / sum(baseline_meals, na.rm = TRUE),
+    opt_share_s1v2_2 = opt_meals_s1v2_2 / sum(opt_meals_s1v2_2, na.rm = TRUE)
+  ) %>%
+  arrange(desc(opt_meals_s1v2_2))
+
+
+# View category totals
+category_totals_s1v2_2
+
+```
+
+
+```{r}
+# -----------------------------------------
+# Save updated optimization2 table
+# -----------------------------------------
+
+write.csv(
+  optimization2,
+  file = "sp_f_combined_outputs/optimization2_s2v3.csv",
+  row.names = FALSE
+)
+```
+
