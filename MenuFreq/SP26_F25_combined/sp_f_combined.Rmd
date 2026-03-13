@@ -508,11 +508,11 @@ n  <- nrow(optimization2)
 meals_served <- sum(x0)
 
 # Lower bound (e.g., max 25% reduction)
-reduction <- 0.5
+reduction <- 0.75
 lower <- ceiling(x0 * reduction)
 
 # Upper bound (e.g., max 25% increase)
-max_multiplier <- 1.5
+max_multiplier <- 1.25
 upper <- floor(x0 * max_multiplier)
 
 # ----------------------------
@@ -581,7 +581,7 @@ baseline_ghg  <- sum(ghg_per_appearance * x0)
 # ----------------------------
 # Cost target: 10% reduction
 # ----------------------------
-target_cost <- baseline_cost * 0.90
+target_cost <- baseline_cost * 0.92
 
 # Add cost cap constraint
 A_costcap   <- rbind(A, cost_per_appearance)
@@ -762,7 +762,7 @@ category_totals_s4v2
 
 write.csv(
   optimization2,
-  file = "sp_f_combined_outputs/optimization_s4v2.csv",
+  file = "sp_f_combined_outputs/optimization_s4v2b.csv",
   row.names = FALSE
 )
 
