@@ -14,6 +14,7 @@ optimization <- read.csv("optimization_data_hypotheticals.csv", stringsAsFactors
 
 
 ## Scenario 3v2
+This is old data (just F25)
 
 ```{r}
 # =========================
@@ -361,4 +362,303 @@ write.csv(
 )
 ```
 
+## Scenario 3v2.2
+This is SP26+F25 data
+
+```{r}
+
+
+
+# =========================
+# Expanded Scenario 2 v2
+# Existing products: ±50% bounds
+# New hypothetical products: only allowed for Category == "Soy" or "Fish"
+# Total meals fixed
+# Total cost cannot increase
+# Primary: maximize sustainable spend
+# Secondary: minimize GHG
+# Additional caps:
+#   total Soy meals  <= 3
+#   total Fish meals <= 19
+# =========================
+
+# Make a plain data.frame in case tibble causes any issues downstream
+optimization <- as.data.frame(optimization)
+
+
+# -----------------------------------------
+# 5. Define baseline vectors
+# -----------------------------------------
+x0 <- optimization$Menu_freq_f25
+n  <- nrow(optimization)
+
+# Identify existing vs new hypothetical rows
+is_existing <- x0 > 0
+is_new_zero <- x0 == 0
+
+is_soy  <- optimization$Category == "Soy"
+is_fish <- optimization$Category == "Fish"
+
+# New hypothetical rows are only allowed if they are Soy or Fish
+is_new_allowed <- is_new_zero & (is_soy | is_fish)
+
+# Any other baseline-zero row is locked at zero
+is_new_locked <- is_new_zero & !is_new_allowed
+
+# -----------------------------------------
+# 6. Sustainable flag and accounting vectors
+# -----------------------------------------
+sus_flag <- ifelse(
+  tolower(trimws(optimization$Default_sus)) %in% c("yes", "y", "true", "1"),
+  1,
+  0
+)
+
+portion_lb <- optimization$Expected_lb_meat_portion
+
+# Effective price per lb used for costing, based on Default_sus
+price_lb <- ifelse(
+  sus_flag == 1,
+  optimization$Sustainable_price_lb,
+  optimization$Conventional_price_lb
+)
+
+# Per menu appearance accounting
+cost_per_appearance <- price_lb * portion_lb
+
+# Sustainable spend only counts when Default_sus == yes
+sus_cost_per_appearance <- optimization$Sustainable_price_lb * portion_lb * sus_flag
+
+# GHG per menu appearance
+ghg_per_appearance <- optimization$Conventional_GHG_per_lb * portion_lb
+
+# -----------------------------------------
+# 7. Baseline totals
+# -----------------------------------------
+baseline_meals <- sum(x0)
+baseline_cost  <- sum(cost_per_appearance * x0)
+baseline_sus   <- sum(sus_cost_per_appearance * x0)
+baseline_ghg   <- sum(ghg_per_appearance * x0)
+
+# -----------------------------------------
+# 8. Bounds
+# -----------------------------------------
+# Existing items:
+#   if baseline is 1 or 2 -> keep fixed at baseline
+#   if baseline is 3 or more -> apply integer-safe +/- 50%
+#
+# New hypothetical items:
+#   allowed only for Soy and Fish rows with baseline 0
+#   controlled by category caps below
+
+lb <- ifelse(
+  is_existing,
+  ifelse(x0 <= 2, x0, ceiling(0.5 * x0)),
+  0
+)
+
+ub <- ifelse(
+  is_existing,
+  ifelse(x0 <= 2, x0, floor(1.5 * x0)),
+  0
+)
+
+# New hypothetical Soy/Fish rows can enter
+# These are row-level maxima only; category-level caps are added below
+ub[is_new_allowed & is_soy]  <- 3
+ub[is_new_allowed & is_fish] <- 19
+
+# Other baseline-zero rows remain locked at 0
+ub[is_new_locked] <- 0
+
+# Safety check
+if (any(lb > ub)) {
+  bad_rows <- which(lb > ub)
+  stop(
+    paste(
+      "Some rows have lower bound > upper bound. Rows:",
+      paste(bad_rows, collapse = ", ")
+    )
+  )
+}
+
+# -----------------------------------------
+# 9. Build base constraints
+# -----------------------------------------
+# Decision variables are integer menu frequencies x_i
+
+A   <- matrix(0, nrow = 0, ncol = n)
+dir <- character(0)
+rhs <- numeric(0)
+
+# 9a. Total meals fixed
+A_meals <- matrix(1, nrow = 1, ncol = n)
+dir_meals <- "="
+rhs_meals <- baseline_meals
+
+A   <- rbind(A, A_meals)
+dir <- c(dir, dir_meals)
+rhs <- c(rhs, rhs_meals)
+
+# 9b. Item-level lower bounds: x_i >= lb_i
+A_lb <- diag(n)
+dir_lb <- rep(">=", n)
+rhs_lb <- lb
+
+A   <- rbind(A, A_lb)
+dir <- c(dir, dir_lb)
+rhs <- c(rhs, rhs_lb)
+
+# 9c. Item-level upper bounds: x_i <= ub_i
+A_ub <- diag(n)
+dir_ub <- rep("<=", n)
+rhs_ub <- ub
+
+A   <- rbind(A, A_ub)
+dir <- c(dir, dir_ub)
+rhs <- c(rhs, rhs_ub)
+
+# 9d. Total Soy cap <= 3 meals
+A_soy <- matrix(as.numeric(is_soy), nrow = 1)
+dir_soy <- "<="
+rhs_soy <- 3
+
+A   <- rbind(A, A_soy)
+dir <- c(dir, dir_soy)
+rhs <- c(rhs, rhs_soy)
+
+# 9e. Total Fish cap <= 19 meals
+A_fish <- matrix(as.numeric(is_fish), nrow = 1)
+dir_fish <- "<="
+rhs_fish <- 19
+
+A   <- rbind(A, A_fish)
+dir <- c(dir, dir_fish)
+rhs <- c(rhs, rhs_fish)
+
+# -----------------------------------------
+# 9f. Category-level constraints
+# Hybrid rule for small categories:
+#   baseline 1-2  -> fixed at baseline
+#   baseline 3-4  -> baseline +/- 1 meal
+#   baseline >= 5 -> +/- 50%
+#
+# Exclude Soy and Fish from this block because they already
+# have their own special treatment.
+# -----------------------------------------
+category_baselines <- optimization %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_cat_meals = sum(Menu_freq_f25, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  filter(!(Category %in% c("Soy", "Fish")))
+
+for (i in seq_len(nrow(category_baselines))) {
+  cat_name <- category_baselines$Category[i]
+  cat_base <- category_baselines$baseline_cat_meals[i]
+
+  cat_vec <- as.numeric(optimization$Category == cat_name)
+
+  if (cat_base <= 2) {
+    cat_lb <- cat_base
+    cat_ub <- cat_base
+ # } else if (cat_base <= 4) {
+ #   cat_lb <- cat_base - 1
+ #   cat_ub <- cat_base + 1
+  } else {
+    cat_lb <- ceiling(0.5 * cat_base)
+    cat_ub <- floor(1.5 * cat_base)
+  }
+
+  A <- rbind(A, cat_vec)
+  dir <- c(dir, ">=")
+  rhs <- c(rhs, cat_lb)
+
+  A <- rbind(A, cat_vec)
+  dir <- c(dir, "<=")
+  rhs <- c(rhs, cat_ub)
+}
+
+# -----------------------------------------
+# 10. Cost cap
+# -----------------------------------------
+cost_slack <- 0.0
+sus_slack  <- 0.0
+
+A_costcap   <- rbind(A, cost_per_appearance)
+dir_costcap <- c(dir, "<=")
+rhs_costcap <- c(rhs, baseline_cost * (1 + cost_slack))
+
+# -----------------------------------------
+# 11. Stage 1: maximize sustainable spend
+# -----------------------------------------
+sol_stage1 <- lp(
+  direction   = "max",
+  objective.in = sus_cost_per_appearance,
+  const.mat   = A_costcap,
+  const.dir   = dir_costcap,
+  const.rhs   = rhs_costcap,
+  all.int     = TRUE
+)
+
+if (sol_stage1$status != 0) {
+  stop(
+    "Expanded S2v2 Stage 1 infeasible. Try checking the new row setup, caps, or use a tiny cost_slack."
+  )
+}
+
+x_stage1 <- sol_stage1$solution
+opt_sus  <- sum(sus_cost_per_appearance * x_stage1)
+
+# -----------------------------------------
+# 12. Stage 2: minimize GHG while preserving sustainable spend
+# -----------------------------------------
+A_susfloor   <- rbind(A_costcap, sus_cost_per_appearance)
+dir_susfloor <- c(dir_costcap, ">=")
+rhs_susfloor <- c(rhs_costcap, opt_sus * (1 - sus_slack))
+
+sol_stage2 <- lp(
+  direction   = "min",
+  objective.in = ghg_per_appearance,
+  const.mat   = A_susfloor,
+  const.dir   = dir_susfloor,
+  const.rhs   = rhs_susfloor,
+  all.int     = TRUE
+)
+
+if (sol_stage2$status != 0) {
+  stop(
+    "Expanded S2v2 Stage 2 infeasible. Try a small sus_slack such as 0.001."
+  )
+}
+
+x_final <- sol_stage2$solution
+
+# -----------------------------------------
+# 13. Summary function
+# -----------------------------------------
+summ <- function(x) {
+  total_cost <- sum(cost_per_appearance * x)
+  sus_spend  <- sum(sus_cost_per_appearance * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg_per_appearance * x)
+
+  c(
+    meals      = sum(x),
+    total_cost = total_cost,
+    sus_spend  = sus_spend,
+    sus_pct    = sus_pct,
+    total_ghg  = total_ghg
+  )
+}
+
+scenario_table_s2v2_expanded <- rbind(
+  baseline = summ(x0),
+  stage1_max_sus_no_cost_increase = summ(x_stage1),
+  stage2_min_ghg_given_cost_and_sus = summ(x_final)
+)
+
+print(scenario_table_s2v2_expanded)
+```
 

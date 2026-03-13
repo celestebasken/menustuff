@@ -63,7 +63,7 @@ n  <- nrow(optimization2)
 meals_served <- sum(x0)
 
 # Lower bound (e.g., max 50% reduction)
-reduction <- 0.25
+reduction <- 0.75
 lower <- ceiling(x0 * reduction)
 
 # Upper bound (e.g., max 50% increase)
@@ -241,10 +241,11 @@ category_totals_s1v2_2 <- optimization2 %>%
   ) %>%
   mutate(
     baseline_share = baseline_meals / sum(baseline_meals, na.rm = TRUE),
-    opt_share_s1v2_2 = opt_meals_s1v2_2 / sum(opt_meals_s1v2_2, na.rm = TRUE)
+    opt_share_s1v2_2 = opt_meals_s1v2_2 / sum(opt_meals_s1v2_2, na.rm = TRUE),
+    
+    pct_change_share = (opt_share_s1v2_2 - baseline_share) / baseline_share
   ) %>%
   arrange(desc(opt_meals_s1v2_2))
-
 
 # View category totals
 category_totals_s1v2_2
@@ -283,11 +284,11 @@ n  <- nrow(optimization2)
 meals_served <- sum(x0)
 
 # Lower bound (e.g., max 75% reduction if reduction = 0.25)
-reduction <- 0.25
+reduction <- 0.5
 lower <- ceiling(x0 * reduction)
 
 # Upper bound (e.g., max 25% increase)
-max_multiplier <- 1.25
+max_multiplier <- 1.5
 upper <- floor(x0 * max_multiplier)
 
 # ----------------------------
@@ -459,7 +460,8 @@ category_totals_s2v2_2 <- optimization2 %>%
   ) %>%
   mutate(
     baseline_share = baseline_meals / sum(baseline_meals, na.rm = TRUE),
-    opt_share_s2v2_2 = opt_meals_s2v2_2 / sum(opt_meals_s2v2_2, na.rm = TRUE)
+    opt_share_s2v2_2 = opt_meals_s2v2_2 / sum(opt_meals_s2v2_2, na.rm = TRUE),
+    pct_change_share = 100 * (opt_share_s2v2_2 - baseline_share) / baseline_share
   ) %>%
   arrange(desc(opt_meals_s2v2_2))
 
