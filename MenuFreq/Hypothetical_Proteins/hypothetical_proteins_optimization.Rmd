@@ -480,7 +480,7 @@ ub <- ifelse(
 # New hypothetical Soy/Fish rows can enter
 # These are row-level maxima only; category-level caps are added below
 ub[is_new_allowed & is_soy]  <- 3
-ub[is_new_allowed & is_fish] <- 40
+ub[is_new_allowed & is_fish] <- 38
 ub[is_new_locked] <- 0
 
 # Safety check
@@ -533,7 +533,7 @@ rhs_list <- c(rhs_list, 3)
 # 9e. Total Fish cap <= 40 meals
 A_list[[length(A_list) + 1]] <- matrix(as.numeric(is_fish), nrow = 1)
 dir_list <- c(dir_list, "<=")
-rhs_list <- c(rhs_list, 40)
+rhs_list <- c(rhs_list, 38)
 
 # 9f. Category-level constraints
 category_baselines <- optimization %>%
@@ -659,5 +659,65 @@ scenario_table_s2v2_expanded <- rbind(
 )
 
 print(scenario_table_s2v2_expanded)
+```
+```{r}
+# -----------------------------------------
+# 14. Attach optimization results to dataframe
+# -----------------------------------------
+optimization <- optimization %>%
+  mutate(
+    freq_baseline = Baseline_freq,
+    freq_opt_s2v2_expanded = x_final,
+    delta_s2v2_expanded = freq_opt_s2v2_expanded - freq_baseline,
+
+    baseline_cost_contribution = cost_per_appearance * freq_baseline,
+    opt_cost_contribution      = cost_per_appearance * freq_opt_s2v2_expanded,
+
+    baseline_sus_contribution  = sus_cost_per_appearance * freq_baseline,
+    opt_sus_contribution       = sus_cost_per_appearance * freq_opt_s2v2_expanded,
+
+    baseline_ghg_contribution  = ghg_per_appearance * freq_baseline,
+    opt_ghg_contribution       = ghg_per_appearance * freq_opt_s2v2_expanded
+  )
+
+# -----------------------------------------
+# 15. Category totals
+# -----------------------------------------
+category_totals_s2v2_expanded <- optimization %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_meals = sum(freq_baseline, na.rm = TRUE),
+    opt_meals_s2v2_expanded = sum(freq_opt_s2v2_expanded, na.rm = TRUE),
+    delta_meals_s2v2_expanded = sum(delta_s2v2_expanded, na.rm = TRUE),
+
+    baseline_cost = sum(baseline_cost_contribution, na.rm = TRUE),
+    opt_cost = sum(opt_cost_contribution, na.rm = TRUE),
+
+    baseline_sus_spend = sum(baseline_sus_contribution, na.rm = TRUE),
+    opt_sus_spend = sum(opt_sus_contribution, na.rm = TRUE),
+
+    baseline_ghg = sum(baseline_ghg_contribution, na.rm = TRUE),
+    opt_ghg = sum(opt_ghg_contribution, na.rm = TRUE),
+
+    .groups = "drop"
+  ) %>%
+  mutate(
+    baseline_share = baseline_meals / sum(baseline_meals, na.rm = TRUE),
+    opt_share_s2v2_expanded = opt_meals_s2v2_expanded / sum(opt_meals_s2v2_expanded, na.rm = TRUE),
+    pct_change_share = 100 * (opt_share_s2v2_expanded - baseline_share) / baseline_share,
+  ) %>%
+  arrange(desc(opt_meals_s2v2_expanded))
+
+print(category_totals_s2v2_expanded)
+
+# -----------------------------------------
+# 17. Export outputs
+# -----------------------------------------
+
+write.csv(
+  optimization,
+  file = "optimization_scenario3v2.2.csv",
+  row.names = FALSE
+)
 ```
 
