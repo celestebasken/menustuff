@@ -211,6 +211,8 @@ optimization2$freq_opt_s1v2.2 <- x_s1v2.2_final
 optimization2$delta_s1v2.2 <- optimization2$freq_opt_s1v2.2 - optimization2$Baseline_freq
 ```
 
+
+
 ```{r}
 
 # -----------------------------------------
@@ -257,7 +259,225 @@ category_totals_s1v2_2
 
 write.csv(
   optimization2,
-  file = "sp_f_combined_outputs/optimization2_s2v3.csv",
+  file = "sp_f_combined_outputs/optimization_s1v2_2.csv",
+  row.names = FALSE
+)
+```
+
+## Scenario 2v2.2 
+Ugh I hate this naming convention but it's my own fault
+
+```{r}
+# =========================
+# s2v2.2: Max sustainability WITHOUT increasing cost
+# (Primary: maximize sustainable spend)
+# (Secondary constraint: total cost <= baseline)
+# Optional tertiary: minimize GHG (after finding max sustainability)
+# =========================
+
+# Setup
+# ----------------------------
+x0 <- optimization2$Baseline_freq
+n  <- nrow(optimization2)
+
+meals_served <- sum(x0)
+
+# Lower bound (e.g., max 75% reduction if reduction = 0.25)
+reduction <- 0.25
+lower <- ceiling(x0 * reduction)
+
+# Upper bound (e.g., max 25% increase)
+max_multiplier <- 1.25
+upper <- floor(x0 * max_multiplier)
+
+# ----------------------------
+# Portion-adjusted price per "menu appearance"
+# ----------------------------
+if (!("Expected_lb_meat_portion" %in% names(optimization2))) {
+  stop("Column Expected_lb_meat_portion not found in optimization2")
+}
+
+portion_lb <- optimization2$Expected_lb_meat_portion
+if (any(is.na(portion_lb))) {
+  stop("Expected_lb_meat_portion has NA values. Please fill them before optimizing.")
+}
+if (any(portion_lb < 0)) {
+  stop("Expected_lb_meat_portion has negative values. Please correct them.")
+}
+
+default_sus_clean <- tolower(trimws(as.character(optimization2$Default_sus)))
+sus_flag <- as.integer(default_sus_clean == "yes")
+
+# Effective price per lb used for costing:
+# if Default_sus == yes -> Sustainable_price_lb else Conventional_price_lb
+price_lb <- ifelse(sus_flag == 1,
+                   optimization2$Sustainable_price_lb,
+                   optimization2$Conventional_price_lb)
+
+# Portion-adjusted vectors
+cost_per_appearance <- price_lb * portion_lb
+
+# Sustainable spend per appearance
+sus_cost_per_appearance <- optimization2$Sustainable_price_lb * portion_lb * sus_flag
+
+# GHG per appearance
+ghg_per_appearance <- optimization2$Conventional_GHG_per_lb * portion_lb
+
+# ----------------------------
+# Constraint matrix
+# ----------------------------
+# 1) Maintain total meals: sum(x) = meals_served
+A <- matrix(1, nrow = 1, ncol = n)
+dir <- "="
+rhs <- meals_served
+
+# 2) Lower bounds: x_i >= lower_i
+A <- rbind(A, diag(n))
+dir <- c(dir, rep(">=", n))
+rhs <- c(rhs, lower)
+
+# 3) Upper bounds: x_i <= upper_i
+if (any(!is.na(upper))) {
+  idx <- which(!is.na(upper))
+  A <- rbind(A, diag(n)[idx, , drop = FALSE])
+  dir <- c(dir, rep("<=", length(idx)))
+  rhs <- c(rhs, upper[idx])
+}
+
+# ----------------------------
+# Baseline totals
+# ----------------------------
+baseline_cost <- sum(cost_per_appearance * x0)
+baseline_sus  <- sum(sus_cost_per_appearance * x0)
+
+# Tuning knob: allow tiny cost wiggle if desired
+cost_slack <- 0.0   # strict no increase; e.g. 0.001 allows 0.1% increase
+
+# ============================================================
+# Add cost cap constraint (NO cost increase)
+# ============================================================
+A_costcap   <- rbind(A, cost_per_appearance)
+dir_costcap <- c(dir, "<=")
+rhs_costcap <- c(rhs, baseline_cost * (1 + cost_slack))
+
+# ============================================================
+# Stage 1: Maximize sustainability subject to cost cap
+# ============================================================
+sol_s2v2.2_stage1 <- lp(
+  direction = "max",
+  objective.in = sus_cost_per_appearance,
+  const.mat = A_costcap,
+  const.dir = dir_costcap,
+  const.rhs = rhs_costcap,
+  all.int = TRUE
+)
+
+if (sol_s2v2.2_stage1$status != 0) {
+  stop("S2v2.2 Stage 1 infeasible. Try relaxing bounds or increasing cost_slack slightly.")
+}
+
+x_s2v2.2_sus <- sol_s2v2.2_stage1$solution
+opt_sus_s2v2.2 <- sum(sus_cost_per_appearance * x_s2v2.2_sus)
+
+# ============================================================
+# Optional Stage 2: Minimize GHG while keeping:
+#  - sustainability at its maximum (within tiny slack)
+#  - cost <= baseline
+# ============================================================
+sus_slack <- 0.001  # allow tiny rounding wiggle around max sustainability
+
+A_ghg2   <- rbind(A_costcap, sus_cost_per_appearance)
+dir_ghg2 <- c(dir_costcap, ">=")
+rhs_ghg2 <- c(rhs_costcap, opt_sus_s2v2.2 * (1 - sus_slack))
+
+sol_s2v2.2_stage2 <- lp(
+  direction = "min",
+  objective.in = ghg_per_appearance,
+  const.mat = A_ghg2,
+  const.dir = dir_ghg2,
+  const.rhs = rhs_ghg2,
+  all.int = TRUE
+)
+
+if (sol_s2v2.2_stage2$status != 0) {
+  stop("S2v2.2 Stage 2 infeasible. Try increasing sus_slack slightly (e.g., 0.005).")
+}
+
+x_s2v2.2_final <- sol_s2v2.2_stage2$solution
+
+# ============================================================
+# Summaries
+# ============================================================
+summ <- function(x) {
+  total_cost <- sum(cost_per_appearance * x)
+  sus_spend  <- sum(sus_cost_per_appearance * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg_per_appearance * x)
+  c(meals = sum(x), total_cost = total_cost, sus_spend = sus_spend, sus_pct = sus_pct, total_ghg = total_ghg)
+}
+
+s2v2.2_table <- rbind(
+  baseline = summ(x0),
+  s2v2_2_stage1_max_sus_no_cost_increase = summ(x_s2v2.2_sus),
+  s2v2_2_final_min_ghg_given_max_sus_and_no_cost_increase = summ(x_s2v2.2_final)
+)
+
+print(s2v2.2_table)
+
+# Attach frequencies
+optimization2$freq_opt_s2v2.2 <- x_s2v2.2_final
+optimization2$delta_s2v2.2 <- optimization2$freq_opt_s2v2.2 - optimization2$Baseline_freq
+```
+
+
+
+
+```{r}
+# -----------------------------------------
+# Add optimized frequencies to dataframe
+# -----------------------------------------
+
+optimization2 <- optimization2 %>%
+  mutate(
+    freq_baseline = Baseline_freq,
+    freq_opt_s2v2_2 = x_s2v2.2_final,
+    delta_s2v2_2 = freq_opt_s2v2_2 - freq_baseline
+  )
+
+
+# -----------------------------------------
+# Category totals
+# -----------------------------------------
+
+category_totals_s2v2_2 <- optimization2 %>%
+  group_by(Category) %>%
+  summarise(
+    baseline_meals = sum(freq_baseline, na.rm = TRUE),
+    opt_meals_s2v2_2 = sum(freq_opt_s2v2_2, na.rm = TRUE),
+    delta_meals_s2v2_2 = sum(delta_s2v2_2, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    baseline_share = baseline_meals / sum(baseline_meals, na.rm = TRUE),
+    opt_share_s2v2_2 = opt_meals_s2v2_2 / sum(opt_meals_s2v2_2, na.rm = TRUE)
+  ) %>%
+  arrange(desc(opt_meals_s2v2_2))
+
+
+# View category totals
+category_totals_s2v2_2
+
+```
+
+
+```{r}
+# -----------------------------------------
+# Save updated optimization2 table
+# -----------------------------------------
+
+write.csv(
+  optimization2,
+  file = "sp_f_combined_outputs/optimization_s2v2_2.csv",
   row.names = FALSE
 )
 ```
