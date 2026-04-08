@@ -1,0 +1,128 @@
+New_SP26,Recipe,Ingredient,Percent_dish_meat,Meat_ingr_conventional_price_lb,Meat_ingr_sustainable_price_lb,Default_sus
+Yes,Beef Bibimbap 2,Beef Sirloin Stir-Fry Cut,0.16,8.35,,No
+Yes,Taco Beef Carne Asada,Beef Carne Asada Diced 1/4 Fully Cooked,0.54,8.46,,No
+Yes,Taco Beef Birria with Broth,Beef Ground HALAL,0.29,3.61,,No
+Yes,Chicken Tenders Korean BBQ,Chicken Tenderloin Breaded Precooked,0.80,0.97,,No
+Yes,Chicken Corn Tortilla Baked Red Sauce Enchiladas,Chicken Thigh Boneless Precooked,0.37,5.78,,No
+Yes,Pork Pulled BBQ Housemade,Pork Butt Boneless,0.82,3.25,,No
+No,Stew Beef Haneeth Yemeni KOSHER,Beef Stew Cut KOSHER,0.81,10.99,,No
+No,Cod Breaded Fried with Tartar Sauce,Cod Fillet Breaded,0.86,9.91,,No
+No,Beef Java Curry,Beef Stew Cut,0.36,8.92,,No
+No,Stew Beef Burgundy,Beef Stew Cut,0.58,8.92,,No
+No,Stew Beef Haneeth Yemeni,Beef Stew Cut,0.81,8.92,,No
+No,Stew Beef Kaldretta Filipino,Beef Stew Cut,0.42,8.92,,No
+No,Stew Beef Rendang,Beef Stew Cut,0.66,8.92,,No
+No,Stew Beef Siga Tibs,Beef Stew Cut,0.50,8.92,,No
+No,Beef Carne Asada Diced Precooked,Beef Carne Asada Diced 1/4 Fully Cooked,1.00,8.46,,No
+No,Beef Broccoli Stir Fry,Beef Sirloin Stir-Fry Cut,0.33,8.35,,No
+No,Beef Bulgogi Sauteed,Beef Sirloin Stir-Fry Cut,0.87,8.35,,No
+No,Beef Carne Asada Housemade,Beef Sirloin Stir-Fry Cut,0.94,8.35,,No
+No,Beef Iskender Kebap Seared,Beef Sirloin Stir-Fry Cut,0.48,8.35,,No
+No,Beef Lomo Saltado Stir Fry 2,Beef Sirloin Stir-Fry Cut,0.30,8.35,,No
+No,Cod Lemon Butter Baked,Cod Fillet,0.78,7.48,,No
+No,Cod Moroccan Coulis Baked,Cod Fillet,0.84,7.48,,No
+No,Beef Barbacoa Prepared,Beef Barbacoa Precooked,1.00,7.16,,No
+No,Rockfish Ginger Steamed HALAL,Rockfish Fillet,0.66,6.90,7.69,Yes
+No,Rockfish Pepper Cilantro Pesto Baked,Rockfish Fillet,0.93,6.90,7.69,Yes
+No,Rockfish Piccata Baked,Rockfish Fillet,0.77,6.90,7.69,Yes
+No,Rockfish Teriyaki Baked HALAL,Rockfish Fillet,0.95,6.90,7.69,Yes
+No,Rockfish Veracruz Baked KOSHER,Rockfish Fillet,0.83,6.90,7.69,Yes
+No,Turkey Breast Herb Roasted,Turkey Breast Boneless Skin On,0.53,6.60,,No
+No,Catfish Blackened,Catfish Fillet,0.82,6.03,,No
+No,Chicken Butter,Chicken Thigh Boneless Precooked,0.65,5.78,,No
+No,Chicken Fire Braised Precooked,Chicken Thigh Boneless Precooked,1.00,5.78,,No
+No,Chicken Thigh Tinga Precooked,Chicken Thigh Boneless Precooked,0.88,5.78,,No
+No,Pork Carnitas,Pork Carnitas Precooked,0.75,5.75,,No
+No,Grits Cheesy Shrimp,Shrimp 26/30,0.23,5.69,,No
+No,Meatballs Beef Swedish With Gravy,Beef Meatball Precooked,0.64,5.64,,No
+No,Ceviche Shrimp Mexican,Shrimp 31/40,0.32,5.59,,No
+No,Shrimp Thai Curry,Shrimp 31/40,0.63,5.59,,No
+No,Shrimp Vindaloo MONSOON,Shrimp 31/40,0.43,5.59,,No
+No,Taco Fish Baja,Pollock Fillet Breaded,0.27,5.08,,No
+No,Chicken Breast Cacciatore Seared,Chicken Breast B/S Raw 4 oz,0.73,4.94,6.93,No
+No,Chicken Breast Herb Grilled,Chicken Breast B/S Raw 4 oz,0.94,4.94,6.93,No
+No,Chicken Breast Parmesan Baked,Chicken Breast B/S Raw 4 oz,0.46,4.94,6.93,No
+Yes,Sausage Pork Link,Sausage Breakfast Pork Link,1.00,4.81,,No
+No,Pork Chile Verde,Pork Stew Cut,0.78,4.69,4.62,No
+No,Pork Sweet and Sour,Pork Stew Cut,0.65,4.69,4.62,No
+No,Pozole Pork,Pork Stew Cut,0.21,4.69,4.62,No
+No,Stew Pork Filipino Adobo,Pork Stew Cut,0.78,4.69,4.62,No
+No,Chicken Tenders Fried (HS) Halal,Chicken Tenderloin Breaded (HS) Halal,0.96,4.60,,No
+No,Shrimp Taco Filling Battered Fried,Shrimp Breaded PopCorn Style,0.97,4.59,,No
+No,Chicken Orange Mandarin,Chicken Mandarin Orange with Sauce,0.93,4.39,,No
+No,Pork Ham Pineapple Glaze Baked,Pork Ham Boneless,0.86,4.30,,No
+Yes,Turkey Breast Cajun Smoked,Turkey Breast,0.79,4.29,,No
+No,Chicken Breast Chipotle (HS) HALAL,Chicken Breast B/S Raw (HS) HALAL,0.95,4.09,,No
+Yes,Chicken Coconut Curry Pulled Precooked,Chicken Pulled Precooked,0.76,4.08,,No
+No,Chicken Thigh Tikka Masala,Chicken Diced Meat Precooked,0.65,4.02,,No
+No,Stew Chicken Thigh Adobo (HS) HALAL,Chicken Thigh (HS) HALAL,0.82,3.98,,No
+No,Chicken Szechuan HALAL,Chicken Diced Dark Meat HALAL,0.44,3.64,,No
+No,Chicken Tikka Masala HALAL,Chicken Diced Dark Meat HALAL,0.61,3.64,,No
+No,Pasta Penne Halal Chicken Chipotle,Chicken Diced Dark Meat HALAL,0.33,3.64,,No
+No,Beef Ground AF HALAL,Beef Ground HALAL,0.94,3.61,,No
+No,Beef Ground Taco Meat Sauteed,Beef Ground HALAL,0.67,3.61,,No
+No,Beef Ground Taco Meat Sauteed HALAL,Beef Ground HALAL,0.72,3.61,,No
+No,Meatloaf Beef Glazed Baked HALAL,Beef Ground HALAL,0.35,3.61,,No
+Yes,Chicken Sesame Orange Tamarind SG,Chicken Tempura,0.67,3.25,,No
+No,Pork Char Siu Roasted,Pork Butt Boneless,0.92,3.25,,No
+No,Pork Chile Verde con Papas,Pork Butt Boneless,0.58,3.25,,No
+No,Pork Kalua,Pork Butt Boneless,0.96,3.25,,No
+No,Chicken Breast Coconut Curry Thai Sauteed HALAL,Chicken Breast Fajita Cut HALAL,0.49,3.19,,No
+No,Chicken Breast Coconut Curry Thai Sauteed,Chicken Breast Fajita Cut,0.48,3.15,,No
+No,Jambalaya Andouille Sausage Chicken Shrimp,Chicken Breast Fajita Cut,0.17,3.15,,No
+No,Chicken Breast AF HALAL,Chicken Breast B/S Raw HALAL,0.98,2.96,2.09,Yes
+No,Chicken Breast Cacciatore Seared HALAL,Chicken Breast B/S Raw HALAL,0.67,2.96,2.09,Yes
+No,Chicken Breast Chipotle HALAL AF,Chicken Breast B/S Raw HALAL,0.03,2.96,2.09,Yes
+No,Chicken Teriyaki SG,Chicken Thigh Boneless HALAL,0.84,1.98,,No
+No,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,0.70,1.98,,No
+No,Chicken Thigh Herb Roasted,Chicken Thigh Boneless HALAL,0.96,1.98,,No
+No,Chicken Thigh Honey Mustard Baked HALAL,Chicken Thigh Boneless HALAL,0.94,1.98,,No
+No,Chicken Thigh Jerk Baked HALAL,Chicken Thigh Boneless HALAL,0.90,1.98,,No
+No,Chicken Thigh Latin Braised Shredded,Chicken Thigh Boneless HALAL,0.52,1.98,,No
+No,Chicken Thigh Shawarma Grilled HALAL,Chicken Thigh Boneless HALAL,0.89,1.98,,No
+No,Chicken Thigh Tagine Seared HALAL,Chicken Thigh Boneless HALAL,0.64,1.98,,No
+No,Chicken Thigh Teriyaki Roasted HALAL,Chicken Thigh Boneless HALAL,0.88,1.98,,No
+No,Chicken Thigh Vindaloo HALAL,Chicken Thigh Boneless HALAL,0.77,1.98,,No
+No,Chicken Wing Fried Party Basic,Chicken Wings Party,0.99,1.84,3.39,No
+No,Chicken Thigh Teriyaki Grilled,Chicken Thigh Boneless,0.92,1.69,5.29,No
+No,Stew Chicken Thigh Adobo,Chicken Thigh Bone In,0.81,1.41,3.59,No
+No,Chicken Thigh Huli Huli Grilled HALAL,Chicken Thigh Bone In HALAL,0.84,1.41,,No
+No,Chicken Thigh Pomegranate Baked,Chicken Thigh Bone In HALAL,0.85,1.41,,No
+No,Chicken Thigh Tandoori Baked HALAL,Chicken Thigh Bone In HALAL,0.87,1.41,,No
+No,Chicken Tenders Fried,Chicken Tenderloin Breaded Precooked,0.96,0.97,,No
+No,Beef Chicken Fried Steak and Gravy,Beef Chicken Fried,0.75,0.35,,No
+No,Beef Tri Tip Achiote Crusted Roasted HALAL,Beef Tri Tip HALAL,0.88,0.20,,No
+No,Beef Tri Tip Chimichuri Grilled (MS) HALAL,Beef Tri Tip HALAL,0.86,0.20,,No
+No,Stew Beef Chili Colorado HALAL,Beef Tri Tip HALAL,0.81,0.20,,No
+No,Beef Brisket BBQ Braised HALAL,Beef Brisket Whole HALAL,0.85,,5.60,Yes
+No,Beef Bulgogi,Beef Sirloin Philly Sliced HALAL,0.76,,8.43,Yes
+No,Beef Bulgogi HALAL,Beef Sirloin Philly Sliced HALAL,0.82,,8.43,Yes
+No,Stew Beef Rendang (HS) HALAL,Beef Stew Cut (HS) Halal,0.66,,8.43,Yes
+No,Beef Broccoli Stir Fry (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,0.33,,8.43,Yes
+No,Beef Sirloin Fajita (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,0.63,,8.43,Yes
+No,Beef Sirloin Fajita HALAL,Beef Stir-Fry Cut (HS) Halal,0.63,,8.43,Yes
+No,Beef Strips Honey Garlic Seared HALAL,Beef Stir-Fry Cut (HS) Halal,0.84,,8.43,Yes
+No,Chicken 8 Cut BBQ Baked,Chicken 8 Cut HALAL,0.87,,2.62,Yes
+No,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,0.88,,2.62,Yes
+No,Chicken 8 Cut Harissa Roasted,Chicken 8 Cut HALAL,0.88,,2.62,Yes
+No,Chicken 8 Cut Herb Roasted,Chicken 8 Cut HALAL,0.88,,2.62,Yes
+No,Chicken 8 Cut Herb Roasted HALAL,Chicken 8 Cut HALAL,0.95,,2.62,Yes
+No,Chicken 8 Cut Jerk Baked HALAL,Chicken 8 Cut HALAL,0.94,,2.62,Yes
+No,Chicken 8 Cut Lemon Thyme Baked,Chicken 8 Cut HALAL,0.88,,2.62,Yes
+No,Chicken 8 Cut Lemongrass Roasted,Chicken 8 Cut HALAL,0.89,,2.62,Yes
+No,Chicken 8 Cut Mediterranean Baked,Chicken 8 Cut HALAL,0.87,,2.62,Yes
+No,Chicken 8 Cut Mediterranean Roasted HALAL,Chicken 8 Cut HALAL,0.89,,2.62,Yes
+No,Chicken 8 Cut Moroccan Spice Baked,Chicken 8 Cut HALAL,0.97,,2.62,Yes
+No,Chicken 8 Cut North African Roasted HALAL AF,Chicken 8 Cut HALAL,0.93,,2.62,Yes
+No,Chicken 8 Cut Piri Piri Roasted,Chicken 8 Cut HALAL,0.81,,2.62,Yes
+No,Pork Carnitas Housemade,Pork Loin Boneless,0.91,,3.75,Yes
+No,Pork Chop Grilled,Pork Loin Boneless,0.91,,3.75,Yes
+No,Pork Loin Citrus Glazed Roasted,Pork Loin Boneless,0.93,,3.75,Yes
+No,Pork Loin Honey Mustard,Pork Loin Boneless,0.89,,3.75,Yes
+No,Pork Loin Roasted,Pork Loin Boneless,1.00,,3.75,Yes
+No,Salmon Cajun Grilled,Salmon Fillet Standard,0.94,,8.28,Yes
+No,Salmon Dijon Herb Crusted Baked,Salmon Fillet Standard,0.90,,8.28,Yes
+No,Salmon Jade Pesto Baked,Salmon Fillet Standard,0.78,,8.28,Yes
+No,Salmon Mango Salsa Baked,Salmon Fillet Standard,0.80,,8.28,Yes
+No,Salmon Pineapple Salsa Baked,Salmon Fillet Standard,0.78,,8.28,Yes
+No,Salmon Pineapple Teriyaki Baked HALAL,Salmon Fillet Standard,0.84,,8.28,Yes

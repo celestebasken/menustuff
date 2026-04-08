@@ -1,0 +1,119 @@
+Ingredient,Category,Conventional_price_lb,Sustainable_price_lb,Default_Sus
+Beef Ground HALAL,Beef,3.61,0.00,No
+Beef Barbacoa Precooked,Beef,7.16,0.00,No
+Beef Meatball Precooked,Beef,5.64,0.00,No
+Beef Sirloin Philly Sliced HALAL,Beef,,8.43,Yes
+Beef Brisket Whole HALAL,Beef,,5.60,Yes
+Beef Carne Asada Diced 1/4 Fully Cooked,Beef,8.46,0.00,No
+Beef Chicken Fried,Beef,0.35,0.00,No
+Beef Brisket,Beef,5.66,0.00,No
+Beef Brisket Corned,Beef,5.44,0.00,No
+Beef Brisket Corned (HS) HALAL,Beef,,7.99,Yes
+Beef Brisket Whole KOSHER,Beef,11.99,,No
+Beef Chuck Tender (HS) HALAL,Beef,3.39,,No
+Beef Fajita Cut,Beef,8.43,,No
+Beef Ground,Beef,3.61,,No
+Beef Ground (HS) HALAL,Beef,,5.93,Yes
+Beef Ground KOSHER,Beef,8.99,,No
+Beef Oxtail,Beef,9.83,,No
+Beef Patty 3.2 oz (HS) HALAL,Beef,5.98,,No
+Beef Patty 4 oz - 4/1 HALAL,Beef,,6.08,Yes
+Beef Patty 4 oz - 4/1 KOSHER,Beef,35.96,,No
+Beef Roast Bottom Round Sliced LG,Beef,8.23,,No
+Beef Roast Shoulder (HS) HALAL,Beef,,4.59,Yes
+Beef Roast Shoulder KOSHER,Beef,10.99,,No
+Beef Sirloin Philly Sliced (HS) HALAL,Beef,,8.43,Yes
+Beef Sirloin Stir-Fry Cut,Beef,8.35,,No
+Beef Steak Flank,Beef,7.67,,No
+Beef Steak Flank (HS) HALAL,Beef,,13.82,Yes
+Beef Steak Flank HALAL,Beef,,8.53,Yes
+Beef Stew Cut,Beef,8.92,,No
+Beef Stew Cut (HS) Halal,Beef,,8.43,Yes
+Beef Stew Cut KOSHER,Beef,10.99,,No
+Beef Stir-Fry Cut (HS) Halal,Beef,,8.43,Yes
+Beef Strip Loin (HS) HALAL,Beef,7.56,,No
+Beef Tri Tip,Beef,9.88,,No
+Beef Tri Tip (HS) HALAL,Beef,9.49,,No
+Beef Tri Tip HALAL,Beef,0.20,,No
+Chili Beef - No Beans,Beef,2.59,,No
+Chili Beef - With Beans,Beef,2.18,,No
+Chicken Thigh Boneless HALAL,Chicken,1.98,,No
+Chicken 8 Cut HALAL,Chicken,,2.62,Yes
+Chicken Breast B/S Raw HALAL,Chicken,2.96,2.09,Yes
+Chicken Diced Dark Meat HALAL,Chicken,3.64,,No
+Chicken Thigh Bone In HALAL,Chicken,1.41,,No
+Chicken Tenderloin Breaded Precooked,Chicken,0.97,,No
+Chicken Breast Fajita Cut,Chicken,3.15,,No
+Chicken Diced Meat Precooked,Chicken,4.02,,No
+Chicken Thigh Boneless Precooked,Chicken,5.78,,No
+Chicken Breast B/S Raw 4 oz,Chicken,4.94,6.93,No
+Chicken Mandarin Orange with Sauce,Chicken,4.39,,No
+Chicken Breast Fajita Cut HALAL,Chicken,3.19,,No
+Chicken Tenderloin Breaded (HS) Halal,Chicken,4.60,,No
+Chicken Thigh Boneless,Chicken,1.69,5.29,No
+Chicken Tempura,Chicken,3.25,,No
+Beef Chicken Fried,Chicken,0.35,,No
+Chicken 8 Cut KOSHER,Chicken,4.49,,No
+Chicken Breast (HS) HALAL,Chicken,3.41,,No
+Chicken Breast B/S Raw (HS) HALAL,Chicken,4.09,,No
+Chicken Breast Boneless Raw KOSHER,Chicken,8.99,,No
+Chicken Breast Patty Breaded,Chicken,3.90,,No
+Chicken Breast Strip Grilled Precooked,Chicken,4.08,,No
+Chicken Cut Wing (HS) HALAL,Chicken,2.73,,No
+Chicken Ground (HS) HALAL,Chicken,4.25,,No
+Chicken Meatball Precooked,Chicken,4.42,,No
+Chicken Tenderloin Precooked Tyson,Chicken,3.67,,No
+Chicken Thigh (HS) HALAL,Chicken,3.98,,No
+Chicken Thigh Bone In,Chicken,1.41,3.59,No
+Chicken Thigh Bone In KOSHER,Chicken,4.99,,No
+Chicken Thigh Boneless KOSHER,Chicken,9.99,,No
+Chicken Thigh Boneless Skin On,Chicken,2.64,5.73,No
+Chicken Thigh Boneless Skinless (HS) HALAL,Chicken,3.04,,No
+Chicken Thigh Fajita KOSHER,Chicken,10.99,,No
+Chicken Whole,Chicken,,3.86,Yes
+Chicken Wings Party,Chicken,1.84,3.39,No
+Chicken Wings Party HALAL,Chicken,2.46,,No
+Chicken Pulled Precooked,Chicken,4.08,,No
+Rockfish Fillet,Fish,6.90,7.69,Yes
+Salmon Fillet Standard,Fish,,8.28,Yes
+Cod Fillet Breaded,Fish,9.91,,No
+Catfish Fillet,Fish,6.03,,No
+Cod Fillet,Fish,7.48,,No
+Catfish Fillet Breaded,Fish,7.90,,No
+Catfish Fillet Breaded Halal,Fish,6.29,,No
+Pollock Fillet Breaded,Fish,5.08,,No
+Pollock Fillet KOSHER,Fish,9.00,,No
+Salmon Filet Premium,Fish,,9.89,Yes
+Salmon Filet Skin Off 4 oz,Fish,,10.98,Yes
+Pork Stew Cut,Pork,4.69,4.62,No
+Pork Butt Boneless,Pork,3.25,,No
+Pork Carnitas Precooked,Pork,5.75,,No
+Pork Loin Boneless,Pork,,3.75,Yes
+Pork Ham Boneless,Pork,4.30,,No
+Pork Fajita Cut,Pork,4.62,,No
+Pork Ground,Pork,2.49,3.63,No
+Pork Ham Spiral Sliced,Pork,3.85,,No
+Pork Spare Rib,Pork,3.74,,No
+Sausage Andouille,Pork,4.32,,No
+Sausage Chorizo Raw,Pork,3.64,,No
+Sausage Crumbled Cooked,Pork,3.61,,No
+Sausage Italian Mild,Pork,4.77,,No
+Sausage Linguica,Pork,4.84,,No
+Sausage Louisiana,Pork,5.89,,No
+Sausage Polish,Pork,5.04,,No
+Sausage Breakfast Pork Link,Pork,4.81,,No
+Sausage Pork Longanisa,Pork,5.75,,No
+Shrimp 31/40,Shellfish,5.59,,No
+Shrimp 26/30,Shellfish,5.69,,No
+Shrimp Breaded PopCorn Style,Shellfish,4.59,,No
+Clam Chopped,Shellfish,7.89,,No
+Crab Cakes,Shellfish,4.04,,No
+Crab Dungeness,Shellfish,,8.98,Yes
+Crab Snow,Shellfish,11.95,,Yes
+Scallop 80/100,Shellfish,73.66,,No
+Shrimp 16/20 Farm Raised,Shellfish,7.22,,No
+Shrimp 16/20 IQF,Shellfish,6.64,,
+Shrimp 90/150,Shellfish,9.14,,No
+Turkey Breast Boneless Skin On,Turkey,6.60,,No
+Turkey Breast,Turkey,4.29,,No
+Turkey Ground,Turkey,,2.86,Yes
