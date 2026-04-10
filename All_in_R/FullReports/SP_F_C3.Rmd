@@ -491,7 +491,7 @@ category_totals_s1_cafe3
 
 # Scenario s5_cafe3
 
-This is 10% cost reduction and it's infeasible womp womp
+This is 10% cost reduction 
 
 ```{r}
 # =========================================================
@@ -618,7 +618,7 @@ baseline_ghg  <- sum(ghg_per_appearance * x0)
 # -------------------------
 # 5% cost reduction target
 # -------------------------
-target_cost <- baseline_cost * 0.93
+target_cost <- baseline_cost * 0.95
 
 A_costcap   <- rbind(A, cost_per_appearance)
 dir_costcap <- c(dir, "<=")
@@ -740,6 +740,27 @@ optimization_data_cafe3 <- optimization_data_cafe3 %>%
     opt_ghg_contribution_s5_cafe3 = freq_opt_s5_cafe3 * ghg_per_appearance
   )
 
+# -------------------------
+# Helpful headline metrics
+# -------------------------
+opt_cost_s5_cafe3 <- sum(cost_per_appearance * x_s1_cafe3)
+opt_sus_s5_cafe3  <- sum(sus_cost_per_appearance * x_s1_cafe3)
+opt_ghg_s5_cafe3  <- sum(ghg_per_appearance * x_s1_cafe3)
+
+pct_cost_reduction_s5_cafe3 <- if (baseline_cost > 0) {
+  100 * (baseline_cost - opt_cost_s5_cafe3) / baseline_cost
+} else {
+  NA_real_
+}
+
+cat("\nBaseline cost: ", baseline_cost, "\n", sep = "")
+cat("Optimized cost (s5_cafe3): ", opt_cost_s5_cafe3, "\n", sep = "")
+cat("Percent cost reduction achieved: ", round(pct_cost_reduction_s5_cafe3, 2), "%\n", sep = "")
+cat("Baseline sustainable spend: ", baseline_sus, "\n", sep = "")
+cat("Optimized sustainable spend: ", opt_sus_s5_cafe3, "\n", sep = "")
+cat("Baseline GHG: ", baseline_ghg, "\n", sep = "")
+cat("Optimized GHG: ", opt_ghg_s5_cafe3, "\n", sep = "")
+
 # =========================================================
 # Category totals
 # =========================================================
@@ -807,49 +828,338 @@ category_totals_s5_cafe3
 
 
 ```{r}
-## DELETE THIS ONCE ITS FIXXED
+# =========================================================
+# s6_cafe3: Lock in 7% cost reduction, then maximize sustainability,
+# then minimize GHG
+# =========================================================
 
-optimization_data_cafe3 %>%
-  filter(is.na(conventional_price_lb) | is.na(sustainable_price_lb)) %>%
-  select(ingredient, category, baseline_freq) %>%
-  arrange(desc(baseline_freq))
+opt <- optimization_data_cafe3
 
-missing_price_ingredients <- optimization_data_cafe3 %>%
-  filter(is.na(conventional_price_lb) | is.na(sustainable_price_lb)) %>%
-  distinct(ingredient)
+x0 <- opt$baseline_freq
+n  <- nrow(opt)
 
-missing_price_ingredients
+meals_served <- sum(x0)
 
-ingredient_prices %>%
-  filter(ingredient %in% missing_price_ingredients$ingredient) %>%
-  select(ingredient, category, conventional_price_lb, sustainable_price_lb, default_sus)
+# Lower and upper bounds
+reduction <- 0.5
+lower <- ceiling(x0 * reduction)
+
+max_multiplier <- 1.5
+upper <- floor(x0 * max_multiplier)
+
+# -------------------------
+# Feasibility checks
+# -------------------------
+required_cols <- c(
+  "expected_lb_meat_portion",
+  "conventional_price_lb",
+  "sustainable_price_lb",
+  "default_sus",
+  "conventional_ghg_per_lb",
+  "baseline_freq"
+)
+
+missing_cols <- setdiff(required_cols, names(opt))
+if (length(missing_cols) > 0) {
+  stop(paste("Missing required columns:", paste(missing_cols, collapse = ", ")))
+}
+
+if (any(is.na(opt$expected_lb_meat_portion))) {
+  stop("expected_lb_meat_portion has NA values in optimization_data_cafe3.")
+}
+
+if (any(opt$expected_lb_meat_portion < 0)) {
+  stop("expected_lb_meat_portion has negative values in optimization_data_cafe3.")
+}
+
+if (any(is.na(opt$default_sus))) {
+  stop("default_sus has NA values in optimization_data_cafe3.")
+}
+
+if (any(is.na(opt$conventional_ghg_per_lb))) {
+  stop("conventional_ghg_per_lb has NA values in optimization_data_cafe3.")
+}
+
+default_sus_clean <- tolower(trimws(as.character(opt$default_sus)))
+
+if (any(!(default_sus_clean %in% c("yes", "no")))) {
+  stop("default_sus contains values other than Yes/No.")
+}
+
+sus_flag <- as.integer(default_sus_clean == "yes")
+
+if (any(sus_flag == 1 & is.na(opt$sustainable_price_lb))) {
+  stop("Some default-sustainable ingredients are missing sustainable_price_lb.")
+}
+
+if (any(sus_flag == 0 & is.na(opt$conventional_price_lb))) {
+  stop("Some default-conventional ingredients are missing conventional_price_lb.")
+}
+
+# -------------------------
+# Effective per-appearance values
+# -------------------------
+price_lb <- dplyr::case_when(
+  sus_flag == 1 ~ opt$sustainable_price_lb,
+  sus_flag == 0 ~ opt$conventional_price_lb
+)
+
+portion_lb <- opt$expected_lb_meat_portion
+
+cost_per_appearance <- price_lb * portion_lb
+
+sus_cost_per_appearance <- dplyr::case_when(
+  sus_flag == 1 ~ opt$sustainable_price_lb * portion_lb,
+  sus_flag == 0 ~ 0,
+  TRUE ~ NA_real_
+)
+
+ghg_per_appearance <- opt$conventional_ghg_per_lb * portion_lb
+
+# -------------------------
+# Constraint matrix
+# -------------------------
+A <- matrix(1, nrow = 1, ncol = n)
+dir <- "="
+rhs <- meals_served
+
+A <- rbind(A, diag(n))
+dir <- c(dir, rep(">=", n))
+rhs <- c(rhs, lower)
+
+if (any(!is.na(upper))) {
+  idx <- which(!is.na(upper))
+  A <- rbind(A, diag(n)[idx, , drop = FALSE])
+  dir <- c(dir, rep("<=", length(idx)))
+  rhs <- c(rhs, upper[idx])
+}
+
+# -------------------------
+# Baseline totals
+# -------------------------
+baseline_cost <- sum(cost_per_appearance * x0)
+baseline_sus  <- sum(sus_cost_per_appearance * x0)
+baseline_ghg  <- sum(ghg_per_appearance * x0)
+
+# -------------------------
+# 7% cost reduction target
+# -------------------------
+target_cost <- baseline_cost * 0.93
+
+A_costcap   <- rbind(A, cost_per_appearance)
+dir_costcap <- c(dir, "<=")
+rhs_costcap <- c(rhs, target_cost)
+
+# -------------------------
+# Safe numeric objects for lpSolve
+# -------------------------
+objective_stage1 <- as.numeric(sus_cost_per_appearance)
+
+A_costcap_num <- matrix(
+  as.numeric(A_costcap),
+  nrow = nrow(A_costcap),
+  ncol = ncol(A_costcap)
+)
+
+rhs_costcap_num <- as.numeric(rhs_costcap)
+dir_costcap_chr <- as.character(dir_costcap)
+
+if (any(is.na(objective_stage1) | is.nan(objective_stage1) | is.infinite(objective_stage1))) {
+  stop("objective_stage1 contains NA/NaN/Inf.")
+}
+
+if (any(is.na(A_costcap_num) | is.nan(A_costcap_num) | is.infinite(A_costcap_num))) {
+  stop("A_costcap_num contains NA/NaN/Inf.")
+}
+
+if (any(is.na(rhs_costcap_num) | is.nan(rhs_costcap_num) | is.infinite(rhs_costcap_num))) {
+  stop("rhs_costcap_num contains NA/NaN/Inf.")
+}
+
+# =========================================================
+# Stage 1: Maximize sustainable spend given 7% cost cut
+# =========================================================
+sol_s6_cafe3_stage1 <- lp(
+  direction = "max",
+  objective.in = objective_stage1,
+  const.mat = A_costcap_num,
+  const.dir = dir_costcap_chr,
+  const.rhs = rhs_costcap_num,
+  all.int = TRUE
+)
+
+if (sol_s6_cafe3_stage1$status != 0) {
+  stop("s6_cafe3 Stage 1 infeasible. Try relaxing bounds or checking the 7% cost reduction target.")
+}
+
+x_s6_cafe3_sus <- sol_s6_cafe3_stage1$solution
+opt_sus_s6_cafe3 <- sum(sus_cost_per_appearance * x_s6_cafe3_sus)
+
+# =========================================================
+# Stage 2: Minimize GHG while preserving max sustainability
+# =========================================================
+sus_slack <- 0.001
+
+A_stage2   <- rbind(A_costcap, sus_cost_per_appearance)
+dir_stage2 <- c(dir_costcap, ">=")
+rhs_stage2 <- c(rhs_costcap, opt_sus_s6_cafe3 * (1 - sus_slack))
+
+sol_s6_cafe3_stage2 <- lp(
+  direction = "min",
+  objective.in = ghg_per_appearance,
+  const.mat = A_stage2,
+  const.dir = dir_stage2,
+  const.rhs = rhs_stage2,
+  all.int = TRUE
+)
+
+if (sol_s6_cafe3_stage2$status != 0) {
+  stop("s6_cafe3 Stage 2 infeasible. Try increasing sus_slack slightly.")
+}
+
+x_s6_cafe3_final <- sol_s6_cafe3_stage2$solution
+
+# =========================================================
+# Summaries
+# =========================================================
+summ <- function(x) {
+  total_cost <- sum(cost_per_appearance * x)
+  sus_spend  <- sum(sus_cost_per_appearance * x)
+  sus_pct    <- if (total_cost > 0) sus_spend / total_cost else NA_real_
+  total_ghg  <- sum(ghg_per_appearance * x)
+
+  c(
+    meals = sum(x),
+    total_cost = total_cost,
+    sus_spend = sus_spend,
+    sus_pct = sus_pct,
+    total_ghg = total_ghg
+  )
+}
+
+s6_cafe3_table <- rbind(
+  baseline = summ(x0),
+  s6_cafe3_stage1_max_sus_given_7pct_cost_cut = summ(x_s6_cafe3_sus),
+  s6_cafe3_final_min_ghg_given_7pct_cost_cut_and_max_sus = summ(x_s6_cafe3_final)
+)
+
+print(s6_cafe3_table)
+
+# =========================================================
+# Attach outputs back to optimization_data_cafe3
+# =========================================================
+optimization_data_cafe3 <- optimization_data_cafe3 %>%
+  mutate(
+    freq_baseline = baseline_freq,
+    freq_opt_s6_cafe3 = x_s6_cafe3_final,
+    delta_s6_cafe3 = freq_opt_s6_cafe3 - freq_baseline,
+
+    baseline_cost_contribution = freq_baseline * cost_per_appearance,
+    opt_cost_contribution_s6_cafe3 = freq_opt_s6_cafe3 * cost_per_appearance,
+
+    baseline_sus_spend_contribution = freq_baseline * sus_cost_per_appearance,
+    opt_sus_spend_contribution_s6_cafe3 = freq_opt_s6_cafe3 * sus_cost_per_appearance,
+
+    baseline_ghg_contribution = freq_baseline * ghg_per_appearance,
+    opt_ghg_contribution_s6_cafe3 = freq_opt_s6_cafe3 * ghg_per_appearance
+  )
+
+# -------------------------
+# Helpful headline metrics
+# -------------------------
+opt_cost_s6_cafe3 <- sum(cost_per_appearance * x_s6_cafe3_final)
+opt_sus_s6_cafe3  <- sum(sus_cost_per_appearance * x_s6_cafe3_final)
+opt_ghg_s6_cafe3  <- sum(ghg_per_appearance * x_s6_cafe3_final)
+
+pct_cost_reduction_s6_cafe3 <- if (baseline_cost > 0) {
+  100 * (baseline_cost - opt_cost_s6_cafe3) / baseline_cost
+} else {
+  NA_real_
+}
+
+pct_sus_change_s6_cafe3 <- if (baseline_cost > 0) {
+  100 * (baseline_sus - opt_sus_s6_cafe3) / baseline_sus
+} else {
+  NA_real_
+}
+
+cat("\nBaseline cost: ", baseline_cost, "\n", sep = "")
+cat("Optimized cost (s6_cafe3): ", opt_cost_s6_cafe3, "\n", sep = "")
+cat("Percent cost reduction achieved: ", round(pct_cost_reduction_s6_cafe3, 2), "%\n", sep = "")
+cat("Baseline sustainable spend: ", baseline_sus, "\n", sep = "")
+cat("Optimized sustainable spend: ", opt_sus_s6_cafe3, "\n", sep = "")
+cat("Percent sustainable spend change: ", pct_sus_change_s6_cafe3, "\n", sep = "")
+cat("Baseline GHG: ", baseline_ghg, "\n", sep = "")
+cat("Optimized GHG: ", opt_ghg_s6_cafe3, "\n", sep = "")
+
+# =========================================================
+# Category totals
+# =========================================================
+category_totals_s6_cafe3 <- optimization_data_cafe3 %>%
+  group_by(category) %>%
+  summarise(
+    baseline_meals = sum(freq_baseline, na.rm = TRUE),
+    opt_meals_s6_cafe3 = sum(freq_opt_s6_cafe3, na.rm = TRUE),
+    delta_meals_s6_cafe3 = opt_meals_s6_cafe3 - baseline_meals,
+    pct_change_meals_s6_cafe3 = ifelse(
+      baseline_meals > 0,
+      (delta_meals_s6_cafe3 / baseline_meals) * 100,
+      NA_real_
+    ),
+
+    baseline_share = baseline_meals / sum(optimization_data_cafe3$freq_baseline, na.rm = TRUE),
+    opt_share_s6_cafe3 = opt_meals_s6_cafe3 / sum(optimization_data_cafe3$freq_opt_s6_cafe3, na.rm = TRUE),
+
+    baseline_cost = sum(baseline_cost_contribution, na.rm = TRUE),
+    opt_cost_s6_cafe3 = sum(opt_cost_contribution_s6_cafe3, na.rm = TRUE),
+    delta_cost_s6_cafe3 = opt_cost_s6_cafe3 - baseline_cost,
+    pct_change_cost_s6_cafe3 = ifelse(
+      baseline_cost > 0,
+      (delta_cost_s6_cafe3 / baseline_cost) * 100,
+      NA_real_
+    ),
+
+    baseline_sus_spend = sum(baseline_sus_spend_contribution, na.rm = TRUE),
+    opt_sus_spend_s6_cafe3 = sum(opt_sus_spend_contribution_s6_cafe3, na.rm = TRUE),
+    delta_sus_spend_s6_cafe3 = opt_sus_spend_s6_cafe3 - baseline_sus_spend,
+    pct_change_sus_spend_s6_cafe3 = ifelse(
+      baseline_sus_spend > 0,
+      (delta_sus_spend_s6_cafe3 / baseline_sus_spend) * 100,
+      NA_real_
+    ),
+
+    baseline_ghg = sum(baseline_ghg_contribution, na.rm = TRUE),
+    opt_ghg_s6_cafe3 = sum(opt_ghg_contribution_s6_cafe3, na.rm = TRUE),
+    delta_ghg_s6_cafe3 = opt_ghg_s6_cafe3 - baseline_ghg,
+    pct_change_ghg_s6_cafe3 = ifelse(
+      baseline_ghg > 0,
+      (delta_ghg_s6_cafe3 / baseline_ghg) * 100,
+      NA_real_
+    ),
+
+    baseline_sus_pct = ifelse(
+      baseline_cost > 0,
+      baseline_sus_spend / baseline_cost,
+      NA_real_
+    ),
+    opt_sus_pct_s6_cafe3 = ifelse(
+      opt_cost_s6_cafe3 > 0,
+      opt_sus_spend_s6_cafe3 / opt_cost_s6_cafe3,
+      NA_real_
+    ),
+    delta_sus_pct_s6_cafe3 = opt_sus_pct_s6_cafe3 - baseline_sus_pct,
+
+    .groups = "drop"
+  ) %>%
+  arrange(desc(opt_meals_s6_cafe3))
+
+category_totals_s6_cafe3
+
+## Save data
+write.csv(optimization_data_cafe3, "Optimized_freqs.csv", row.names = FALSE)
+
+
 ```
-
-```{r}
-## MORE CLEANING
-
-sum(is.na(sus_cost_per_appearance))
-sum(is.nan(sus_cost_per_appearance))
-sum(is.infinite(sus_cost_per_appearance))
-
-sum(is.nan(A_costcap))
-sum(is.infinite(A_costcap))
-
-sum(is.nan(rhs_costcap))
-sum(is.infinite(rhs_costcap))
-
-class(A_costcap)
-typeof(A_costcap)
-storage.mode(A_costcap)
-
-class(sus_cost_per_appearance)
-typeof(sus_cost_per_appearance)
-
-class(rhs_costcap)
-typeof(rhs_costcap)
-```
-
-
 
 
 
