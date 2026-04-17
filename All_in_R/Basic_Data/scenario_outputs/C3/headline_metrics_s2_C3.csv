@@ -1,0 +1,2 @@
+scenario,baseline_cost,optimized_cost,cost_pct_change,baseline_sus_spend,optimized_sus_spend,sus_spend_pct_change,baseline_sus_pct,optimized_sus_pct,sus_pct_pct_change,baseline_ghg,optimized_ghg,ghg_pct_change
+s2_C3,69.7186,69.64395967320262,-0.10705941713886823,35.5755,46.65365,31.139829376958865,51.02727249256296,66.9887958968985,31.280377383803685,219.80392454806,218.05630944828118,-0.7950791157947216
