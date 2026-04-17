@@ -250,6 +250,9 @@ category_totals_s1v2_2 <- optimization2 %>%
 # View category totals
 category_totals_s1v2_2
 
+write.csv(optimization2, "Optimized_freqs_froms1v2_2.csv", row.names = FALSE)
+
+
 ```
 
 

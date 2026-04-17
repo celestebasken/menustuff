@@ -1,0 +1,7 @@
+category,baseline_meals,optimized_meals,scenario,change_meals,baseline_share,optimized_share,pct_change_meals
+Chicken,47,54,s1_cafe3,7,0.5875,0.675,14.893617021276595
+Beef,24,21,s1_cafe3,-3,0.3,0.2625,-12.5
+Fish,9,5,s1_cafe3,-4,0.1125,0.0625,-44.44444444444444
+Chicken,47,51,s6_cafe3,4,0.5875,0.6375,8.51063829787234
+Beef,24,24,s6_cafe3,0,0.3,0.3,0
+Fish,9,5,s6_cafe3,-4,0.1125,0.0625,-44.44444444444444
