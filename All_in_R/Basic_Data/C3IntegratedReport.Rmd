@@ -37,7 +37,7 @@ dining_hall_name <- "C3"
 dining_hall_label <- "Cafe 3"
 
 # Scenario 3 setting: target cost reduction
-scenario3_cost_reduction_target <- 0.07
+scenario3_cost_reduction_target <- 0.1
 
 # Bounds used across scenarios
 lower_multiplier_default <- 0.5
@@ -273,7 +273,7 @@ prepare_optimization_metrics <- function(opt_df) {
 # BUILD STANDARD CONSTRAINTS
 # =========================================================
 
-build_base_constraints <- function(opt_df, lower_multiplier = 0.5, upper_multiplier = 1.5) {
+build_base_constraints <- function(opt_df, lower_multiplier = lower_multiplier_default, upper_multiplier = upper_multiplier_default) {
 
   x0 <- opt_df$baseline_freq
   n  <- nrow(opt_df)
@@ -321,8 +321,8 @@ build_base_constraints <- function(opt_df, lower_multiplier = 0.5, upper_multipl
 solve_scenario1_cost_min_keep_sus <- function(
     opt_df,
     scenario_name = "scenario1",
-    lower_multiplier = 0.5,
-    upper_multiplier = 1.5
+    lower_multiplier = lower_multiplier_default,
+    upper_multiplier = upper_multiplier_default
 ) {
 
   prepped <- prepare_optimization_metrics(opt_df)
@@ -360,8 +360,8 @@ solve_scenario1_cost_min_keep_sus <- function(
 solve_scenario2_sus_max_keep_cost <- function(
     opt_df,
     scenario_name = "scenario2",
-    lower_multiplier = 0.5,
-    upper_multiplier = 1.5
+    lower_multiplier = lower_multiplier_default,
+    upper_multiplier = upper_multiplier_default
 ) {
 
   prepped <- prepare_optimization_metrics(opt_df)
@@ -398,10 +398,10 @@ solve_scenario2_sus_max_keep_cost <- function(
 # Lock in a user-defined cost reduction, then maximize sustainability, then minimize GHG
 solve_scenario3_cost_target_then_sus_then_ghg <- function(
     opt_df,
-    cost_reduction_target = 0.07,
+    cost_reduction_target = scenario3_cost_reduction_target,
     scenario_name = "scenario3",
-    lower_multiplier = 0.5,
-    upper_multiplier = 1.5
+    lower_multiplier = lower_multiplier_default,
+    upper_multiplier = upper_multiplier_default
 ) {
 
   prepped <- prepare_optimization_metrics(opt_df)
@@ -467,10 +467,10 @@ run_selected_scenarios <- function(
     run_s1 = TRUE,
     run_s2 = TRUE,
     run_s3 = TRUE,
-    scenario3_cost_reduction_target = 0.07,
-    lower_multiplier = 0.5,
-    upper_multiplier = 1.5,
-    dining_hall_name = "C3"
+    scenario3_cost_reduction_target = scenario3_cost_reduction_target,
+    lower_multiplier = lower_multiplier_default,
+    upper_multiplier = upper_multiplier_default,
+    dining_hall_name = dining_hall_name
 ) {
 
   results <- list()
@@ -1011,9 +1011,9 @@ run_full_dining_hall_analysis <- function(
     run_s1 = TRUE,
     run_s2 = TRUE,
     run_s3 = TRUE,
-    scenario3_cost_reduction_target = 0.07,
-    lower_multiplier = 0.5,
-    upper_multiplier = 1.5
+    scenario3_cost_reduction_target = scenario3_cost_reduction_target,
+    lower_multiplier = lower_multiplier_default,
+    upper_multiplier = upper_multiplier_default
 ) {
 
   inputs <- read_and_clean_inputs(data_dir)
@@ -1093,7 +1093,7 @@ print(results$report_objs$scenario_summary)
 
 print(results$report_objs$category_frequency)
 
-print(results$exported$s3_C3$category_table)
+print(results$exported$s3_XRDS$category_table)
 
 # Example: show narrative for Scenario 3
 scenario3_name <- paste0("s3_", dining_hall_name)
@@ -1108,4 +1108,6 @@ if (scenario3_name %in% names(results$report_objs$plots)) {
   print(results$report_objs$plots[[scenario3_name]]$sus_vs_conv_spend)
 }
 ```
+
+
 
