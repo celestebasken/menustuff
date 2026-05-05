@@ -1049,7 +1049,7 @@ run_dashboard_hypothetical_scenario <- function(
     cost_reduction_target = 0.07,
     lower_multiplier = 0.5,
     upper_multiplier = 1.5,
-    data_dir = "../Basic_Data"
+    data_dir = "Basic_Data"
 ) {
   
   inputs <- read_and_clean_inputs(data_dir)

@@ -1,0 +1,263 @@
+Semester,week,day,meal,dining_hall,recipe,Ingredient,Category,percent_meat,meat_price_per_dish,Expected_lb_meat_portion,oz_meat_per_dish,Conventional_price_lb,Sustainable_price_lb,Default_sus,portion_size_oz,planned_portions,planned_weight_lbs,cost_recipe_per_portion
+SP26,4,Sunday,Dinner,C3,Beef Sirloin Fajita (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.63,1.05,0.13,2,,8.43,Yes,3.18,"2,400.00",477.3,1.35
+F25,4,Sunday,Dinner,C3,Beef Sirloin Fajita (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.63,1.05,0.13,2,,8.43,Yes,3.18,"2,400.00",477.3,1.29
+SP26,1,Monday,Dinner,XRDS,Stew Pork Filipino Adobo,Pork Stew Cut,Pork,0.78,1.13,0.24,3.84,4.69,4.62,No,4.9,"2,000.00",612.87,1.24
+SP26,3,Thursday,Dinner,XRDS,Meatloaf Beef Glazed Baked HALAL,Beef Ground HALAL,Beef,0.35,0.48,0.13,2.13,3.61,0,No,6.13,"2,000.00",766.64,0.86
+SP26,3,Tuesday,Dinner,XRDS,Chicken Thigh Huli Huli Grilled HALAL,Chicken Thigh Bone In HALAL,Chicken,0.84,0.28,0.2,3.2,1.41,,No,3.79,"2,000.00",474.31,1.36
+F25,3,Monday,Dinner,C3,Beef Bulgogi HALAL,Beef Sirloin Philly Sliced HALAL,Beef,0.82,1.29,0.15,2.45,,8.43,Yes,3,"2,000.00",375,0.49
+SP26,3,Tuesday,Dinner,C3,Chicken Szechuan HALAL,Chicken Diced Dark Meat HALAL,Chicken,0.44,0.58,0.16,2.56,3.64,,No,5.84,"1,880.00",686.06,1.75
+F25,3,Tuesday,Dinner,C3,Chicken Szechuan HALAL,Chicken Diced Dark Meat HALAL,Chicken,0.44,0.58,0.16,2.56,3.64,,No,5.84,"1,880.00",686.06,1.31
+SP26,4,Monday,Dinner,XRDS,Stew Beef Burgundy,Beef Stew Cut,Beef,0.58,2.14,0.24,3.84,8.92,,No,6.63,"1,800.00",746.2,2.5
+SP26,4,Thursday,Dinner,C3,Beef Bulgogi HALAL,Beef Sirloin Philly Sliced HALAL,Beef,0.82,1.71,0.2,3.25,,8.43,Yes,3.98,"1,725.00",429.28,2.12
+F25,4,Thursday,Dinner,C3,Beef Bulgogi,Beef Sirloin Philly Sliced HALAL,Beef,0.76,1.58,0.19,3,,8.43,Yes,3.96,"1,725.00",426.63,2.23
+SP26,2,Wednesday,Dinner,C3,Chicken Tenders Fried (HS) Halal,Chicken Tenderloin Breaded (HS) Halal,Chicken,0.96,1.16,0.25,4.04,4.6,,No,4.22,"1,708.00",450.1,1.17
+F25,2,Wednesday,Dinner,C3,Chicken Tenders Fried (HS) Halal,Chicken Tenderloin Breaded (HS) Halal,Chicken,0.96,1.16,0.25,4.04,4.6,,No,4.22,"1,708.00",450.1,1.17
+SP26,3,Tues,Lunch,XRDS,Beef Tri Tip Achiote Crusted Roasted HALAL,Beef Tri Tip HALAL,Beef,0.88,0.05,0.24,3.84,0.2,,No,4.37,"1,700.00",463.8,0.1
+SP26,1,Thursday,Lunch,C3,Beef Broccoli Stir Fry (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.33,0.65,0.08,1.23,,8.43,Yes,3.79,"1,691.00",400.04,1.01
+F25,1,Thursday,Lunch,C3,Beef Broccoli Stir Fry (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.33,0.65,0.08,1.23,,8.43,Yes,3.79,"1,691.00",400.04,1
+SP26,4,Friday,Dinner,C3,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,610.00",460.34,0.71
+F25,4,Friday,Dinner,C3,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,610.00",460.34,0.82
+SP26,2,Wednesday,Lunch,C3,Chicken Thigh Huli Huli Grilled HALAL,Chicken Thigh Bone In HALAL,Chicken,0.84,0.3,0.21,3.37,1.41,,No,4,"1,605.00",400.91,1.43
+F25,2,Wednesday,Lunch,C3,Chicken Thigh Huli Huli Grilled HALAL,Chicken Thigh Bone In HALAL,Chicken,0.84,0.3,0.21,3.37,1.41,,No,4,"1,605.00",400.91,0.96
+F25,1,Friday,Dinner,XRDS,Beef Barbacoa Prepared,Beef Barbacoa Precooked,Beef,1,1.79,0.25,4,7.16,0,No,4,"1,600.00",400,1.74
+SP26,4,Sunday,Dinner,XRDS,Shrimp Thai Curry,Shrimp 31/40,Shellfish,0.63,0.93,0.17,2.67,5.59,,No,4.24,"1,600.00",423.9,1.19
+F25,3,Friday,Dinner,XRDS,Stew Pork Filipino Adobo,Pork Stew Cut,Pork,0.78,1.15,0.24,3.92,4.69,4.62,No,5,"1,600.00",500,1.23
+SP26,4,Friday,Dinner,XRDS,Chicken Thigh Teriyaki Grilled,Chicken Thigh Boneless,Chicken,0.92,0.49,0.29,4.6,1.69,5.29,No,5,"1,600.00",500,2.26
+F25,4,Friday,Dinner,XRDS,Chicken Thigh Teriyaki Grilled,Chicken Thigh Boneless,Chicken,0.92,0.49,0.29,4.6,1.69,5.29,No,5,"1,600.00",500,1.75
+SP26,4,Thursday,Dinner,XRDS,Chicken Tenders Fried,Chicken Tenderloin Breaded Precooked,Chicken,0.96,0.24,0.25,4.04,0.97,,No,4.22,"1,600.00",421.64,0.26
+F25,4,Thursday,Dinner,XRDS,Chicken Tenders Fried,Chicken Tenderloin Breaded Precooked,Chicken,0.96,0.24,0.25,4.04,0.97,,No,4.22,"1,600.00",421.64,0.26
+SP26,3,Mon,Lunch,XRDS,Chicken 8 Cut Herb Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.95,0.65,0.25,4,,2.62,Yes,4.23,"1,600.00",422.76,0.77
+SP26,4,Tuesday,Lunch,C3,Beef Sirloin Fajita (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.63,1.05,0.13,2,,8.43,Yes,3.18,"1,508.00",299.91,1.35
+F25,4,Tuesday,Lunch,C3,Beef Sirloin Fajita HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.63,1.05,0.13,2,,8.43,Yes,3.18,"1,508.00",299.91,1.11
+SP26,4,Tuesday,Dinner,XRDS,Chicken Corn Tortilla Baked Red Sauce Enchiladas,Chicken Thigh Boneless Precooked,Chicken,0.37,1.08,0.19,2.98,5.78,,No,8,"1,500.00",750,1.01
+SP26,1,Tuesday,Dinner,XRDS,Catfish Blackened,Catfish Fillet,Fish,0.82,1.45,0.24,3.84,6.03,,No,4.71,"1,500.00",441.44,1.56
+SP26,3,Weds,Lunch,XRDS,Chicken Butter,Chicken Thigh Boneless Precooked,Chicken,0.65,1.45,0.25,4,5.78,,No,6.18,"1,500.00",578.96,2.02
+SP26,1,Thursday,Dinner,XRDS,Chicken Breast Cacciatore Seared,Chicken Breast B/S Raw 4 oz,Chicken,0.73,1.24,0.25,4,4.94,6.93,No,5.46,"1,500.00",511.86,2.19
+SP26,4,Weds,Lunch,XRDS,Pork Chile Verde,Pork Stew Cut,Pork,0.78,1.13,0.24,3.84,4.69,4.62,No,4.94,"1,500.00",463.43,1.28
+SP26,3,Sunday,Dinner,C3,Meatloaf Beef Glazed Baked HALAL,Beef Ground HALAL,Beef,0.35,0.49,0.14,2.16,3.61,0,No,6.21,"1,500.00",582.32,0.87
+F25,3,Sunday,Dinner,C3,Meatloaf Beef Glazed Baked HALAL,Beef Ground HALAL,Beef,0.35,0.49,0.14,2.16,3.61,0,No,6.21,"1,500.00",582.32,0.85
+SP26,4,Monday,Dinner,C3,Chicken Breast Coconut Curry Thai Sauteed HALAL,Chicken Breast Fajita Cut HALAL,Chicken,0.49,0.64,0.2,3.22,3.19,,No,6.6,"1,500.00",619.2,1.14
+F25,4,Monday,Dinner,C3,Chicken Breast Coconut Curry Thai Sauteed HALAL,Chicken Breast Fajita Cut HALAL,Chicken,0.49,0.64,0.2,3.22,3.19,,No,6.6,"1,500.00",619.2,1.06
+SP26,3,Friday,Dinner,XRDS,Jambalaya Andouille Sausage Chicken Shrimp,Chicken Breast Fajita Cut,Chicken,0.17,0.19,0.06,0.96,3.15,,No,5.69,"1,500.00",533.62,0.92
+SP26,1,Tues,Lunch,XRDS,Salmon Mango Salsa Baked,Salmon Fillet Standard,Fish,0.8,1.99,0.24,3.84,,8.28,Yes,4.83,"1,500.00",452.96,2.2
+SP26,1,Mon,Lunch,XRDS,Chicken 8 Cut Herb Roasted,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.35,"1,500.00",407.4,0.86
+F25,3,Tuesday,Lunch,XRDS,Beef Sirloin Fajita (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.63,1.33,0.16,2.52,,8.43,Yes,4,"1,500.00",375,1.4
+SP26,1,Monday,Lunch,C3,Chicken Thigh Shawarma Grilled HALAL,Chicken Thigh Boneless HALAL,Chicken,0.89,0.48,0.24,3.84,1.98,,No,4.31,"1,486.00",400.24,2.57
+F25,1,Monday,Lunch,C3,Chicken Thigh Shawarma Grilled HALAL,Chicken Thigh Boneless HALAL,Chicken,0.89,0.48,0.24,3.84,1.98,,No,4.31,"1,486.00",400.24,3.99
+SP26,2,Mon,Lunch,XRDS,Stew Chicken Thigh Adobo,Chicken Thigh Bone In,Chicken,0.81,0.35,0.25,4.03,1.41,3.59,No,5,"1,450.00",453.13,0.43
+F25,2,Monday,Lunch,XRDS,Stew Chicken Thigh Adobo,Chicken Thigh Bone In,Chicken,0.81,0.35,0.25,4.03,1.41,3.59,No,5,"1,450.00",453.13,0.51
+SP26,2,Fri,Lunch,XRDS,Cod Breaded Fried with Tartar Sauce,Cod Fillet Breaded,Fish,0.86,2.48,0.25,4,9.91,,No,4.68,"1,400.00",409.18,2.57
+F25,2,Friday,Lunch,XRDS,Cod Breaded Fried with Tartar Sauce,Cod Fillet Breaded,Fish,0.86,2.48,0.25,4,9.91,,No,4.68,"1,400.00",409.18,2.35
+SP26,1,Friday,Dinner,XRDS,Stew Beef Haneeth Yemeni,Beef Stew Cut,Beef,0.81,2.03,0.23,3.65,8.92,,No,4.5,"1,400.00",393.76,2.27
+F25,4,Saturday,Dinner,XRDS,Beef Barbacoa Prepared,Beef Barbacoa Precooked,Beef,1,1.79,0.25,4,7.16,0,No,4,"1,400.00",350,1.74
+F25,4,Tuesday,Lunch,XRDS,Beef Barbacoa Prepared,Beef Barbacoa Precooked,Beef,1,1.79,0.25,4,7.16,0,No,4,"1,400.00",350,1.74
+SP26,2,Tues,Lunch,XRDS,Pork Carnitas,Pork Carnitas Precooked,Pork,0.75,1.08,0.19,3,5.75,,No,4,"1,400.00",350,1.25
+F25,2,Tuesday,Lunch,XRDS,Pork Carnitas,Pork Carnitas Precooked,Pork,0.75,1.08,0.19,3,5.75,,No,4,"1,400.00",350,1.22
+SP26,2,Friday,Dinner,XRDS,Pork Chile Verde,Pork Stew Cut,Pork,0.78,1.13,0.24,3.84,4.69,4.62,No,4.94,"1,400.00",432.54,1.28
+SP26,3,Wednesday,Dinner,XRDS,Chicken Orange Mandarin,Chicken Mandarin Orange with Sauce,Chicken,0.93,1.53,0.35,5.57,4.39,,No,6,"1,400.00",525,1.6
+F25,3,Wednesday,Dinner,XRDS,Chicken Orange Mandarin,Chicken Mandarin Orange with Sauce,Chicken,0.93,1.53,0.35,5.57,4.39,,No,6,"1,400.00",525,1.6
+F25,4,Wednesday,Lunch,XRDS,Chicken Coconut Curry Pulled Precooked,Chicken Pulled Precooked,Chicken,0.76,0.97,0.24,3.81,4.08,,No,5,"1,400.00",437.5,1.13
+SP26,1,Friday,Dinner,C3,Stew Chicken Thigh Adobo (HS) HALAL,Chicken Thigh (HS) HALAL,Chicken,0.82,0.95,0.24,3.84,3.98,,No,4.67,"1,400.00",408.73,1.22
+F25,3,Wednesday,Lunch,XRDS,Chicken Tikka Masala HALAL,Chicken Diced Dark Meat HALAL,Chicken,0.61,0.7,0.19,3.06,3.64,,No,5,"1,400.00",437.5,1
+SP26,1,Weds,Lunch,XRDS,Chicken Breast Coconut Curry Thai Sauteed,Chicken Breast Fajita Cut,Chicken,0.48,0.47,0.15,2.4,3.15,,No,5,"1,400.00",437.5,0.84
+F25,1,Wednesday,Lunch,XRDS,Chicken Breast Coconut Curry Thai Sauteed,Chicken Breast Fajita Cut,Chicken,0.48,0.47,0.15,2.4,3.15,,No,5,"1,400.00",437.5,0.93
+SP26,1,Tuesday,Dinner,C3,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,400.00",400.3,0.71
+F25,1,Tuesday,Dinner,C3,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,400.00",400.3,0.82
+SP26,1,Wednesday,Lunch,C3,Chicken Thigh Huli Huli Grilled HALAL,Chicken Thigh Bone In HALAL,Chicken,0.84,0.34,0.24,3.91,1.41,,No,4.64,"1,400.00",405.71,1.66
+SP26,4,Mon,Lunch,XRDS,Chicken Thigh Pomegranate Baked,Chicken Thigh Bone In HALAL,Chicken,0.85,0.35,0.25,4,1.41,,No,4.71,"1,400.00",411.86,0.57
+SP26,2,Thurs,Lunch,XRDS,Chicken Thigh Tandoori Baked HALAL,Chicken Thigh Bone In HALAL,Chicken,0.87,0.39,0.27,4.37,1.41,,No,5,"1,400.00",437.5,4.69
+F25,1,Wednesday,Lunch,C3,Chicken Thigh Huli Huli Grilled HALAL,Chicken Thigh Bone In HALAL,Chicken,0.84,0.34,0.24,3.91,1.41,,No,4.64,"1,400.00",405.71,1.11
+F25,2,Thursday,Lunch,XRDS,Chicken Thigh Tandoori Baked HALAL,Chicken Thigh Bone In HALAL,Chicken,0.87,0.39,0.27,4.37,1.41,,No,5,"1,400.00",437.5,2.39
+F25,1,Friday,Dinner,C3,Stew Chicken Thigh Adobo,Chicken Thigh Bone In,Chicken,0.81,0.34,0.24,3.84,1.41,3.59,No,4.77,"1,400.00",417.27,0.49
+SP26,1,Saturday,Dinner,XRDS,Pork Loin Honey Mustard,Pork Loin Boneless,Pork,0.89,0.9,0.24,3.84,,3.75,Yes,4.34,"1,400.00",379.42,1.48
+SP26,2,Friday,Dinner,C3,Salmon Cajun Grilled,Salmon Fillet Standard,Fish,0.94,1.99,0.24,3.84,,8.28,Yes,4.11,"1,400.00",359.53,2.05
+F25,2,Friday,Dinner,C3,Salmon Cajun Grilled,Salmon Fillet Standard,Fish,0.94,1.99,0.24,3.84,,8.28,Yes,4.11,"1,400.00",359.53,0.28
+SP26,4,Thurs,Lunch,XRDS,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.88,0.57,0.22,3.5,,2.62,Yes,4,"1,400.00",350,0.79
+SP26,2,Monday,Dinner,C3,Chicken 8 Cut Jerk Baked HALAL,Chicken 8 Cut HALAL,Chicken,0.94,0.63,0.24,3.84,,2.62,Yes,4.08,"1,400.00",356.8,0.76
+SP26,3,Thurs,Lunch,XRDS,Chicken 8 Cut Mediterranean Baked,Chicken 8 Cut HALAL,Chicken,0.87,0.71,0.27,4.34,,2.62,Yes,5,"1,400.00",437.5,1.75
+SP26,1,Sunday,Dinner,C3,Chicken 8 Cut Mediterranean Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.89,0.63,0.24,3.84,,2.62,Yes,4.32,"1,400.00",377.74,0.76
+F25,2,Monday,Dinner,C3,Chicken 8 Cut Jerk Baked HALAL,Chicken 8 Cut HALAL,Chicken,0.94,0.63,0.24,3.84,,2.62,Yes,4.08,"1,400.00",356.8,0.78
+F25,1,Sunday,Dinner,C3,Chicken 8 Cut Mediterranean Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.89,0.63,0.24,3.84,,2.62,Yes,4.32,"1,400.00",377.74,0.77
+SP26,2,Weds,Lunch,XRDS,Beef Bulgogi,Beef Sirloin Philly Sliced HALAL,Beef,0.76,1.6,0.19,3.03,,8.43,Yes,4,"1,400.00",350,2.59
+SP26,1,Thurs,Lunch,XRDS,Beef Strips Honey Garlic Seared HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.84,1.43,0.17,2.72,,8.43,Yes,3.23,"1,400.00",283.01,1.85
+F25,2,Wednesday,Lunch,XRDS,Beef Bulgogi,Beef Sirloin Philly Sliced HALAL,Beef,0.76,1.6,0.19,3.03,,8.43,Yes,4,"1,400.00",350,2.25
+SP26,4,Wednesday,Dinner,C3,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.38,"1,350.00",369.69,0.87
+F25,4,Wednesday,Dinner,C3,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.38,"1,350.00",369.69,0.83
+F25,3,Saturday,Dinner,C3,Chicken Breast AF HALAL,Chicken Breast B/S Raw HALAL,Chicken,0.98,0.51,0.25,3.92,2.96,2.09,Yes,4,"1,320.00",330,0.64
+F25,1,Thursday,Lunch,XRDS,Beef Barbacoa Prepared,Beef Barbacoa Precooked,Beef,1,1.79,0.25,4,7.16,0,No,4,"1,300.00",325,1.74
+SP26,4,Fri,Lunch,XRDS,Shrimp Vindaloo MONSOON,Shrimp 31/40,Shellfish,0.43,0.75,0.13,2.15,5.59,,No,5,"1,300.00",406.25,1.52
+F25,4,Friday,Lunch,XRDS,Shrimp Vindaloo MONSOON,Shrimp 31/40,Shellfish,0.43,0.75,0.13,2.15,5.59,,No,5,"1,300.00",406.25,1.46
+SP26,1,Fri,Lunch,XRDS,Pozole Pork,Pork Stew Cut,Pork,0.21,0.73,0.16,2.49,4.69,4.62,No,12.11,"1,300.00",983.79,1.22
+F25,1,Friday,Lunch,XRDS,Pozole Pork,Pork Stew Cut,Pork,0.21,0.73,0.16,2.49,4.69,4.62,No,12.11,"1,300.00",983.79,1.18
+F25,3,Friday,Lunch,XRDS,Chicken Thigh Tagine Seared HALAL,Chicken Thigh Boneless HALAL,Chicken,0.64,0.4,0.2,3.2,1.98,,No,5,"1,300.00",406.25,1.52
+SP26,2,Sunday,Dinner,C3,Stew Beef Chili Colorado HALAL,Beef Tri Tip HALAL,Beef,0.81,0.04,0.2,3.2,0.2,,No,3.97,"1,300.00",322.8,0.12
+SP26,3,Friday,Dinner,C3,Chicken Thigh Teriyaki Roasted HALAL,Chicken Thigh Boneless HALAL,Chicken,0.88,0.49,0.25,4,1.98,,No,4.57,"1,280.00",365.61,0.64
+F25,3,Friday,Dinner,C3,Chicken Thigh Teriyaki Roasted HALAL,Chicken Thigh Boneless HALAL,Chicken,0.88,0.49,0.25,4,1.98,,No,4.57,"1,280.00",365.61,0.81
+F25,1,Tuesday,Lunch,C3,Beef Ground Taco Meat Sauteed,Beef Ground HALAL,Beef,0.67,0.58,0.16,2.55,3.61,0,No,3.8,"1,264.00",299.96,0.83
+SP26,1,Friday,Lunch,C3,Cod Breaded Fried with Tartar Sauce,Cod Fillet Breaded,Fish,0.86,2.48,0.25,4,9.91,,No,4.68,"1,232.00",360.08,2.57
+F25,1,Friday,Lunch,C3,Cod Breaded Fried with Tartar Sauce,Cod Fillet Breaded,Fish,0.86,2.48,0.25,4,9.91,,No,4.68,"1,232.00",360.08,2.35
+F25,1,Wednesday,Dinner,C3,Beef Java Curry,Beef Stew Cut,Beef,0.36,1.11,0.12,2,8.92,,No,5.49,"1,200.00",411.63,1.06
+SP26,3,Fri,Lunch,XRDS,Rockfish Teriyaki Baked HALAL,Rockfish Fillet,Fish,0.95,1.92,0.25,4,6.9,7.69,Yes,4.21,"1,200.00",315.95,2.08
+F25,1,Tuesday,Lunch,XRDS,Meatballs Beef Swedish With Gravy,Beef Meatball Precooked,Beef,0.64,1.46,0.26,4.14,5.64,0,No,6.5,"1,200.00",487.5,1.54
+SP26,2,Thursday,Dinner,C3,Chicken Breast Chipotle (HS) HALAL,Chicken Breast B/S Raw (HS) HALAL,Chicken,0.95,1.21,0.3,4.73,4.09,,No,5,"1,200.00",375,1.35
+SP26,1,Saturday,Dinner,C3,Meatloaf Beef Glazed Baked HALAL,Beef Ground HALAL,Beef,0.35,0.49,0.14,2.16,3.61,0,No,6.21,"1,200.00",465.86,0.87
+F25,1,Saturday,Dinner,C3,Meatloaf Beef Glazed Baked HALAL,Beef Ground HALAL,Beef,0.35,0.49,0.14,2.16,3.61,0,No,6.21,"1,200.00",465.86,0.85
+F25,3,Monday,Lunch,XRDS,Chicken Thigh Honey Mustard Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.94,0.58,0.29,4.69,1.98,,No,5,"1,200.00",375,0.96
+SP26,4,Tues,Lunch,XRDS,Beef Chicken Fried Steak and Gravy,Beef Chicken Fried,Beef,0.75,0.08,0.24,3.84,0.35,0,No,5.15,"1,200.00",386.4,1.58
+SP26,2,Friday,Lunch,C3,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.38,"1,200.00",328.61,0.87
+SP26,3,Friday,Lunch,C3,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.38,"1,200.00",328.61,0.87
+F25,2,Friday,Lunch,C3,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.38,"1,200.00",328.61,0.83
+F25,3,Friday,Lunch,C3,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.38,"1,200.00",328.61,0.83
+SP26,1,Monday,Dinner,C3,Beef Strips Honey Garlic Seared HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.84,1.78,0.21,3.38,,8.43,Yes,4.02,"1,194.00",300.23,2.3
+F25,1,Monday,Dinner,C3,Beef Strips Honey Garlic Seared HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.84,1.78,0.21,3.38,,8.43,Yes,4.02,"1,194.00",300.23,1.94
+SP26,2,Monday,Dinner,CKC,Chicken 8 Cut BBQ Roasted HALAL,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.38,"1,187.00",325.05,
+SP26,1,Wednesday,Dinner,CKC,Beef Strips Honey Garlic Seared HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.84,1.43,0.17,2.72,,8.43,Yes,3.23,"1,177.00",237.93,
+SP26,4,Tuesday,Dinner,CKC,Chicken Orange Mandarin,Chicken Mandarin Orange with Sauce,Chicken,0.93,1.65,0.37,6,4.39,,No,6.46,"1,160.00",468.09,
+F25,4,Friday,Lunch,C3,Chicken Thigh Jerk Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.9,0.48,0.24,3.84,1.98,,No,4.25,"1,132.00",300.51,2.2
+SP26,3,Tuesday,Dinner,CKC,Beef Sirloin Fajita (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.63,1.05,0.13,2,,8.43,Yes,3.18,"1,120.00",222.74,
+F25,1,Sunday,Dinner,CKC,Pork Pulled BBQ Housemade,Pork Butt Boneless,Pork,0.82,0.65,0.2,3.2,3.25,,No,3.92,"1,100.00",269.67,0.83
+SP26,2,Monday,Dinner,XRDS,Beef Broccoli Stir Fry,Beef Sirloin Stir-Fry Cut,Beef,0.33,0.85,0.1,1.63,8.35,,No,5,"1,100.00",343.75,1.28
+F25,2,Monday,Dinner,XRDS,Beef Broccoli Stir Fry,Beef Sirloin Stir-Fry Cut,Beef,0.33,0.85,0.1,1.63,8.35,,No,5,"1,100.00",343.75,1.06
+F25,4,Thursday,Lunch,XRDS,Rockfish Pepper Cilantro Pesto Baked,Rockfish Fillet,Fish,0.93,1.78,0.23,3.71,6.9,7.69,Yes,4,"1,100.00",275,1.69
+F25,4,Monday,Dinner,XRDS,Rockfish Veracruz Baked KOSHER,Rockfish Fillet,Fish,0.83,1.79,0.23,3.72,6.9,7.69,Yes,4.5,"1,100.00",309.38,1.72
+F25,4,Tuesday,Dinner,XRDS,Chicken Fire Braised Precooked,Chicken Thigh Boneless Precooked,Chicken,1,1.45,0.25,4,5.78,,No,4,"1,100.00",275,1.2
+SP26,2,Sunday,Dinner,XRDS,Chicken Thigh Tikka Masala,Chicken Diced Meat Precooked,Chicken,0.65,0.82,0.2,3.26,4.02,,No,5,"1,100.00",343.75,1.28
+F25,2,Sunday,Dinner,XRDS,Chicken Thigh Tikka Masala,Chicken Diced Meat Precooked,Chicken,0.65,0.82,0.2,3.26,4.02,,No,5,"1,100.00",343.75,1.22
+SP26,2,Tuesday,Lunch,C3,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,100.00",314.52,0.71
+SP26,2,Monday,Lunch,C3,Chicken Thigh Herb Roasted,Chicken Thigh Boneless HALAL,Chicken,0.96,0.48,0.24,3.84,1.98,,No,4.02,"1,100.00",276.41,2.37
+F25,1,Saturday,Dinner,XRDS,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,100.00",314.52,0.82
+F25,2,Tuesday,Lunch,C3,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,100.00",314.52,0.82
+F25,2,Monday,Lunch,C3,Chicken Thigh Herb Roasted,Chicken Thigh Boneless HALAL,Chicken,0.96,0.48,0.24,3.84,1.98,,No,4.02,"1,100.00",276.41,2.24
+SP26,4,Wednesday,Dinner,XRDS,Pork Loin Citrus Glazed Roasted,Pork Loin Boneless,Pork,0.93,0.87,0.23,3.7,,3.75,Yes,4,"1,100.00",275,1
+F25,4,Wednesday,Dinner,XRDS,Pork Loin Citrus Glazed Roasted,Pork Loin Boneless,Pork,0.93,0.87,0.23,3.7,,3.75,Yes,4,"1,100.00",275,1
+F25,3,Thursday,Lunch,XRDS,Chicken 8 Cut Mediterranean Baked,Chicken 8 Cut HALAL,Chicken,0.87,0.71,0.27,4.34,,2.62,Yes,5,"1,100.00",343.75,1.58
+SP26,3,Sunday,Dinner,XRDS,Beef Sirloin Fajita (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.63,1.66,0.2,3.15,,8.43,Yes,5,"1,100.00",343.75,2.12
+F25,3,Sunday,Dinner,XRDS,Beef Sirloin Fajita (HS) HALAL,Beef Stir-Fry Cut (HS) Halal,Beef,0.63,1.66,0.2,3.15,,8.43,Yes,5,"1,100.00",343.75,2.03
+SP26,4,Saturday,Dinner,XRDS,Cod Lemon Butter Baked,Cod Fillet,Fish,0.78,1.87,0.25,4,7.48,,No,5.11,"1,000.00",319.68,2.11
+SP26,3,Monday,Dinner,C3,Cod Lemon Butter Baked,Cod Fillet,Fish,0.78,1.87,0.25,4,7.48,,No,5.11,"1,000.00",319.68,2.11
+F25,3,Monday,Dinner,C3,Cod Lemon Butter Baked,Cod Fillet,Fish,0.78,1.87,0.25,4,7.48,,No,5.11,"1,000.00",319.68,1.67
+SP26,3,Wednesday,Dinner,C3,Rockfish Ginger Steamed HALAL,Rockfish Fillet,Fish,0.66,1.93,0.25,4.02,6.9,7.69,Yes,6.12,"1,000.00",382.71,2.27
+F25,3,Wednesday,Dinner,C3,Rockfish Ginger Steamed HALAL,Rockfish Fillet,Fish,0.66,1.93,0.25,4.02,6.9,7.69,Yes,6.12,"1,000.00",382.71,2.06
+SP26,3,Saturday,Dinner,XRDS,Turkey Breast Herb Roasted,Turkey Breast Boneless Skin On,Turkey,0.53,1.1,0.17,2.67,6.6,,No,5,"1,000.00",312.5,1.64
+F25,3,Saturday,Dinner,XRDS,Turkey Breast Herb Roasted,Turkey Breast Boneless Skin On,Turkey,0.53,1.1,0.17,2.67,6.6,,No,5,"1,000.00",312.5,1.41
+F25,2,Thursday,Dinner,XRDS,Chicken Fire Braised Precooked,Chicken Thigh Boneless Precooked,Chicken,1,1.45,0.25,4,5.78,,No,4,"1,000.00",250,1.2
+F25,4,Sunday,Dinner,XRDS,Grits Cheesy Shrimp,Shrimp 26/30,Shellfish,0.23,0.57,0.1,1.6,5.69,,No,7.05,"1,000.00",440.56,1
+SP26,2,Saturday,Dinner,XRDS,Meatballs Beef Swedish With Gravy,Beef Meatball Precooked,Beef,0.64,1.12,0.2,3.19,5.64,0,No,5,"1,000.00",312.5,1.06
+F25,2,Saturday,Dinner,XRDS,Meatballs Beef Swedish With Gravy,Beef Meatball Precooked,Beef,0.64,1.12,0.2,3.19,5.64,0,No,5,"1,000.00",312.5,1.19
+F25,2,Friday,Dinner,XRDS,Ceviche Shrimp Mexican,Shrimp 31/40,Shellfish,0.32,0.66,0.12,1.89,5.59,,No,6,"1,000.00",375,1.14
+F25,2,Tuesday,Dinner,XRDS,Chicken Breast Cacciatore Seared,Chicken Breast B/S Raw 4 oz,Chicken,0.73,1.13,0.23,3.67,4.94,6.93,No,5,"1,000.00",312.5,1.53
+F25,3,Thursday,Dinner,XRDS,Jambalaya Andouille Sausage Chicken Shrimp,Chicken Breast Fajita Cut,Chicken,0.17,0.2,0.06,1.01,3.15,,No,6,"1,000.00",375,0.98
+SP26,4,Monday,Lunch,C3,Chicken Breast Cacciatore Seared HALAL,Chicken Breast B/S Raw HALAL,Chicken,0.67,0.52,0.25,4,2.96,2.09,Yes,5.96,"1,000.00",372.49,1.71
+F25,4,Monday,Lunch,C3,Chicken Breast Cacciatore Seared HALAL,Chicken Breast B/S Raw HALAL,Chicken,0.67,0.52,0.25,4,2.96,2.09,Yes,5.96,"1,000.00",372.49,1.15
+SP26,1,Wednesday,Dinner,XRDS,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,000.00",285.93,0.71
+SP26,4,Wednesday,Lunch,C3,Chicken Thigh Honey Mustard Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.94,0.5,0.25,4,1.98,,No,4.26,"1,000.00",266.55,0.68
+F25,1,Wednesday,Dinner,XRDS,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,"1,000.00",285.93,0.82
+F25,4,Wednesday,Lunch,C3,Chicken Thigh Honey Mustard Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.94,0.5,0.25,4,1.98,,No,4.26,"1,000.00",266.55,0.82
+SP26,1,Monday,Lunch,CKC,Chicken Thigh Huli Huli Grilled HALAL,Chicken Thigh Bone In HALAL,Chicken,0.84,0.28,0.2,3.2,1.41,,No,3.79,"1,000.00",237.16,
+SP26,3,Monday,Dinner,XRDS,Beef Chicken Fried Steak and Gravy,Beef Chicken Fried,Beef,0.75,0.08,0.23,3.73,0.35,0,No,5,"1,000.00",312.5,1.53
+F25,3,Monday,Dinner,XRDS,Beef Chicken Fried Steak and Gravy,Beef Chicken Fried,Beef,0.75,0.08,0.23,3.73,0.35,0,No,5,"1,000.00",312.5,1.51
+SP26,3,Tuesday,Lunch,C3,Salmon Pineapple Salsa Baked,Salmon Fillet Standard,Fish,0.78,1.99,0.24,3.84,,8.28,Yes,4.94,"1,000.00",308.46,2.23
+SP26,3,Saturday,Dinner,CKC,Chicken 8 Cut Piri Piri Roasted,Chicken 8 Cut HALAL,Chicken,0.81,0.63,0.24,3.84,,2.62,Yes,4.73,"1,000.00",295.39,
+F25,3,Tuesday,Dinner,XRDS,Chicken 8 Cut Jerk Baked HALAL,Chicken 8 Cut HALAL,Chicken,0.94,0.63,0.24,3.84,,2.62,Yes,4.08,"1,000.00",254.86,0.78
+SP26,1,Thursday,Dinner,C3,Pasta Penne Halal Chicken Chipotle,Chicken Diced Dark Meat HALAL,Chicken,0.33,0.51,0.14,2.24,3.64,,No,6.77,945.00,399.82,1.11
+SP26,3,Wednesday,Dinner,CKC,Chicken Szechuan HALAL,Chicken Diced Dark Meat HALAL,Chicken,0.44,0.58,0.16,2.56,3.64,,No,5.84,937.00,341.93,
+F25,4,Sunday,Dinner,CKC,Chicken Tenders Fried,Chicken Tenderloin Breaded Precooked,Chicken,0.96,0.24,0.25,4.04,0.97,,No,4.22,935.00,246.39,0.26
+SP26,2,Tuesday,Dinner,C3,Chicken Tikka Masala HALAL,Chicken Diced Dark Meat HALAL,Chicken,0.61,0.87,0.24,3.84,3.64,,No,6.28,917.00,360.04,1.34
+F25,2,Tuesday,Dinner,C3,Chicken Tikka Masala HALAL,Chicken Diced Dark Meat HALAL,Chicken,0.61,0.87,0.24,3.84,3.64,,No,6.28,917.00,360.04,1.26
+SP26,3,Monday,Lunch,C3,Chicken Thigh Jerk Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.9,0.79,0.4,6.4,1.98,,No,7.08,904.00,399.94,1.42
+F25,3,Monday,Lunch,C3,Chicken Thigh Jerk Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.9,0.79,0.4,6.4,1.98,,No,7.08,904.00,399.94,3.66
+SP26,1,Sunday,Dinner,XRDS,Chicken Tenders Korean BBQ,Chicken Tenderloin Breaded Precooked,Chicken,0.8,0.24,0.25,4,0.97,,No,5,900.00,281.25,0.48
+F25,1,Sunday,Dinner,XRDS,Chicken Tenders Korean BBQ,Chicken Tenderloin Breaded Precooked,Chicken,0.8,0.24,0.25,4,0.97,,No,5,900.00,281.25,0.37
+F25,1,Tuesday,Dinner,XRDS,Rockfish Piccata Baked,Rockfish Fillet,Fish,0.77,1.48,0.19,3.08,6.9,7.69,Yes,4,900.00,225,1.5
+F25,4,Monday,Lunch,XRDS,Rockfish Teriyaki Baked HALAL,Rockfish Fillet,Fish,0.95,1.83,0.24,3.8,6.9,7.69,Yes,4,900.00,225,1.75
+SP26,2,Saturday,Dinner,C3,Beef Ground Taco Meat Sauteed HALAL,Beef Ground HALAL,Beef,0.72,0.62,0.17,2.74,3.61,0,No,3.8,900.00,213.58,0.91
+F25,2,Saturday,Dinner,C3,Beef Ground Taco Meat Sauteed,Beef Ground HALAL,Beef,0.67,0.58,0.16,2.55,3.61,0,No,3.8,900.00,213.58,0.83
+SP26,2,Tuesday,Dinner,CKC,Chicken Orange Mandarin,Chicken Mandarin Orange with Sauce,Chicken,0.93,1.65,0.37,6,4.39,,No,6.46,880.00,355.1,
+F25,4,Tuesday,Dinner,CKC,Chicken Orange Mandarin,Chicken Mandarin Orange with Sauce,Chicken,0.93,1.65,0.37,6,4.39,,No,6.46,840.00,338.96,1.72
+SP26,2,Sunday,Dinner,CKC,Stew Chicken Thigh Adobo (HS) HALAL,Chicken Thigh (HS) HALAL,Chicken,0.82,0.95,0.24,3.84,3.98,,No,4.67,835,243.78,
+SP26,2,Thursday,Dinner,CKC,Stew Beef Kaldretta Filipino,Beef Stew Cut,Beef,0.42,1.78,0.2,3.2,8.92,,No,7.55,800,377.53,
+SP26,1,Sunday,Dinner,CKC,Chicken Thigh Honey Mustard Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.94,0.5,0.25,4,1.98,,No,4.26,800,213.24,
+SP26,3,Thursday,Dinner,CKC,Jambalaya Andouille Sausage Chicken Shrimp,Chicken Breast Fajita Cut,Chicken,0.17,0.19,0.06,0.96,3.15,,No,5.69,770,273.92,
+SP26,2,Wednesday,Lunch,CKC,Beef Broccoli Stir Fry,Beef Sirloin Stir-Fry Cut,Beef,0.33,0.67,0.08,1.28,8.35,,No,3.93,750,184.22,
+SP26,3,Thursday,Lunch,C3,Stew Beef Rendang (HS) HALAL,Beef Stew Cut (HS) Halal,Beef,0.66,2.02,0.24,3.84,,8.43,Yes,5.8,750,272.07,2.71
+F25,3,Thursday,Lunch,C3,Stew Beef Rendang (HS) HALAL,Beef Stew Cut (HS) Halal,Beef,0.66,2.02,0.24,3.84,,8.43,Yes,5.8,750,272.07,2.95
+F25,2,Wednesday,Dinner,XRDS,Sausage Pork Link,Sausage Breakfast Pork Link,Pork,1,0.6,0.13,2,4.81,,No,2,700,87.5,0.52
+SP26,2,Saturday,Dinner,CKC,Chicken Thigh Tikka Masala,Chicken Diced Meat Precooked,Chicken,0.65,0.8,0.2,3.2,4.02,,No,4.91,700,214.81,
+F25,4,Tuesday,Dinner,C3,Chicken Breast Chipotle HALAL AF,Chicken Breast B/S Raw HALAL,Chicken,0.03,0.03,0.02,0.25,2.96,2.09,Yes,7.47,685,319.99,2.94
+F25,2,Sunday,Dinner,CKC,Stew Pork Filipino Adobo,Pork Stew Cut,Pork,0.78,1.13,0.24,3.84,4.69,4.62,No,4.9,680,208.37,1.2
+SP26,4,Friday,Lunch,CKC,Chicken Thigh Jerk Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.9,0.48,0.24,3.84,1.98,,No,4.25,667,177.07,
+F25,3,Tuesday,Dinner,CKC,Beef Brisket BBQ Braised HALAL,Beef Brisket Whole HALAL,Beef,0.85,1.34,0.24,3.84,,5.6,Yes,4.52,665,187.73,1.3
+SP26,1,Wednesday,Lunch,CKC,Chicken Thigh Honey Mustard Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.94,0.5,0.25,4,1.98,,No,4.26,640,170.59,
+SP26,1,Saturday,Dinner,CKC,Beef Carne Asada Diced Precooked,Beef Carne Asada Diced 1/4 Fully Cooked,Beef,1,1.61,0.19,3.04,8.46,0,No,3.04,632,120.08,
+F25,4,Wednesday,Dinner,CKC,Beef Carne Asada Diced Precooked,Beef Carne Asada Diced 1/4 Fully Cooked,Beef,1,1.61,0.19,3.04,8.46,0,No,3.04,632,120.08,1.56
+SP26,1,Tuesday,Lunch,CKC,Beef Ground Taco Meat Sauteed HALAL,Beef Ground HALAL,Beef,0.72,0.62,0.17,2.74,3.61,0,No,3.8,625,148.32,
+SP26,1,Friday,Lunch,CKC,Salmon Pineapple Teriyaki Baked HALAL,Salmon Fillet Standard,Fish,0.84,1.66,0.2,3.2,,8.28,Yes,3.81,625,148.88,
+SP26,2,Wednesday,Dinner,CKC,Pork Kalua,Pork Butt Boneless,Pork,0.96,0.78,0.24,3.84,3.25,,No,4.02,600,150.8,
+F25,2,Saturday,Dinner,CKC,Pork Kalua,Pork Butt Boneless,Pork,0.96,0.78,0.24,3.84,3.25,,No,4.02,600,150.8,0.98
+F25,1,Tuesday,Dinner,CKC,Chicken Thigh Latin Braised Shredded,Chicken Thigh Boneless HALAL,Chicken,0.52,0.26,0.13,2.09,1.98,,No,4,600,150,0.52
+F25,1,Wednesday,Dinner,CKC,Pork Loin Roasted,Pork Loin Boneless,Pork,1,0.9,0.24,3.84,,3.75,Yes,3.86,600,144.58,0.97
+SP26,1,Thursday,Dinner,CKC,Chicken 8 Cut Piri Piri Roasted,Chicken 8 Cut HALAL,Chicken,0.81,0.63,0.24,3.84,,2.62,Yes,4.73,600,177.23,
+F25,1,Thursday,Dinner,CKC,Chicken 8 Cut Piri Piri Roasted,Chicken 8 Cut HALAL,Chicken,0.81,0.63,0.24,3.84,,2.62,Yes,4.73,600,177.23,0.86
+F25,3,Friday,Dinner,CKC,Chicken Breast Parmesan Baked,Chicken Breast B/S Raw 4 oz,Chicken,0.46,0.99,0.2,3.2,4.94,6.93,No,6.9,595,256.67,1.46
+F25,2,Wednesday,Dinner,CKC,Chicken Thigh Tikka Masala,Chicken Diced Meat Precooked,Chicken,0.65,0.8,0.2,3.2,4.02,,No,4.91,595,182.58,1.2
+F25,4,Thursday,Dinner,CKC,Chicken Thigh Tikka Masala,Chicken Diced Meat Precooked,Chicken,0.65,0.8,0.2,3.2,4.02,,No,4.91,595,182.58,1.2
+F25,3,Wednesday,Dinner,CKC,Chicken Szechuan HALAL,Chicken Diced Dark Meat HALAL,Chicken,0.44,0.58,0.16,2.56,3.64,,No,5.84,595,217.13,1.31
+F25,2,Tuesday,Dinner,CKC,Chicken 8 Cut Lemon Thyme Baked,Chicken 8 Cut HALAL,Chicken,0.88,0.63,0.24,3.84,,2.62,Yes,4.37,595,162.54,1.28
+SP26,3,Monday,Lunch,CKC,Pork Loin Roasted,Pork Loin Boneless,Pork,1,0.9,0.24,3.84,,3.75,Yes,3.86,584,140.73,
+F25,3,Thursday,Dinner,CKC,Catfish Blackened,Catfish Fillet,Fish,0.82,1.45,0.24,3.84,6.03,,No,4.71,560,164.81,1.47
+SP26,3,Sunday,Dinner,CKC,Meatballs Beef Swedish With Gravy,Beef Meatball Precooked,Beef,0.64,1.41,0.25,4,5.64,0,No,6.28,560,219.74,
+F25,2,Thursday,Dinner,CKC,Pork Chile Verde,Pork Stew Cut,Pork,0.78,1.13,0.24,3.84,4.69,4.62,No,4.94,560,173.02,1.25
+F25,4,Saturday,Dinner,CKC,Chicken Breast Coconut Curry Thai Sauteed,Chicken Breast Fajita Cut,Chicken,0.48,0.55,0.18,2.81,3.15,,No,5.86,560,205.16,1.1
+F25,3,Monday,Dinner,CKC,Chicken Thigh Pomegranate Baked,Chicken Thigh Bone In HALAL,Chicken,0.85,0.35,0.25,4,1.41,,No,4.71,560,164.74,0.64
+F25,3,Sunday,Dinner,CKC,Meatballs Beef Swedish With Gravy,Beef Meatball Precooked,Beef,0.64,1.41,0.25,4,5.64,0,No,6.28,553,217,1.49
+F25,3,Saturday,Dinner,CKC,Pork Ham Pineapple Glaze Baked,Pork Ham Boneless,Pork,0.86,1.07,0.25,4,4.3,,No,4.64,525,152.25,0.81
+F25,1,Saturday,Dinner,CKC,Chicken Corn Tortilla Baked Red Sauce Enchiladas,Chicken Thigh Boneless Precooked,Chicken,0.37,1.44,0.25,4,5.78,,No,10.75,510,342.62,1.1
+F25,4,Saturday,Dinner,C3,Beef Ground Taco Meat Sauteed,Beef Ground HALAL,Beef,0.67,0.58,0.16,2.55,3.61,0,No,3.8,500,118.66,0.83
+F25,1,Thursday,Dinner,XRDS,Chicken Teriyaki SG,Chicken Thigh Boneless HALAL,Chicken,0.84,0.4,0.2,3.2,1.98,,No,3.8,500,118.74,0.73
+SP26,3,Wednesday,Lunch,CKC,Beef Java Curry,Beef Stew Cut,Beef,0.36,1.11,0.12,2,8.92,,No,5.49,480,164.65,
+SP26,4,Monday,Dinner,CKC,Chicken Butter,Chicken Thigh Boneless Precooked,Chicken,0.65,1.45,0.25,4,5.78,,No,6.18,480,185.27,
+SP26,4,Thursday,Lunch,CKC,Chicken Wing Fried Party Basic,Chicken Wings Party,Chicken,0.99,0.92,0.5,8,1.84,3.39,No,8.05,480,241.5,
+F25,1,Friday,Lunch,CKC,Pork Char Siu Roasted,Pork Butt Boneless,Pork,0.92,0.78,0.24,3.84,3.25,,No,4.16,462,120.12,1.03
+F25,4,Friday,Dinner,CKC,Rockfish Ginger Steamed HALAL,Rockfish Fillet,Fish,0.66,1.93,0.25,4.02,6.9,7.69,Yes,6.12,455,174.13,2.06
+SP26,1,Friday,Dinner,CKC,Salmon Dijon Herb Crusted Baked,Salmon Fillet Standard,Fish,0.9,1.99,0.24,3.84,,8.28,Yes,4.26,455,121.08,
+SP26,2,Friday,Dinner,CKC,Salmon Mango Salsa Baked,Salmon Fillet Standard,Fish,0.8,1.99,0.24,3.84,,8.28,Yes,4.83,455,137.4,
+F25,1,Friday,Dinner,CKC,Salmon Dijon Herb Crusted Baked,Salmon Fillet Standard,Fish,0.9,1.99,0.24,3.84,,8.28,Yes,4.26,455,121.08,0.38
+F25,2,Friday,Dinner,CKC,Salmon Mango Salsa Baked,Salmon Fillet Standard,Fish,0.8,1.99,0.24,3.84,,8.28,Yes,4.83,455,137.4,0.43
+SP26,4,Friday,Dinner,CKC,Meatloaf Beef Glazed Baked HALAL,Beef Ground HALAL,Beef,0.35,0.48,0.13,2.13,3.61,0,No,6.13,450,172.49,
+F25,4,Wednesday,Dinner,CKC,Chicken Thigh Tinga Precooked,Chicken Thigh Boneless Precooked,Chicken,0.88,1.39,0.24,3.84,5.78,,No,4.35,441,120.03,1.21
+SP26,3,Thursday,Lunch,CKC,Chicken Tenders Fried,Chicken Tenderloin Breaded Precooked,Chicken,0.96,0.24,0.25,4.04,0.97,,No,4.22,435,114.63,
+F25,4,Friday,Lunch,CKC,Chicken Thigh Jerk Baked HALAL,Chicken Thigh Boneless HALAL,Chicken,0.9,0.48,0.24,3.84,1.98,,No,4.25,425,112.83,2.2
+F25,1,Thursday,Lunch,CKC,Chicken 8 Cut North African Roasted HALAL AF,Chicken 8 Cut HALAL,Chicken,0.93,0.63,0.24,3.84,,2.62,Yes,4.15,425,110.16,0.87
+F25,1,Monday,Lunch,XRDS,Chicken Sesame Orange Tamarind SG,Chicken Tempura,Chicken,0.67,0.65,0.2,3.2,3.25,,No,4.77,400,119.15,1.36
+F25,4,Wednesday,Lunch,CKC,Chicken Tenders Korean BBQ,Chicken Tenderloin Breaded Precooked,Chicken,0.8,0.24,0.25,4,0.97,,No,5,400,125,0.37
+F25,3,Friday,Lunch,CKC,Pork Pulled BBQ Housemade,Pork Butt Boneless,Pork,0.82,0.65,0.2,3.2,3.25,,No,3.92,400,98.06,0.83
+F25,3,Monday,Lunch,CKC,Stew Beef Haneeth Yemeni KOSHER,Beef Stew Cut KOSHER,Beef,0.81,2.78,0.25,4.05,10.99,,No,5,400,125,3.37
+SP26,2,Friday,Lunch,CKC,Cod Breaded Fried with Tartar Sauce,Cod Fillet Breaded,Fish,0.86,2.48,0.25,4,9.91,,No,4.68,400,116.91,
+F25,2,Friday,Lunch,CKC,Cod Breaded Fried with Tartar Sauce,Cod Fillet Breaded,Fish,0.86,2.48,0.25,4,9.91,,No,4.68,400,116.91,2.35
+SP26,4,Monday,Lunch,CKC,Stew Beef Siga Tibs,Beef Stew Cut,Beef,0.5,1.43,0.16,2.56,8.92,,No,5.12,400,128.05,
+F25,4,Thursday,Lunch,CKC,Stew Beef Siga Tibs,Beef Stew Cut,Beef,0.5,1.43,0.16,2.56,8.92,,No,5.12,400,128.05,1.74
+SP26,4,Wednesday,Lunch,CKC,Beef Bulgogi Sauteed,Beef Sirloin Stir-Fry Cut,Beef,0.87,1.67,0.2,3.2,8.35,,No,3.68,400,91.93,
+SP26,3,Friday,Dinner,CKC,Cod Lemon Butter Baked,Cod Fillet,Fish,0.78,1.87,0.25,4,7.48,,No,5.11,400,127.87,
+SP26,4,Tuesday,Lunch,CKC,Pork Carnitas,Pork Carnitas Precooked,Pork,0.75,1.15,0.2,3.2,5.75,,No,4.26,400,106.48,
+F25,4,Tuesday,Lunch,CKC,Pork Carnitas,Pork Carnitas Precooked,Pork,0.75,1.15,0.2,3.2,5.75,,No,4.26,400,106.48,1.3
+SP26,2,Monday,Lunch,CKC,Chicken Breast Parmesan Baked,Chicken Breast B/S Raw 4 oz,Chicken,0.46,0.99,0.2,3.2,4.94,6.93,No,6.9,400,172.55,
+F25,2,Wednesday,Lunch,CKC,Pozole Pork,Pork Stew Cut,Pork,0.21,0.73,0.16,2.49,4.69,4.62,No,12.11,400,302.71,1.18
+SP26,4,Thursday,Dinner,CKC,Chicken Breast Coconut Curry Thai Sauteed HALAL,Chicken Breast Fajita Cut HALAL,Chicken,0.49,0.64,0.2,3.2,3.19,,No,6.56,400,164.12,
+SP26,1,Tuesday,Dinner,CKC,Chicken Thigh Fajita Sauteed HALAL,Chicken Thigh Boneless HALAL,Chicken,0.7,0.4,0.2,3.2,1.98,,No,4.57,400,114.37,
+SP26,2,Thursday,Lunch,CKC,Chicken Thigh Tandoori Baked HALAL,Chicken Thigh Bone In HALAL,Chicken,0.87,0.35,0.25,3.97,1.41,,No,4.55,400,113.65,
+F25,2,Thursday,Lunch,CKC,Chicken Thigh Tandoori Baked HALAL,Chicken Thigh Bone In HALAL,Chicken,0.87,0.35,0.25,3.97,1.41,,No,4.55,400,113.65,2.17
+F25,3,Thursday,Lunch,CKC,Chicken Tenders Fried,Chicken Tenderloin Breaded Precooked,Chicken,0.96,0.24,0.25,4.04,0.97,,No,4.22,400,105.41,0.26
+F25,1,Monday,Lunch,CKC,Salmon Pineapple Salsa Baked,Salmon Fillet Standard,Fish,0.78,1.99,0.24,3.84,,8.28,Yes,4.94,400,123.38,0.48
+F25,1,Tuesday,Lunch,CKC,Chicken 8 Cut BBQ Baked,Chicken 8 Cut HALAL,Chicken,0.87,0.63,0.24,3.84,,2.62,Yes,4.41,400,110.16,0.9
+SP26,3,Tuesday,Lunch,CKC,Chicken Corn Tortilla Baked Red Sauce Enchiladas,Chicken Thigh Boneless Precooked,Chicken,0.37,1.44,0.25,4,5.78,,No,10.75,373,250.58,
+SP26,3,Friday,Lunch,CKC,Pork Pulled BBQ Housemade,Pork Butt Boneless,Pork,0.82,0.65,0.2,3.2,3.25,,No,3.92,360,88.25,
+SP26,2,Tuesday,Lunch,CKC,Beef Carne Asada Housemade,Beef Sirloin Stir-Fry Cut,Beef,0.94,1.95,0.23,3.74,8.35,,No,4,350,87.5,
+F25,2,Tuesday,Lunch,CKC,Beef Carne Asada Housemade,Beef Sirloin Stir-Fry Cut,Beef,0.94,1.95,0.23,3.74,8.35,,No,4,350,87.5,1.83
+SP26,1,Monday,Dinner,CKC,Pork Loin Roasted,Pork Loin Boneless,Pork,1,0.9,0.24,3.84,,3.75,Yes,3.86,350,84.34,
+SP26,1,Thursday,Lunch,CKC,Stew Beef Kaldretta Filipino,Beef Stew Cut,Beef,0.42,1.78,0.2,3.2,8.92,,No,7.55,300,141.58,
+F25,1,Monday,Lunch,CKC,Beef Bulgogi,Beef Sirloin Philly Sliced HALAL,Beef,0.76,1,0.12,1.9,,8.43,Yes,2.5,270,42.19,1.41
+SP26,4,Sunday,Dinner,CKC,Beef Chicken Fried Steak and Gravy,Beef Chicken Fried,Beef,0.75,0.08,0.24,3.84,0.35,0,No,5.15,250,80.5,
+SP26,3,Monday,Dinner,CKC,Chicken Thigh Vindaloo HALAL,Chicken Thigh Boneless HALAL,Chicken,0.77,0.44,0.22,3.52,1.98,,No,4.56,240,68.35,
+F25,2,Tuesday,Lunch,CKC,Shrimp Taco Filling Battered Fried,Shrimp Breaded PopCorn Style,Shellfish,0.97,0.57,0.12,2,4.59,,No,2.06,200,25.8,0.59
+F25,4,Saturday,Dinner,C3,Beef Ground AF HALAL,Beef Ground HALAL,Beef,0.94,0.87,0.24,3.84,3.61,0,No,4.08,200,51.06,1.4
+SP26,2,Sunday,Dinner,FTH,Chicken Orange Mandarin,Chicken Mandarin Orange with Sauce,Chicken,0.93,1.65,0.37,6,4.39,,No,6.46,110,44.39,1.72

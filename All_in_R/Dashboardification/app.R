@@ -407,7 +407,7 @@ server <- function(input, output, session) {
           scenario = "s1",
           lower_multiplier = 1 - input$bounds_max_decrease_pct / 100,
           upper_multiplier = 1 + input$bounds_max_increase_pct / 100,
-          data_dir = "../Basic_Data"
+          data_dir = "Basic_Data"
         )
         
         s2 <- run_dashboard_scenario(
@@ -416,7 +416,7 @@ server <- function(input, output, session) {
           scenario = "s2",
           lower_multiplier = 1 - input$bounds_max_decrease_pct / 100,
           upper_multiplier = 1 + input$bounds_max_increase_pct / 100,
-          data_dir = "../Basic_Data"
+          data_dir = "Basic_Data"
         )
         
         list(s1 = s1, s2 = s2)
@@ -444,7 +444,7 @@ server <- function(input, output, session) {
           cost_reduction_target = input$custom_cost_reduction_target,
           lower_multiplier = 1 - input$custom_max_decrease_pct / 100,
           upper_multiplier = 1 + input$custom_max_increase_pct / 100,
-          data_dir = "../Basic_Data"
+          data_dir = "Basic_Data"
         )
       },
       error = function(e) {
@@ -475,7 +475,7 @@ server <- function(input, output, session) {
           cost_reduction_target = input$hyp_cost_reduction_target,
           lower_multiplier = 1 - input$hyp_max_decrease_pct / 100,
           upper_multiplier = 1 + input$hyp_max_increase_pct / 100,
-          data_dir = "../Basic_Data"
+          data_dir = "Basic_Data"
         )
       },
       error = function(e) {

@@ -1,0 +1,10 @@
+name: protein-frequency-optimization
+title: Protein Frequency Optimization Dashboard
+username: cbasken
+account: cbasken
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17296388
+bundleId: 11949689
+url: https://cbasken.shinyapps.io/protein-frequency-optimization/
+version: 1
