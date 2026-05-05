@@ -42,6 +42,40 @@ make_dashboard_narrative <- function(results_obj, dining_hall_label) {
   ))
 }
 
+make_hypothetical_assumption_text <- function(results_obj) {
+  assumptions <- results_obj$hypothetical_assumptions
+  scenario_name <- results_obj$scenario_summary$scenario[2]
+  
+  ingredient_tbl <- results_obj$ingredient_details[[scenario_name]]
+  
+  recommended_frequency <- ingredient_tbl %>%
+    filter(ingredient == assumptions$hypothetical_name) %>%
+    pull(freq_optimized)
+  
+  if (length(recommended_frequency) == 0) {
+    recommended_frequency <- 0
+  }
+  
+  recommendation_text <- if (recommended_frequency > 0) {
+    "This hypothetical was added to the menu, so it is price and sustainability-competitive based on current purchasing."
+  } else {
+    "This hypothetical was not added to the menu, indicating that it is not price or sustainability-competitive based on current purchasing."
+  }
+  
+  HTML(paste0(
+    "<p>",
+    "New hypothetical protein: <strong>", assumptions$hypothetical_name, "</strong><br>",
+    "Protein category: <strong>", assumptions$category, "</strong><br>",
+    "Assumed protein weight in menu items: <strong>",
+    round(assumptions$assumed_expected_lb_per_appearance, 2), " lb</strong><br>",
+    "Cap: <strong>", assumptions$cap, "</strong><br>",
+    "Recommended frequency: <strong>", recommended_frequency, "</strong>",
+    "</p>",
+    "<h3>Recommendation</h3>",
+    "<p>", recommendation_text, "</p>"
+  ))
+}
+
 make_dashboard_category_table <- function(results_obj) {
   scenario_name <- results_obj$scenario_summary$scenario[2]
   
@@ -256,8 +290,7 @@ ui <- fluidPage(
               "Lamb",
               "Pork",
               "Soy",
-              "Turkey",
-              "Other"
+              "Turkey"
             ),
             selected = "Soy"
           ),
@@ -286,22 +319,6 @@ ui <- fluidPage(
           ),
           
           numericInput(
-            "hyp_portion_lb",
-            "Expected lb per menu appearance",
-            value = 0.25,
-            min = 0,
-            step = 0.01
-          ),
-          
-          numericInput(
-            "hyp_ghg",
-            "GHG per lb",
-            value = 1.0,
-            min = 0,
-            step = 0.1
-          ),
-          
-          numericInput(
             "hyp_cap",
             "Maximum appearances allowed",
             value = 3,
@@ -324,6 +341,9 @@ ui <- fluidPage(
           
           h3("Optimization Summary"),
           uiOutput("hyp_narrative"),
+          
+          h3("Assumptions Used"),
+          DTOutput("hyp_assumptions_table"),
           
           h3("Category Meal Share"),
           DTOutput("hyp_deliverable_table"),
@@ -419,8 +439,6 @@ server <- function(input, output, session) {
           default_sus = input$hyp_default_sus,
           conventional_price_lb = input$hyp_conventional_price,
           sustainable_price_lb = input$hyp_sustainable_price,
-          expected_lb_meat_portion = input$hyp_portion_lb,
-          conventional_ghg_per_lb = input$hyp_ghg,
           hypothetical_cap = input$hyp_cap,
           cost_reduction_target = input$hyp_cost_reduction_target,
           lower_multiplier = input$hyp_lower_multiplier,
@@ -613,6 +631,19 @@ server <- function(input, output, session) {
     scenario_name <- hyp_results()$scenario_summary$scenario[2]
     
     hyp_results()$plots[[scenario_name]]$sus_vs_conv_spend
+  })
+  
+  output$hyp_assumptions_table <- renderDT({
+    req(hyp_results())
+    
+    datatable(
+      hyp_results()$hypothetical_assumptions,
+      rownames = FALSE,
+      options = list(
+        dom = "t",
+        ordering = FALSE
+      )
+    )
   })
 }
 

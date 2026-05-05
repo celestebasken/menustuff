@@ -1084,7 +1084,7 @@ run_dashboard_hypothetical_scenario <- function(
   # GHG per lb comes from GHG_equivalents.csv
   assumed_ghg <- inputs$ghg_equivalents %>%
     filter(meat_type == hypothetical_category) %>%
-    summarise(ghg = first(conventional_ghg_per_lb)) %>%
+    summarise(ghg = first(c_footprint_kg_c_per_kg_food)) %>%
     pull(ghg)
   
   if (is.na(assumed_ghg) || length(assumed_ghg) == 0) {
