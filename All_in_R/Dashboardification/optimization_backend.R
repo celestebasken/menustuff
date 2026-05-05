@@ -1036,3 +1036,178 @@ run_dashboard_scenario <- function(
     plots = report_objs$plots
   )
 }
+
+run_dashboard_hypothetical_scenario <- function(
+    dining_hall_name,
+    dining_hall_label,
+    hypothetical_name,
+    hypothetical_category,
+    default_sus = "Yes",
+    conventional_price_lb,
+    sustainable_price_lb,
+    hypothetical_cap,
+    cost_reduction_target = 0.07,
+    lower_multiplier = 0.5,
+    upper_multiplier = 1.5,
+    data_dir = "../Basic_Data"
+) {
+  
+  inputs <- read_and_clean_inputs(data_dir)
+  
+  opt_df <- build_optimization_data(
+    meals = inputs$meals,
+    ingredient_prices = inputs$ingredient_prices,
+    ghg_equivalents = inputs$ghg_equivalents,
+    dining_hall_name = dining_hall_name
+  )
+  
+  # Expected lb per menu appearance:
+  # - Soy is assumed to be 0.25
+  # - all other categories use the dining hall/category average
+  assumed_expected_lb <- if (hypothetical_category == "Soy") {
+    0.25
+  } else {
+    opt_df %>%
+      filter(category == hypothetical_category) %>%
+      summarise(avg_lb = mean(expected_lb_meat_portion, na.rm = TRUE)) %>%
+      pull(avg_lb)
+  }
+  
+  if (is.na(assumed_expected_lb) || length(assumed_expected_lb) == 0) {
+    stop(paste0(
+      "Could not calculate expected lb per menu appearance for category ",
+      hypothetical_category,
+      ". Check whether this category exists in the selected dining hall data."
+    ))
+  }
+  
+  # GHG per lb comes from GHG_equivalents.csv
+  assumed_ghg <- inputs$ghg_equivalents %>%
+    filter(meat_type == hypothetical_category) %>%
+    summarise(ghg = first(conventional_ghg_per_lb)) %>%
+    pull(ghg)
+  
+  if (is.na(assumed_ghg) || length(assumed_ghg) == 0) {
+    stop(paste0(
+      "Could not find GHG equivalent for category ",
+      hypothetical_category,
+      " in GHG_equivalents.csv."
+    ))
+  }
+  
+  hypothetical_row <- tibble(
+    ingredient = hypothetical_name,
+    category = hypothetical_category,
+    percent_dish_meat = NA_real_,
+    meat_price_per_dish = NA_real_,
+    expected_lb_meat_portion = as.numeric(assumed_expected_lb),
+    oz_meat_per_dish = NA_real_,
+    conventional_price_lb = as.numeric(conventional_price_lb),
+    sustainable_price_lb = as.numeric(sustainable_price_lb),
+    default_sus = default_sus,
+    portion_size_oz = NA_real_,
+    expected_portions = NA_real_,
+    planned_weight_lbs = NA_real_,
+    cost_recipe_per_portion = NA_real_,
+    conventional_ghg_per_lb = as.numeric(assumed_ghg),
+    baseline_freq = 0,
+    default_sus_clean = tolower(trimws(default_sus))
+  )
+  
+  opt_df_expanded <- bind_rows(opt_df, hypothetical_row)
+  
+  prepped <- prepare_optimization_metrics(opt_df_expanded)
+  
+  x0 <- prepped$baseline_freq
+  n <- nrow(prepped)
+  
+  hypothetical_index <- n
+  
+  baseline_meals <- sum(x0)
+  baseline_cost <- sum(prepped$cost_per_appearance * x0)
+  cost_cap <- baseline_cost * (1 - cost_reduction_target)
+  
+  lower <- ceiling(x0 * lower_multiplier)
+  upper <- floor(x0 * upper_multiplier)
+  
+  lower[hypothetical_index] <- 0
+  upper[hypothetical_index] <- hypothetical_cap
+  
+  if (any(lower > upper)) {
+    stop("Some lower bounds are greater than upper bounds. Check the multipliers or hypothetical cap.")
+  }
+  
+  A <- matrix(1, nrow = 1, ncol = n)
+  dir <- "="
+  rhs <- baseline_meals
+  
+  A <- rbind(A, diag(n))
+  dir <- c(dir, rep(">=", n))
+  rhs <- c(rhs, lower)
+  
+  A <- rbind(A, diag(n))
+  dir <- c(dir, rep("<=", n))
+  rhs <- c(rhs, upper)
+  
+  A_cost <- rbind(A, prepped$cost_per_appearance)
+  dir_cost <- c(dir, "<=")
+  rhs_cost <- c(rhs, cost_cap)
+  
+  sol_stage1 <- lp(
+    direction = "max",
+    objective.in = as.numeric(prepped$sus_cost_per_appearance),
+    const.mat = matrix(as.numeric(A_cost), nrow = nrow(A_cost), ncol = ncol(A_cost)),
+    const.dir = as.character(dir_cost),
+    const.rhs = as.numeric(rhs_cost),
+    all.int = TRUE
+  )
+  
+  if (sol_stage1$status != 0) {
+    stop("Hypothetical Scenario 3 infeasible at sustainability-max stage. Try lowering the cost reduction target or relaxing bounds.")
+  }
+  
+  x_stage1 <- sol_stage1$solution
+  max_sus <- sum(prepped$sus_cost_per_appearance * x_stage1)
+  
+  A_final <- rbind(A_cost, prepped$sus_cost_per_appearance)
+  dir_final <- c(dir_cost, ">=")
+  rhs_final <- c(rhs_cost, max_sus)
+  
+  sol_stage2 <- lp(
+    direction = "min",
+    objective.in = as.numeric(prepped$ghg_per_appearance),
+    const.mat = matrix(as.numeric(A_final), nrow = nrow(A_final), ncol = ncol(A_final)),
+    const.dir = as.character(dir_final),
+    const.rhs = as.numeric(rhs_final),
+    all.int = TRUE
+  )
+  
+  if (sol_stage2$status != 0) {
+    stop("Hypothetical Scenario 3 infeasible at GHG-min stage.")
+  }
+  
+  scenario_name <- paste0("s3_hypothetical_", dining_hall_name)
+  
+  scenario_list <- list()
+  scenario_list[[scenario_name]] <- sol_stage2$solution
+  
+  report_objs <- build_scenario_report_objects(
+    opt_df = opt_df_expanded,
+    scenario_list = scenario_list
+  )
+  
+  list(
+    scenario_summary = report_objs$scenario_summary,
+    category_frequency = report_objs$category_frequency,
+    category_sustainability = report_objs$category_sustainability,
+    ingredient_details = report_objs$ingredient_details,
+    plots = report_objs$plots,
+    hypothetical_assumptions = tibble(
+      hypothetical_name = hypothetical_name,
+      category = hypothetical_category,
+      assumed_expected_lb_per_appearance = assumed_expected_lb,
+      assumed_ghg_per_lb = assumed_ghg,
+      cap = hypothetical_cap
+    )
+  )
+}
