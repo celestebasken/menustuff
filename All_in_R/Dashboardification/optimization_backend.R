@@ -22,7 +22,7 @@ library(forcats)
 # USER SETTINGS
 # =========================================================
 
-data_dir <- "../Dashboardification"
+data_dir = "All_in_R/Basic_Data"
 output_root <- "scenario_outputs"
 
 # Dining hall to analyze
@@ -993,7 +993,7 @@ run_dashboard_scenario <- function(
     cost_reduction_target = 0.1,
     lower_multiplier = 0.5,
     upper_multiplier = 1.5,
-    data_dir = "../Dashboardification"
+    data_dir = "All_in_R/Basic_Data"
 ) {
   
   inputs <- read_and_clean_inputs(data_dir)
