@@ -93,6 +93,43 @@ make_dashboard_category_table <- function(results_obj) {
     )
 }
 
+
+make_metric_cards <- function(results_obj) {
+  s <- results_obj$scenario_summary
+  
+  scen <- s %>%
+    filter(scenario != "baseline") %>%
+    slice(1)
+  
+  cost_label <- paste0(round(scen$cost_pct_change, 1), "%")
+  sus_label <- paste0(round(scen$sus_spend_pct_change, 1), "%")
+  ghg_label <- paste0(round(scen$ghg_pct_change, 1), "%")
+  
+  HTML(paste0(
+    "<div style='display: flex; gap: 16px; margin: 18px 0 24px 0; flex-wrap: wrap;'>",
+    
+    "<div style='flex: 1; min-width: 180px; padding: 18px; border-radius: 12px; background-color: #f5f5f5; border: 1px solid #ddd;'>",
+    "<div style='font-size: 14px; color: #555;'>Cost Change</div>",
+    "<div style='font-size: 30px; font-weight: 700;'>", cost_label, "</div>",
+    "<div style='font-size: 13px; color: #666;'>relative to baseline</div>",
+    "</div>",
+    
+    "<div style='flex: 1; min-width: 180px; padding: 18px; border-radius: 12px; background-color: #f5f5f5; border: 1px solid #ddd;'>",
+    "<div style='font-size: 14px; color: #555;'>Sustainable Spend Change</div>",
+    "<div style='font-size: 30px; font-weight: 700;'>", sus_label, "</div>",
+    "<div style='font-size: 13px; color: #666;'>relative to baseline</div>",
+    "</div>",
+    
+    "<div style='flex: 1; min-width: 180px; padding: 18px; border-radius: 12px; background-color: #f5f5f5; border: 1px solid #ddd;'>",
+    "<div style='font-size: 14px; color: #555;'>GHG Change</div>",
+    "<div style='font-size: 30px; font-weight: 700;'>", ghg_label, "</div>",
+    "<div style='font-size: 13px; color: #666;'>relative to baseline</div>",
+    "</div>",
+    
+    "</div>"
+  ))
+}
+
 ui <- fluidPage(
   titlePanel("Protein Frequency Optimization Dashboard"),
   
@@ -111,21 +148,21 @@ ui <- fluidPage(
           ),
           
           numericInput(
-            "bounds_lower_multiplier",
-            "Lower multiplier",
-            value = 0.5,
+            "bounds_max_decrease_pct",
+            "Maximum decrease allowed per protein (%)",
+            value = 50,
             min = 0,
-            max = 1,
-            step = 0.05
+            max = 100,
+            step = 5
           ),
           
           numericInput(
-            "bounds_upper_multiplier",
-            "Upper multiplier",
-            value = 1.5,
-            min = 1,
-            max = 3,
-            step = 0.05
+            "bounds_max_increase_pct",
+            "Maximum increase allowed per protein (%)",
+            value = 50,
+            min = 0,
+            max = 200,
+            step = 5
           ),
           
           actionButton("run_bounds", "Run Scenarios 1 & 2")
@@ -147,12 +184,14 @@ ui <- fluidPage(
           
           h3("Scenario 1: Max Cost Reduction"),
           uiOutput("s1_narrative"),
+          uiOutput("s1_metric_cards"),
           DTOutput("s1_deliverable_table"),
           plotOutput("s1_category_plot", height = "450px"),
           plotOutput("s1_spend_plot", height = "500px"),
           
           h3("Scenario 2: Max Sustainable Spend"),
           uiOutput("s2_narrative"),
+          uiOutput("s2_metric_cards"),
           DTOutput("s2_deliverable_table"),
           plotOutput("s2_category_plot", height = "450px"),
           plotOutput("s2_spend_plot", height = "500px")
@@ -182,21 +221,21 @@ ui <- fluidPage(
           ),
           
           numericInput(
-            "custom_lower_multiplier",
-            "Lower multiplier",
-            value = 0.5,
+            "custom_max_decrease_pct",
+            "Maximum decrease allowed per protein (%)",
+            value = 50,
             min = 0,
-            max = 1,
-            step = 0.05
+            max = 100,
+            step = 5
           ),
           
           numericInput(
-            "custom_upper_multiplier",
-            "Upper multiplier",
-            value = 1.5,
-            min = 1,
-            max = 3,
-            step = 0.05
+            "custom_max_increase_pct",
+            "Maximum increase allowed per protein (%)",
+            value = 50,
+            min = 0,
+            max = 200,
+            step = 5
           ),
           
           actionButton("run_custom", "Run Scenario 3")
@@ -208,13 +247,14 @@ ui <- fluidPage(
           p(
             "This page allows users to choose a specific cost reduction target and identify the protein frequency mix that maximizes sustainable spend under that constraint. 
   After meeting the selected cost target, the model prioritizes sustainability and then minimizes greenhouse gas equivalents where possible. 
-  Users can adjust the lower and upper multipliers to control how much each protein category is allowed to change from baseline."
+  Users can control how much each protein item is allowed to decrease or increase relative to its current menu frequency."
           ),
           
           hr(),
           
           h3("Optimization Summary"),
           uiOutput("custom_narrative"),
+          uiOutput("custom_metric_cards"),
           
           h3("Category Meal Share"),
           DTOutput("custom_deliverable_table"),
@@ -249,21 +289,21 @@ ui <- fluidPage(
           ),
           
           numericInput(
-            "hyp_lower_multiplier",
-            "Lower multiplier",
-            value = 0.5,
+            "hyp_max_decrease_pct",
+            "Maximum decrease allowed per protein (%)",
+            value = 50,
             min = 0,
-            max = 1,
-            step = 0.05
+            max = 100,
+            step = 5
           ),
           
           numericInput(
-            "hyp_upper_multiplier",
-            "Upper multiplier",
-            value = 1.5,
-            min = 1,
-            max = 3,
-            step = 0.05
+            "hyp_max_increase_pct",
+            "Maximum increase allowed per protein (%)",
+            value = 50,
+            min = 0,
+            max = 200,
+            step = 5
           ),
           
           hr(),
@@ -335,6 +375,7 @@ ui <- fluidPage(
           
           h3("Optimization Summary"),
           uiOutput("hyp_narrative"),
+          uiOutput("hyp_metric_cards"),
           
           h3("Hypothetical Protein Assumptions"),
           uiOutput("hyp_assumptions_text"),
@@ -364,8 +405,8 @@ server <- function(input, output, session) {
           dining_hall_name = dining_hall_name,
           dining_hall_label = input$bounds_dining_hall_label,
           scenario = "s1",
-          lower_multiplier = input$bounds_lower_multiplier,
-          upper_multiplier = input$bounds_upper_multiplier,
+          lower_multiplier = 1 - input$bounds_max_decrease_pct / 100,
+          upper_multiplier = 1 + input$bounds_max_increase_pct / 100,
           data_dir = "../Basic_Data"
         )
         
@@ -373,8 +414,8 @@ server <- function(input, output, session) {
           dining_hall_name = dining_hall_name,
           dining_hall_label = input$bounds_dining_hall_label,
           scenario = "s2",
-          lower_multiplier = input$bounds_lower_multiplier,
-          upper_multiplier = input$bounds_upper_multiplier,
+          lower_multiplier = 1 - input$bounds_max_decrease_pct / 100,
+          upper_multiplier = 1 + input$bounds_max_increase_pct / 100,
           data_dir = "../Basic_Data"
         )
         
@@ -401,8 +442,8 @@ server <- function(input, output, session) {
           dining_hall_label = input$custom_dining_hall_label,
           scenario = "s3",
           cost_reduction_target = input$custom_cost_reduction_target,
-          lower_multiplier = input$custom_lower_multiplier,
-          upper_multiplier = input$custom_upper_multiplier,
+          lower_multiplier = 1 - input$custom_max_decrease_pct / 100,
+          upper_multiplier = 1 + input$custom_max_increase_pct / 100,
           data_dir = "../Basic_Data"
         )
       },
@@ -432,8 +473,8 @@ server <- function(input, output, session) {
           sustainable_price_lb = input$hyp_sustainable_price,
           hypothetical_cap = input$hyp_cap,
           cost_reduction_target = input$hyp_cost_reduction_target,
-          lower_multiplier = input$hyp_lower_multiplier,
-          upper_multiplier = input$hyp_upper_multiplier,
+          lower_multiplier = 1 - input$hyp_max_decrease_pct / 100,
+          upper_multiplier = 1 + input$hyp_max_increase_pct / 100,
           data_dir = "../Basic_Data"
         )
       },
@@ -499,6 +540,16 @@ server <- function(input, output, session) {
         ordering = FALSE
       )
     )
+  })
+  
+  output$s1_metric_cards <- renderUI({
+    req(bounds_results())
+    make_metric_cards(bounds_results()$s1)
+  })
+  
+  output$s2_metric_cards <- renderUI({
+    req(bounds_results())
+    make_metric_cards(bounds_results()$s2)
   })
   
   output$s1_category_plot <- renderPlot({
@@ -599,6 +650,16 @@ server <- function(input, output, session) {
   output$hyp_assumptions_text <- renderUI({
     req(hyp_results())
     make_hypothetical_assumption_text(hyp_results())
+  })
+  
+  output$custom_metric_cards <- renderUI({
+    req(custom_results())
+    make_metric_cards(custom_results())
+  })
+  
+  output$hyp_metric_cards <- renderUI({
+    req(hyp_results())
+    make_metric_cards(hyp_results())
   })
 }
 

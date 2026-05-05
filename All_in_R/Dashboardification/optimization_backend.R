@@ -777,7 +777,7 @@ plot_category_frequency_clean <- function(category_freq_df, scenario_name) {
     coord_flip() +
     theme_minimal(base_size = 12) +
     labs(
-      title = paste("Category Frequency:", scenario_name),
+      title = "Change in Menu Composition by Protein Category",
       x = NULL,
       y = "Meals",
       fill = NULL
