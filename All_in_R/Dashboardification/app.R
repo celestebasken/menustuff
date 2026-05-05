@@ -219,12 +219,6 @@ ui <- fluidPage(
           h3("Category Meal Share"),
           DTOutput("custom_deliverable_table"),
           
-          h3("Scenario 3 Summary"),
-          DTOutput("custom_summary_table"),
-          
-          h3("Category Frequency"),
-          DTOutput("custom_category_table"),
-          
           h3("Category Frequency Plot"),
           plotOutput("custom_category_plot", height = "500px"),
           
@@ -342,14 +336,11 @@ ui <- fluidPage(
           h3("Optimization Summary"),
           uiOutput("hyp_narrative"),
           
-          h3("Assumptions Used"),
-          DTOutput("hyp_assumptions_table"),
+          h3("Hypothetical Protein Assumptions"),
+          uiOutput("hyp_assumptions_text"),
           
           h3("Category Meal Share"),
           DTOutput("hyp_deliverable_table"),
-          
-          h3("Scenario Summary"),
-          DTOutput("hyp_summary_table"),
           
           h3("Category Frequency Plot"),
           plotOutput("hyp_category_plot", height = "500px"),
@@ -534,25 +525,6 @@ server <- function(input, output, session) {
     bounds_results()$s2$plots[[scenario_name]]$sus_vs_conv_spend
   })
   
-  output$custom_summary_table <- renderDT({
-    req(custom_results())
-    
-    datatable(
-      custom_results()$scenario_summary,
-      options = list(pageLength = 5, scrollX = TRUE)
-    )
-  })
-  
-  output$custom_category_table <- renderDT({
-    req(custom_results())
-    
-    scenario_name <- custom_results()$scenario_summary$scenario[2]
-    
-    custom_results()$category_frequency %>%
-      filter(scenario == scenario_name) %>%
-      datatable(options = list(pageLength = 10, scrollX = TRUE))
-  })
-  
   output$custom_category_plot <- renderPlot({
     req(custom_results())
     
@@ -608,15 +580,6 @@ server <- function(input, output, session) {
     )
   })
   
-  output$hyp_summary_table <- renderDT({
-    req(hyp_results())
-    
-    datatable(
-      hyp_results()$scenario_summary,
-      options = list(pageLength = 5, scrollX = TRUE)
-    )
-  })
-  
   output$hyp_category_plot <- renderPlot({
     req(hyp_results())
     
@@ -633,17 +596,9 @@ server <- function(input, output, session) {
     hyp_results()$plots[[scenario_name]]$sus_vs_conv_spend
   })
   
-  output$hyp_assumptions_table <- renderDT({
+  output$hyp_assumptions_text <- renderUI({
     req(hyp_results())
-    
-    datatable(
-      hyp_results()$hypothetical_assumptions,
-      rownames = FALSE,
-      options = list(
-        dom = "t",
-        ordering = FALSE
-      )
-    )
+    make_hypothetical_assumption_text(hyp_results())
   })
 }
 
