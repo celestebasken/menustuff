@@ -19,27 +19,14 @@ library(forcats)
 # Inputs
 
 # =========================================================
-# USER SETTINGS
+# DEFAULTS
 # =========================================================
+# Fallback bound multipliers used when a scenario solver is called
+# without explicit lower_multiplier/upper_multiplier arguments (the
+# dashboard always supplies these explicitly).
 
-data_dir = "All_in_R/Basic_Data"
-output_root <- "scenario_outputs"
-
-# Dining hall to analyze
-dining_hall_name <- "XRDS"
-dining_hall_label <- "Crossroads"
-
-# Scenario 3 setting: target cost reduction
-scenario3_cost_reduction_target <- 0.1
-
-# Bounds used across scenarios
 lower_multiplier_default <- 0.5
 upper_multiplier_default <- 1.5
-
-# Which scenarios to run
-run_s1 <- TRUE
-run_s2 <- TRUE
-run_s3 <- TRUE
 
 # =========================================================
 # HELPER FUNCTIONS
@@ -64,6 +51,25 @@ save_plot <- function(plot_obj, filename, output_dir, width = 8, height = 5, dpi
   )
 }
 
+# Solves an integer LP via lpSolve, coercing constraint inputs and
+# stopping with error_message if no feasible solution is found.
+solve_lp_or_stop <- function(direction, objective_in, A, dir, rhs, error_message) {
+  sol <- lp(
+    direction = direction,
+    objective.in = as.numeric(objective_in),
+    const.mat = matrix(as.numeric(A), nrow = nrow(A), ncol = ncol(A)),
+    const.dir = as.character(dir),
+    const.rhs = as.numeric(rhs),
+    all.int = TRUE
+  )
+
+  if (sol$status != 0) {
+    stop(error_message)
+  }
+
+  sol$solution
+}
+
 
 
 # Read data
@@ -81,14 +87,7 @@ read_and_clean_inputs <- function(data_dir) {
       dining_hall = trimws(dining_hall),
       ingredient = trimws(ingredient),
       category = trimws(category),
-      planned_portions = as.numeric(gsub(",", "", planned_portions)),
-      percent_meat = as.numeric(percent_meat),
-      meat_price_per_dish = as.numeric(meat_price_per_dish),
-      expected_lb_meat_portion = as.numeric(expected_lb_meat_portion),
-      oz_meat_per_dish = as.numeric(oz_meat_per_dish),
-      portion_size_oz = as.numeric(portion_size_oz),
-      planned_weight_lbs = as.numeric(planned_weight_lbs),
-      cost_recipe_per_portion = as.numeric(cost_recipe_per_portion)
+      expected_lb_meat_portion = as.numeric(expected_lb_meat_portion)
     )
   
   ingredient_prices <- read.csv(file.path(data_dir, "Ingredient_prices.csv"), stringsAsFactors = FALSE) %>%
@@ -129,14 +128,7 @@ build_optimization_data <- function(meals, ingredient_prices, ghg_equivalents, d
     group_by(ingredient) %>%
     summarise(
       baseline_freq = n(),
-      percent_dish_meat = safe_mean(percent_meat),
-      meat_price_per_dish = safe_mean(meat_price_per_dish),
       expected_lb_meat_portion = safe_mean(expected_lb_meat_portion),
-      oz_meat_per_dish = safe_mean(oz_meat_per_dish),
-      portion_size_oz = safe_mean(portion_size_oz),
-      expected_portions = safe_mean(planned_portions),
-      planned_weight_lbs = safe_mean(planned_weight_lbs),
-      cost_recipe_per_portion = safe_mean(cost_recipe_per_portion),
       category_meals = first_nonmissing(category),
       .groups = "drop"
     )
@@ -167,17 +159,10 @@ build_optimization_data <- function(meals, ingredient_prices, ghg_equivalents, d
     select(
       ingredient,
       category,
-      percent_dish_meat,
-      meat_price_per_dish,
       expected_lb_meat_portion,
-      oz_meat_per_dish,
       conventional_price_lb,
       sustainable_price_lb,
       default_sus,
-      portion_size_oz,
-      expected_portions,
-      planned_weight_lbs,
-      cost_recipe_per_portion,
       conventional_ghg_per_lb,
       baseline_freq
     ) %>%
@@ -325,23 +310,19 @@ solve_scenario1_cost_min_keep_sus <- function(
   A_s1 <- rbind(cons$A, prepped$sus_cost_per_appearance)
   dir_s1 <- c(cons$dir, ">=")
   rhs_s1 <- c(cons$rhs, baseline_sus)
-  
-  sol <- lp(
+
+  solution <- solve_lp_or_stop(
     direction = "min",
-    objective.in = as.numeric(prepped$cost_per_appearance),
-    const.mat = matrix(as.numeric(A_s1), nrow = nrow(A_s1), ncol = ncol(A_s1)),
-    const.dir = as.character(dir_s1),
-    const.rhs = as.numeric(rhs_s1),
-    all.int = TRUE
+    objective_in = prepped$cost_per_appearance,
+    A = A_s1,
+    dir = dir_s1,
+    rhs = rhs_s1,
+    error_message = paste0(scenario_name, " infeasible.")
   )
-  
-  if (sol$status != 0) {
-    stop(paste0(scenario_name, " infeasible."))
-  }
-  
+
   list(
     scenario_name = scenario_name,
-    solution = sol$solution,
+    solution = solution,
     objective_order = "min_cost | sustain_floor"
   )
 }
@@ -364,23 +345,19 @@ solve_scenario2_sus_max_keep_cost <- function(
   A_s2 <- rbind(cons$A, prepped$cost_per_appearance)
   dir_s2 <- c(cons$dir, "<=")
   rhs_s2 <- c(cons$rhs, baseline_cost)
-  
-  sol <- lp(
+
+  solution <- solve_lp_or_stop(
     direction = "max",
-    objective.in = as.numeric(prepped$sus_cost_per_appearance),
-    const.mat = matrix(as.numeric(A_s2), nrow = nrow(A_s2), ncol = ncol(A_s2)),
-    const.dir = as.character(dir_s2),
-    const.rhs = as.numeric(rhs_s2),
-    all.int = TRUE
+    objective_in = prepped$sus_cost_per_appearance,
+    A = A_s2,
+    dir = dir_s2,
+    rhs = rhs_s2,
+    error_message = paste0(scenario_name, " infeasible.")
   )
-  
-  if (sol$status != 0) {
-    stop(paste0(scenario_name, " infeasible."))
-  }
-  
+
   list(
     scenario_name = scenario_name,
-    solution = sol$solution,
+    solution = solution,
     objective_order = "max_sustainability | cost_cap_baseline"
   )
 }
@@ -389,7 +366,7 @@ solve_scenario2_sus_max_keep_cost <- function(
 # Lock in a user-defined cost reduction, then maximize sustainability, then minimize GHG
 solve_scenario3_cost_target_then_sus_then_ghg <- function(
     opt_df,
-    cost_reduction_target = scenario3_cost_reduction_target,
+    cost_reduction_target = 0.1,
     scenario_name = "scenario3",
     lower_multiplier = lower_multiplier_default,
     upper_multiplier = upper_multiplier_default
@@ -407,43 +384,34 @@ solve_scenario3_cost_target_then_sus_then_ghg <- function(
   rhs_cost <- c(cons$rhs, cost_cap)
   
   # Stage 1: maximize sustainable spend under cost cap
-  sol_stage1 <- lp(
+  x_stage1 <- solve_lp_or_stop(
     direction = "max",
-    objective.in = as.numeric(prepped$sus_cost_per_appearance),
-    const.mat = matrix(as.numeric(A_cost), nrow = nrow(A_cost), ncol = ncol(A_cost)),
-    const.dir = as.character(dir_cost),
-    const.rhs = as.numeric(rhs_cost),
-    all.int = TRUE
+    objective_in = prepped$sus_cost_per_appearance,
+    A = A_cost,
+    dir = dir_cost,
+    rhs = rhs_cost,
+    error_message = paste0(scenario_name, " infeasible at sustainability-max stage.")
   )
-  
-  if (sol_stage1$status != 0) {
-    stop(paste0(scenario_name, " infeasible at sustainability-max stage."))
-  }
-  
-  x_stage1 <- sol_stage1$solution
+
   max_sus <- sum(prepped$sus_cost_per_appearance * x_stage1)
-  
+
   # Stage 2: minimize GHG while holding max sustainable spend
   A_final <- rbind(A_cost, prepped$sus_cost_per_appearance)
   dir_final <- c(dir_cost, ">=")
   rhs_final <- c(rhs_cost, max_sus)
-  
-  sol_stage2 <- lp(
+
+  solution <- solve_lp_or_stop(
     direction = "min",
-    objective.in = as.numeric(prepped$ghg_per_appearance),
-    const.mat = matrix(as.numeric(A_final), nrow = nrow(A_final), ncol = ncol(A_final)),
-    const.dir = as.character(dir_final),
-    const.rhs = as.numeric(rhs_final),
-    all.int = TRUE
+    objective_in = prepped$ghg_per_appearance,
+    A = A_final,
+    dir = dir_final,
+    rhs = rhs_final,
+    error_message = paste0(scenario_name, " infeasible at GHG-min stage.")
   )
-  
-  if (sol_stage2$status != 0) {
-    stop(paste0(scenario_name, " infeasible at GHG-min stage."))
-  }
-  
+
   list(
     scenario_name = scenario_name,
-    solution = sol_stage2$solution,
+    solution = solution,
     objective_order = "cost_target -> max_sustainability -> min_ghg",
     cost_reduction_target = cost_reduction_target
   )
@@ -455,13 +423,13 @@ solve_scenario3_cost_target_then_sus_then_ghg <- function(
 
 run_selected_scenarios <- function(
     opt_df,
+    dining_hall_name,
     run_s1 = TRUE,
     run_s2 = TRUE,
     run_s3 = TRUE,
-    scenario3_cost_reduction_target = scenario3_cost_reduction_target,
+    scenario3_cost_reduction_target = 0.1,
     lower_multiplier = lower_multiplier_default,
-    upper_multiplier = upper_multiplier_default,
-    dining_hall_name = dining_hall_name
+    upper_multiplier = upper_multiplier_default
 ) {
   
   results <- list()
@@ -788,7 +756,7 @@ plot_category_frequency_clean <- function(category_freq_df, scenario_name) {
     )
 }
 
-plot_sus_vs_conv_spend_clean <- function(category_sus_df, scenario_name) {
+plot_sus_vs_conv_spend_clean <- function(category_sus_df, scenario_name, dining_hall_label) {
   
   baseline_long <- category_sus_df %>%
     filter(scenario == scenario_name) %>%
@@ -888,7 +856,7 @@ plot_sus_vs_conv_spend_clean <- function(category_sus_df, scenario_name) {
 # BUILD REPORT OBJECTS
 # =========================================================
 
-build_scenario_report_objects <- function(opt_df, scenario_list) {
+build_scenario_report_objects <- function(opt_df, scenario_list, dining_hall_label) {
   
   prepped <- prepare_optimization_metrics(opt_df)
   scenario_df <- add_scenarios_to_data(prepped, scenario_list)
@@ -908,7 +876,7 @@ build_scenario_report_objects <- function(opt_df, scenario_list) {
     purrr::map(scenario_names, function(nm) {
       list(
         category_frequency = plot_category_frequency_clean(category_frequency, nm),
-        sus_vs_conv_spend = plot_sus_vs_conv_spend_clean(category_sustainability, nm)
+        sus_vs_conv_spend = plot_sus_vs_conv_spend_clean(category_sustainability, nm, dining_hall_label)
       )
     }),
     scenario_names
@@ -993,18 +961,18 @@ run_dashboard_scenario <- function(
     cost_reduction_target = 0.1,
     lower_multiplier = 0.5,
     upper_multiplier = 1.5,
-    data_dir = "All_in_R/Basic_Data"
+    data_dir = "Basic_Data"
 ) {
-  
+
   inputs <- read_and_clean_inputs(data_dir)
-  
+
   opt_df <- build_optimization_data(
     meals = inputs$meals,
     ingredient_prices = inputs$ingredient_prices,
     ghg_equivalents = inputs$ghg_equivalents,
     dining_hall_name = dining_hall_name
   )
-  
+
   # Decide which scenario(s) to run
   run_s1 <- scenario == "s1"
   run_s2 <- scenario == "s2"
@@ -1025,9 +993,10 @@ run_dashboard_scenario <- function(
   
   report_objs <- build_scenario_report_objects(
     opt_df = opt_df,
-    scenario_list = scenario_list
+    scenario_list = scenario_list,
+    dining_hall_label = dining_hall_label
   )
-  
+
   list(
     scenario_summary = report_objs$scenario_summary,
     category_frequency = report_objs$category_frequency,
@@ -1098,17 +1067,10 @@ run_dashboard_hypothetical_scenario <- function(
   hypothetical_row <- tibble(
     ingredient = hypothetical_name,
     category = hypothetical_category,
-    percent_dish_meat = NA_real_,
-    meat_price_per_dish = NA_real_,
     expected_lb_meat_portion = as.numeric(assumed_expected_lb),
-    oz_meat_per_dish = NA_real_,
     conventional_price_lb = as.numeric(conventional_price_lb),
     sustainable_price_lb = as.numeric(sustainable_price_lb),
     default_sus = default_sus,
-    portion_size_oz = NA_real_,
-    expected_portions = NA_real_,
-    planned_weight_lbs = NA_real_,
-    cost_recipe_per_portion = NA_real_,
     conventional_ghg_per_lb = as.numeric(assumed_ghg),
     baseline_freq = 0,
     default_sus_clean = tolower(trimws(default_sus))
@@ -1153,47 +1115,39 @@ run_dashboard_hypothetical_scenario <- function(
   dir_cost <- c(dir, "<=")
   rhs_cost <- c(rhs, cost_cap)
   
-  sol_stage1 <- lp(
+  x_stage1 <- solve_lp_or_stop(
     direction = "max",
-    objective.in = as.numeric(prepped$sus_cost_per_appearance),
-    const.mat = matrix(as.numeric(A_cost), nrow = nrow(A_cost), ncol = ncol(A_cost)),
-    const.dir = as.character(dir_cost),
-    const.rhs = as.numeric(rhs_cost),
-    all.int = TRUE
+    objective_in = prepped$sus_cost_per_appearance,
+    A = A_cost,
+    dir = dir_cost,
+    rhs = rhs_cost,
+    error_message = "Hypothetical Scenario 3 infeasible at sustainability-max stage. Try lowering the cost reduction target or relaxing bounds."
   )
-  
-  if (sol_stage1$status != 0) {
-    stop("Hypothetical Scenario 3 infeasible at sustainability-max stage. Try lowering the cost reduction target or relaxing bounds.")
-  }
-  
-  x_stage1 <- sol_stage1$solution
+
   max_sus <- sum(prepped$sus_cost_per_appearance * x_stage1)
   
   A_final <- rbind(A_cost, prepped$sus_cost_per_appearance)
   dir_final <- c(dir_cost, ">=")
   rhs_final <- c(rhs_cost, max_sus)
   
-  sol_stage2 <- lp(
+  solution <- solve_lp_or_stop(
     direction = "min",
-    objective.in = as.numeric(prepped$ghg_per_appearance),
-    const.mat = matrix(as.numeric(A_final), nrow = nrow(A_final), ncol = ncol(A_final)),
-    const.dir = as.character(dir_final),
-    const.rhs = as.numeric(rhs_final),
-    all.int = TRUE
+    objective_in = prepped$ghg_per_appearance,
+    A = A_final,
+    dir = dir_final,
+    rhs = rhs_final,
+    error_message = "Hypothetical Scenario 3 infeasible at GHG-min stage."
   )
-  
-  if (sol_stage2$status != 0) {
-    stop("Hypothetical Scenario 3 infeasible at GHG-min stage.")
-  }
-  
+
   scenario_name <- paste0("s3_hypothetical_", dining_hall_name)
-  
+
   scenario_list <- list()
-  scenario_list[[scenario_name]] <- sol_stage2$solution
+  scenario_list[[scenario_name]] <- solution
   
   report_objs <- build_scenario_report_objects(
     opt_df = opt_df_expanded,
-    scenario_list = scenario_list
+    scenario_list = scenario_list,
+    dining_hall_label = dining_hall_label
   )
   
   list(
